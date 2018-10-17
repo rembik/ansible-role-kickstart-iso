@@ -1,0 +1,27 @@
+---
+- name: Ensure custom ISO image and kickstart config not exist
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ image_src_dir }}/image_custom.iso"
+    - "{{ image_src_dir }}/iso/kickstart.cfg"
+
+- name: Create kickstart config
+  template:
+    src: "kickstart.cfg.j2"
+    dest: "{{ image_src_dir }}/iso/kickstart.cfg"
+    mode: 0644
+
+- name: Create custom ISO image
+  command: "genisoimage -U -r -v -T -J -joliet-long -V '{{ image_name }}' -volset '{{ image_name }}' -A '{{ image_name }}' -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e images/efiboot.img -no-emul-boot -o ../image_custom.iso ."
+  args:
+    chdir: "{{ image_src_dir }}/iso"
+
+- name: Copy custom ISO image and kickstart config to destination directory
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "{{ image_src_dir }}/image_custom.iso", dest: "{{ image_dest_dir }}/{{ image_file_name }}{{ ('_' + (image_host.name|default('')) + '_')|replace('__','_') }}{{ image_host.ip|replace('.','-') }}.iso"}
+    - { src: "{{ image_src_dir }}/iso/kickstart.cfg", dest: "{{ image_dest_dir }}/{{ image_file_name }}{{ ('_' + (image_host.name|default('')) + '_')|replace('__','_') }}{{ image_host.ip|replace('.','-') }}.cfg"}

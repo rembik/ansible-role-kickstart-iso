@@ -1,0 +1,34 @@
+---
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-boot-menu-customization
+
+image_src_dir: "../.images/{{ image_file_name }}"
+image_dest_dir: "../.images/{{ image_file_name }}"
+
+image_name: 'CentOS 7 x86_64'
+image_file_name: 'CentOS-7-x86_64-Minimal-1804'
+image_dl_url: 'http://ftp.tu-chemnitz.de/pub/linux/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso'
+image_dl_checksum: 'sha256:714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd'
+image_bios_conf_file: "isolinux/isolinux.cfg"
+image_uefi_conf_file: "EFI/BOOT/grub.cfg"
+image_boot_name: "{{ image_name|replace(' ','\\x20') }}"
+
+# Pick first disks with minimal physical size image_disk_drive_min_size (GiB)
+# until a overall minimal logical OS volume size image_disk_volume_min_size (GiB)
+# and create a logical OS volume with maximal size image_disk_volume_max_size (GiB)
+image_disk_drive_min_size: 10
+image_disk_volume_min_size: 60
+image_disk_volume_max_size: 120
+
+image_hosts: []
+image_root_password: 'centos'
+image_country_code: 'de'
+image_timezone: 'Europe/Berlin'
+image_network_bootproto: 'dhcp'
+image_network_device: 'eth0'
+image_network_static_netmask: '255.255.255.0'
+image_network_static_gateway: '192.168.1.1'
+image_network_static_nameserver: ['192.168.1.1']
+# If image_network_bootproto is 'static' use image_network_static_hosts to create custom static host ISO images
+#image_network_static_hosts:
+#  - { ip: '192.168.1.1', hostname: 'host01'}
+image_network_static_hosts: []

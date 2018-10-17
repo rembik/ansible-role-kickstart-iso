@@ -1,0 +1,163 @@
+# Go to a manually installed RHEL/CentOS server, look at the /root/anaconda-ks.cfg and edit this kickstart template for your purpose
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-syntax
+
+%pre --log=/tmp/kickstart-pre.log
+{% if image_network_bootproto == 'static' and image_host.ip == 'static' %}
+exec < /dev/tty6 > /dev/tty6 2> /dev/tty6
+chvt 6
+IFS=$'\n'
+echo
+echo "############################################"
+echo "#       Static Network Configuration       #"
+echo "############################################"
+CONFIRM=no
+while [ "$CONFIRM" != "y" ];do
+    echo -n "Enter Hostname: "
+    read HOSTNAME
+    echo -n "Enter IP Address: "
+    read IPADDRESS
+    echo -en "Enter Netmask (\\e[01;36m{{ image_network_static_netmask }}\\e[00m): "
+    read NETMASK
+    if [ -z $NETMASK ]
+    then
+        NETMASK="{{ image_network_static_netmask }}"
+    fi
+    echo -en "Enter Gateway (\\e[01;36m{{ image_network_static_gateway }}\\e[00m): "
+    read GATEWAY
+    if [ -z $GATEWAY ]
+    then
+        GATEWAY="{{ image_network_static_gateway }}"
+    fi
+    echo -en "Enter Nameserver (\\e[01;36m{{ image_network_static_nameserver|join(',') }}\\e[00m): "
+    read NAMESERVER
+    if [ -z $NAMESERVER ]
+    then
+        NAMESERVER="{{ image_network_static_nameserver|join(',') }}"
+    fi
+    echo
+    echo -e "Hostname:   \\e[01;36m$HOSTNAME \\e[00m"
+    echo -e "IP Address: \\e[01;36m$IPADDRESS \\e[00m"
+    echo -e "Netmask:    \\e[01;36m$NETMASK \\e[00m"
+    echo -e "Gateway:    \\e[01;36m$GATEWAY \\e[00m"
+    echo -e "Nameserver: \\e[01;36m$NAMESERVER \\e[00m"
+    NETWORK="network --bootproto={{ image_network_bootproto }} --device={{ image_network_device }} --gateway=$GATEWAY --ip=$IPADDRESS --nameserver=$NAMESERVER --netmask=$NETMASK --hostname=$HOSTNAME"
+    echo -n "Is the above configuration correct?(y/n): "
+    read CONFIRM
+    echo
+done
+echo $NETWORK > /tmp/kickstart-network.cfg
+chvt 1
+exec < /dev/tty1 > /dev/tty1 2> /dev/tty1
+{% endif %}
+############################################
+#     Partitioning Logic Configuration     #
+############################################
+# Pick first disks with minimal physical size PHYMINSIZE (GiB)
+# until a overall minimal logical OS volume size LOGMINSIZE (GiB)
+# and create a logical OS volume with maximal size LOGMAXSIZE (GiB)
+PHYMINSIZE={{ image_disk_drive_min_size }}
+LOGMINSIZE={{ image_disk_volume_min_size }}
+LOGMAXSIZE={{ image_disk_volume_max_size }}
+{% raw %}
+INFO1DISKS="/proc/partitions"
+INFO2DISKS="/sys/block"
+INFORAM="/proc/meminfo"
+# Get physical disks for logical OS volume
+PHYCOUNT=0
+LOGCOUNT=0
+LOGSIZE=0
+for DISK in $(awk '{if ($NF ~ "^(s|h)d|cciss" && $NF !~ "((s|h)d|c.d.)[a-z][0-9]$") print $4}' ${INFO1DISKS}); do
+    PHYSIZE=$(($(cat ${INFO2DISKS}/${DISK//\/dev\/}/size)/2**21))
+    if [ ${PHYSIZE} -ge ${PHYMINSIZE} ] && [ ${LOGSIZE} -lt ${LOGMINSIZE} ]; then
+        LOGDISK[${LOGCOUNT}]="${DISK//\/dev\/}"
+        LOGSIZE=$((${LOGSIZE}+${PHYSIZE}))
+        let LOGCOUNT++
+    fi
+    PHYDISK[${PHYCOUNT}]="${DISK//\/dev\/}"
+    let PHYCOUNT++
+done
+LOGDISKS="${LOGDISK[@]:0}"
+# Calculate SWAP size over the amount of RAM
+MEM=$(($(sed -n 's/^MemTotal: \+\([0-9]*\) kB/\1/p' ${INFORAM})/2**10))
+if [ "${MEM}" -le "2048" ]; then
+    SWAP=$((MEM * 2))
+elif [ "${MEM}" -gt "2048" ] && [ "${MEM}" -le "8192" ]; then
+    SWAP=${MEM}
+elif [ "${MEM}" -gt "8192" ]; then
+    SWAP=4096
+fi
+#echo "Partitioning Logic => Physical disks: ${LOGDISKS// /,}; Logical size: ${LOGSIZE}GiB; RAM: ${MEM}MiB; SWAP: ${SWAP}MiB"
+# Create disk partitioning information
+cat > /tmp/kickstart-partitions.cfg <<EOF
+ignoredisk --only-use=${LOGDISKS// /,}
+clearpart --all --drives=${LOGDISKS// /,}
+zerombr
+bootloader --append=' crashkernel=auto' --location=mbr --boot-drive=${LOGDISK[0]}
+part /boot --fstype=xfs --size=1024 --label=boot
+EOF
+for ((i=0; i < ${#LOGDISK[@]}; i++)); do
+    PHYVOLUME[$i]="pv.0$((${i}+1))"
+    echo "part ${PHYVOLUME[$i]} --fstype=lvmpv --ondisk=${LOGDISK[$i]} --size=128 --grow" >> /tmp/kickstart-partitions.cfg
+done
+cat >> /tmp/kickstart-partitions.cfg <<EOF
+volgroup os ${PHYVOLUME[@]:0}
+logvol swap --fstype=swap --size=${SWAP} --name=swap --vgname=os
+logvol / --fstype=xfs --size=$((${PHYMINSIZE}*2**10-${SWAP}-1024)) --maxsize=$((${LOGMAXSIZE}*2**10)) --grow --label=root --name=root --vgname=os
+EOF
+{% endraw %}
+
+%end
+
+#version=DEVEL
+# System authorization information
+auth --enableshadow --passalgo=sha512
+# Use CDROM installation media
+cdrom
+# Use cmdline install
+cmdline
+# Run the Setup Agent on first boot
+firstboot --enable
+# Keyboard layouts
+keyboard --vckeymap={{ image_country_code|lower }} --xlayouts='{{ image_country_code|lower }}','us' --switch='grp:alt_caps_toggle'
+# System language
+lang en_US.UTF-8 --addsupport={{ image_country_code|lower }}_{{ image_country_code|upper }}.UTF-8
+# Network information
+{% if image_network_bootproto != 'static'%}
+network --bootproto={{ image_network_bootproto }} --device={{ image_network_device }}
+{% elif image_network_bootproto == 'static' and image_host.ip != 'static' %}
+network --bootproto={{ image_network_bootproto }} --device={{ image_network_device }} --gateway={{ image_network_static_gateway }} --ip={{ image_host.ip }} --nameserver={{ image_network_static_nameserver|join(',') }} --netmask={{ image_network_static_netmask }} --hostname={{ image_host.name }}
+{% elif image_network_bootproto == 'static' and image_host.ip == 'static' %}
+%include /tmp/kickstart-network.cfg
+{% endif %}
+# Root password
+rootpw --iscrypted {{ image_root_password | password_hash('sha512') }}
+# System services
+services --enabled='chronyd'
+# System timezone
+timezone {{ image_timezone }} --isUtc
+# Disk partitioning information
+%include /tmp/kickstart-partitions.cfg
+# Power off system after installation
+poweroff
+
+%packages
+@^minimal
+@core
+chrony
+kexec-tools
+
+%end
+
+%addon com_redhat_kdump --enable --reserve-mb='auto'
+
+%end
+
+%anaconda
+pwpolicy root --minlen=6 --minquality=1 --notstrict --nochanges --notempty
+pwpolicy user --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
+pwpolicy luks --minlen=6 --minquality=1 --notstrict --nochanges --notempty
+%end
+
+%post
+
+%end
