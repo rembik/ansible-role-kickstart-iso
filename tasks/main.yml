@@ -39,7 +39,7 @@
     warn: no
   with_items:
     - "cp -pRf /tmp/{{ image_file_name }}/* {{ image_src_dir }}/iso"
-    - 'chown {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ image_src_dir }}/iso'
+    - "chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ image_src_dir }}/iso"
 
 - name: Unmount ISO image
   become: yes
