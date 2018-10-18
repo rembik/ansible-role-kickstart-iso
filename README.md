@@ -48,7 +48,6 @@ image_disk_drive_min_size: 10
 image_disk_volume_min_size: 60
 image_disk_volume_max_size: 120
 
-image_hosts: []
 image_root_password: 'centos'
 image_country_code: 'de'
 image_timezone: 'Europe/Berlin'
@@ -59,8 +58,7 @@ image_network_static_gateway: '192.168.1.1'
 image_network_static_nameserver: ['192.168.1.1']
 # If image_network_bootproto is 'static' use image_network_static_hosts to create custom static host ISO images
 #image_network_static_hosts:
-#  - { ip: '192.168.1.1', hostname: 'host01'}
-image_network_static_hosts: []
+#  - { ip: '192.168.1.1', name: 'host01'}
 ```
 
 Dependencies
