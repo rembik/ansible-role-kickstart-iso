@@ -47,10 +47,10 @@ image_network_device: 'eth0'
 image_network_static_netmask: '255.255.255.0'
 image_network_static_gateway: '192.168.1.1'
 image_network_static_nameserver: ['192.168.1.1']
-# If image_network_bootproto is 'static' use image_network_static_hosts
+# If image_network_bootproto is static use image_network_static_hosts
 # to create custom static host ISO images
 #image_network_static_hosts:
-#- { ip: '192.168.1.1', name: 'host01'}
+#- {ip:'192.168.1.1', name: 'host01'}
 ```
 
 Dependencies
