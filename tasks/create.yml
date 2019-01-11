@@ -23,5 +23,5 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   with_items:
-    - { src: "{{ image_src_dir }}/image_custom.iso", dest: "{{ image_dest_dir }}/{{ image_file_name }}{{ ('_' + (image_host.name|default('')) + '_')|replace('__','_') }}{{ image_host.ip|replace('.','-') }}.iso"}
-    - { src: "{{ image_src_dir }}/iso/kickstart.cfg", dest: "{{ image_dest_dir }}/{{ image_file_name }}{{ ('_' + (image_host.name|default('')) + '_')|replace('__','_') }}{{ image_host.ip|replace('.','-') }}.cfg"}
+    - {src: "{{ image_src_dir }}/image_custom.iso", dest: "{{ image_dest_dir }}/{{ image_file_name }}{{ ('_' + (image_host.name|default('')) + '_')|replace('__','_') }}{{ image_host.ip|replace('.','-') }}.iso"}
+    - {src: "{{ image_src_dir }}/iso/kickstart.cfg", dest: "{{ image_dest_dir }}/{{ image_file_name }}{{ ('_' + (image_host.name|default('')) + '_')|replace('__','_') }}{{ image_host.ip|replace('.','-') }}.cfg"}

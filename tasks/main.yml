@@ -5,9 +5,9 @@
     state: "{{ item.state }}"
     mode: 0755
   with_items:
-    - { path: "{{ image_src_dir }}/iso", state: 'absent' }
-    - { path: "{{ image_src_dir }}/iso", state: 'directory' }
-    - { path: "/tmp/{{ image_file_name }}", state: 'directory' }
+    - {path: "{{ image_src_dir }}/iso", state: 'absent'}
+    - {path: "{{ image_src_dir }}/iso", state: 'directory'}
+    - {path: "/tmp/{{ image_file_name }}", state: 'directory'}
 
 - name: Download ISO image
   get_url:
@@ -60,13 +60,13 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     insertafter: "{{ item.insertafter }}"
-    firstmatch:  "{{ item.firstmatch }}"
+    firstmatch: "{{ item.firstmatch }}"
   with_items:
-    - { path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'absent', regexp: '^  menu default', line: '', insertafter: EOF, firstmatch: no}
-    - { path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present', regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}", line: "  append initrd=initrd.img inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg inst.stage2=hd:LABEL={{ image_boot_name }} quiet", insertafter: EOF, firstmatch: no}
-    - { path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present', regexp: '^  menu default', line: '  menu default', insertafter: '^  menu label \^Install CentOS 7', firstmatch: yes}
-    - { path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present', regexp: '^set default=', line: 'set default="0"', insertafter: EOF, firstmatch: no}
-    - { path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present', regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}", line: "        linuxefi /images/pxeboot/vmlinuz inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg inst.stage2=hd:LABEL={{ image_boot_name }} quiet", insertafter: EOF, firstmatch: no}
+    - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'absent', regexp: '^  menu default', line: '', insertafter: EOF, firstmatch: no}
+    - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present', regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}", line: "  append initrd=initrd.img inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg inst.stage2=hd:LABEL={{ image_boot_name }} quiet", insertafter: EOF, firstmatch: no}
+    - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present', regexp: '^  menu default', line: '  menu default', insertafter: '^  menu label \^Install CentOS 7', firstmatch: yes}
+    - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present', regexp: '^set default=', line: 'set default="0"', insertafter: EOF, firstmatch: no}
+    - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present', regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}", line: "        linuxefi /images/pxeboot/vmlinuz inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg inst.stage2=hd:LABEL={{ image_boot_name }} quiet", insertafter: EOF, firstmatch: no}
 
 - name: Loop ISO image creation list
   include_tasks: create.yml

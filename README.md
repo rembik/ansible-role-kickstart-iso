@@ -1,6 +1,8 @@
 Ansible Role: Kickstart ISO
 ===========================
 
+[![Build Status](https://travis-ci.org/rembik/ansible-role-kickstart-iso.svg?branch=master)](https://travis-ci.org/rembik/ansible-role-kickstart-iso)
+
 This role creates custom kickstart ISO images for:
 * RHEL 7
 * CentOS 7
