@@ -1,5 +1,5 @@
 Ansible Role: Kickstart ISO
-================================================
+===========================
 
 This role creates custom kickstart ISO images for:
 * RHEL 7
