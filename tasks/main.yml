@@ -3,7 +3,7 @@
   find:
     paths: "{{ image_dest_dir }}"
     patterns: "{{ image_file_name }}*.iso"
-  register: image_created
+  register: image_custom_iso_create
 
 - name: Create custom ISO images
   block:
@@ -16,6 +16,10 @@
       with_items:
         - 'wget'
         - 'xorriso'
+      register: image_packages_install
+      until: image_packages_install is success
+      retries: 3
+      delay: 60
 
     - name: Ensure required directories are empty and present
       file:
@@ -108,4 +112,4 @@
       loop_control:
         loop_var: image_host
 
-  when: image_created.matched|int == 0
+  when: image_custom_iso_create.matched|int == 0
