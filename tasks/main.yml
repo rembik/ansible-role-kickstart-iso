@@ -22,6 +22,7 @@
   command: "mount -t iso9660 -o loop {{ image_src_dir }}/image.iso /tmp/{{ image_file_name }}"
   args:
     warn: false
+  when: true
 
 # - name: Export ISO image (slow)
 #   become: true
@@ -34,16 +35,17 @@
 
 - name: Export ISO image (fast)
   become: true
-  shell: "{{ item }}"
+  shell: |
+    cp -pRf /tmp/{{ image_file_name }}/* {{ image_src_dir }}/iso
+    chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ image_src_dir }}/iso
   args:
     warn: false
-  with_items:
-    - "cp -pRf /tmp/{{ image_file_name }}/* {{ image_src_dir }}/iso"
-    - "chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ image_src_dir }}/iso"
+  when: true
 
 - name: Unmount ISO image
   become: true
   command: "umount /tmp/{{ image_file_name }}"
+  when: true
 
 - name: Delete origin ISO image and mount point
   file:
@@ -67,7 +69,8 @@
     - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present',
        regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
        line: "  append initrd=initrd.img inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
-       inst.stage2=hd:LABEL={{ image_boot_name }} quiet", insertafter: EOF, firstmatch: false}
+              inst.stage2=hd:LABEL={{ image_boot_name }} quiet",
+       insertafter: EOF, firstmatch: false}
     - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present', regexp: '^  menu default',
        line: '  menu default', insertafter: '^  menu label \^Install CentOS 7', firstmatch: true}
     - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present', regexp: '^set default=',
@@ -75,7 +78,8 @@
     - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present',
        regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
        line: "        linuxefi /images/pxeboot/vmlinuz inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
-       inst.stage2=hd:LABEL={{ image_boot_name }} quiet", insertafter: EOF, firstmatch: false}
+              inst.stage2=hd:LABEL={{ image_boot_name }} quiet",
+       insertafter: EOF, firstmatch: false}
 
 - name: Loop ISO image creation list
   include_tasks: create.yml
