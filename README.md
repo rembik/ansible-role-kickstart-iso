@@ -4,7 +4,7 @@ Ansible Role: Kickstart ISO
 [![Build Status](https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg)](https://travis-ci.org/rembik/ansible-role-kickstart-iso)
 [![GitHub release](https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg)](https://github.com/rembik/ansible-role-kickstart-iso/releases)
 [![Ansible Role](https://img.shields.io/ansible/role/36241.svg)](https://galaxy.ansible.com/rembik/kickstart_iso)
-![Ansible Role](https://img.shields.io/ansible/role/d/36241.svg)
+![Ansible Role downloads](https://img.shields.io/ansible/role/d/36241.svg)
 
 This role creates custom kickstart ISO images for:
 * RHEL 7
@@ -87,7 +87,8 @@ localhost with custom variables; made for static network configuration.
   pre_tasks:
     - name: Get all hosts (including IP) from inventory
       set_fact:
-        image_network_static_hosts: "{{ (image_network_static_hosts|default([])) + [dict(ip=hostvars[item].ansible_host, name=(item.split('.')[0]|lower))] }}"
+        image_network_static_hosts: "{{ (image_network_static_hosts|default([])) +
+                                     [dict(ip=hostvars[item].ansible_host, name=(item.split('.')[0]|lower))] }}"
       with_items: "{{ groups['all'] }}"
 
   roles:
