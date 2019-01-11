@@ -8,7 +8,7 @@
 - name: Create custom ISO images
   block:
 
-    - name: Ensure requiered system packages are present
+    - name: Ensure required system packages are present
       become: true
       package:
         name: "{{ item }}"
@@ -17,7 +17,7 @@
         - 'wget'
         - 'xorriso'
 
-    - name: Ensure empty ISO image source directory and mount point exists
+    - name: Ensure required directories are empty and present
       file:
         path: "{{ item.path }}"
         state: "{{ item.state }}"
@@ -26,6 +26,7 @@
         - {path: "{{ image_src_dir }}/iso", state: 'absent'}
         - {path: "{{ image_src_dir }}/iso", state: 'directory'}
         - {path: "/tmp/{{ image_file_name }}", state: 'directory'}
+        - {path: "{{ image_dest_dir }}", state: 'directory'}
 
     # - name: Download ISO image (no redirect)
     #   get_url:
