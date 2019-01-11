@@ -21,7 +21,7 @@
       retries: 3
       delay: 60
 
-    - name: Ensure required directories are empty and present
+    - name: Ensure required ISO image directories are empty and present
       file:
         path: "{{ item.path }}"
         state: "{{ item.state }}"
@@ -29,6 +29,7 @@
       with_items:
         - {path: "{{ image_src_dir }}/iso", state: 'absent'}
         - {path: "{{ image_src_dir }}/iso", state: 'directory'}
+        - {path: "/tmp/{{ image_file_name }}", state: 'absent'}
         - {path: "/tmp/{{ image_file_name }}", state: 'directory'}
         - {path: "{{ image_dest_dir }}", state: 'directory'}
 
@@ -72,14 +73,6 @@
       become: true
       command: "umount /tmp/{{ image_file_name }}"
 
-    - name: Delete origin ISO image and mount point
-      file:
-        path: "{{ item }}"
-        state: absent
-      with_items:
-        - "{{ image_src_dir }}/image.iso"
-        - "/tmp/{{ image_file_name }}"
-
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
         path: "{{ item.path }}"
@@ -106,10 +99,19 @@
                   inst.stage2=hd:LABEL={{ image_boot_name }} quiet",
            insertafter: EOF, firstmatch: false}
 
-    - name: Loop ISO image creation list
+    - name: Loop over ISO image creation list
       include_tasks: create.yml
       with_items: "{{ (image_network_static_hosts|default([])) + [dict(ip=image_network_bootproto)] }}"
       loop_control:
         loop_var: image_host
+
+    - name: Delete ISO image source directories
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ image_src_dir }}/image.iso"
+        - "{{ image_src_dir }}/iso"
+        - "/tmp/{{ image_file_name }}"
 
   when: image_custom_iso_create.matched|int == 0
