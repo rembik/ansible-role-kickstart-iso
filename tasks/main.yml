@@ -27,12 +27,12 @@
         - {path: "{{ image_src_dir }}/iso", state: 'directory'}
         - {path: "/tmp/{{ image_file_name }}", state: 'directory'}
 
-#    - name: Download ISO image (no redirect)
-#      get_url:
-#        url: "{{ image_url }}"
-#        dest: "{{ image_src_dir }}/image.iso"
-#        mode: 0755
-#        unsafe_writes: true
+    # - name: Download ISO image (no redirect)
+    #   get_url:
+    #     url: "{{ image_url }}"
+    #     dest: "{{ image_src_dir }}/image.iso"
+    #     mode: 0755
+    #     unsafe_writes: true
 
     - name: Download ISO image (redirect)
       command: "wget {{ image_url }} -O image.iso"
@@ -45,14 +45,14 @@
       args:
         warn: false
 
-#    - name: Export ISO image (slow)
-#      become: true
-#      copy:
-#        src: "/tmp/{{ image_file_name }}/"
-#        dest: "{{ image_src_dir }}/iso"
-#        mode: preserve
-#        owner: "{{ ansible_real_user_id }}"
-#        group: "{{ ansible_real_user_id }}"
+    # - name: Export ISO image (slow)
+    #   become: true
+    #   copy:
+    #     src: "/tmp/{{ image_file_name }}/"
+    #     dest: "{{ image_src_dir }}/iso"
+    #     mode: preserve
+    #     owner: "{{ ansible_real_user_id }}"
+    #     group: "{{ ansible_real_user_id }}"
 
     - name: Export ISO image (fast)
       become: true
@@ -84,21 +84,21 @@
         firstmatch: "{{ item.firstmatch }}"
       with_items:
         - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'absent', regexp: '^  menu default',
-          line: '', insertafter: EOF, firstmatch: false}
+           line: '', insertafter: EOF, firstmatch: false}
         - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present',
-          regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
-          line: "  append initrd=initrd.img inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
+           regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
+           line: "  append initrd=initrd.img inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
                   inst.stage2=hd:LABEL={{ image_boot_name }} quiet",
-          insertafter: EOF, firstmatch: false}
+           insertafter: EOF, firstmatch: false}
         - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present', regexp: '^  menu default',
-          line: '  menu default', insertafter: '^  menu label \^Install', firstmatch: true}
+           line: '  menu default', insertafter: '^  menu label \^Install', firstmatch: true}
         - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present', regexp: '^set default=',
-          line: 'set default="0"', insertafter: EOF, firstmatch: false}
+           line: 'set default="0"', insertafter: EOF, firstmatch: false}
         - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present',
-          regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
-          line: "        linuxefi /images/pxeboot/vmlinuz inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
+           regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
+           line: "        linuxefi /images/pxeboot/vmlinuz inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
                   inst.stage2=hd:LABEL={{ image_boot_name }} quiet",
-          insertafter: EOF, firstmatch: false}
+           insertafter: EOF, firstmatch: false}
 
     - name: Loop ISO image creation list
       include_tasks: create.yml
