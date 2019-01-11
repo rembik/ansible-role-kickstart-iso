@@ -38,6 +38,7 @@
       command: "wget {{ image_url }} -O image.iso"
       args:
         chdir: "{{ image_src_dir }}"
+        warn: false
 
     - name: Mount ISO image
       become: true
