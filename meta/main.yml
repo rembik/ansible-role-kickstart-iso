@@ -1,0 +1,24 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: kickstart_iso
+  author: rembik
+  description: Creates custom kickstart ISO images for RedHat/CentOS Linux.
+  license: "Apache 2.0"
+  min_ansible_version: 2.6
+  platforms:
+    - name: EL
+      versions:
+      - all
+    - name: Debian
+      versions:
+      - all
+    - name: Ubuntu
+      versions:
+      - all
+  galaxy_tags:
+    - server
+    - kickstart
+    - iso
+    - image

@@ -1,0 +1,10 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  roles:
+    - role: rembik.kickstart_iso
+    - role: rembik.kickstart_iso
+      vars:
+        image_network_bootproto: 'static'

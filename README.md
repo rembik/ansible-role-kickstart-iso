@@ -1,25 +1,14 @@
-Ansible RedHat ISO Image Role
-==================
+Ansible Role: Kickstart ISO
+================================================
 
-This role creates an automated RedHat ISO Image on your localhost.
+This role creates custom kickstart ISO images for:
+* RHEL 7
+* CentOS 7
 
 Requirements
 ------------
 
-This role was developed using Ansible **2.6**. Backwards compatibility is not guaranteed.
-
-**Supported platforms:**
-
-```yaml
-CentOS:
-  versions:
-    - 6
-    - 7
-RHEL:
-  versions:
-    - 6
-    - 7
-```
+None.
 
 Role Variables
 --------------
@@ -56,37 +45,48 @@ image_network_device: 'eth0'
 image_network_static_netmask: '255.255.255.0'
 image_network_static_gateway: '192.168.1.1'
 image_network_static_nameserver: ['192.168.1.1']
-# If image_network_bootproto is 'static' use image_network_static_hosts to create custom static host ISO images
+# If image_network_bootproto is 'static' use image_network_static_hosts
+# to create custom static host ISO images
 #image_network_static_hosts:
-#  - { ip: '192.168.1.1', name: 'host01'}
+#- { ip: '192.168.1.1', name: 'host01'}
 ```
 
 Dependencies
 ------------
 
-None
+None.
 
 Example Playbook
 ----------------
 
-This is a sample playbook file for the Ansible role to create an automated CentOS ISO image on a localhost; made for network releases via DHCP.
+This is a sample playbook file for the Ansible role to create an kickstart CentOS 7 ISO image on
+localhost; made for network releases via DHCP.
 
 ```yaml
 ---
 - hosts: localhost
   become: yes
+
   roles:
-    - role: redhat-iso-image
+    - role: kickstart_iso
 ```
 
-This is a sample playbook file for the Ansible role to create automated CentOS ISO images on a localhost with custom variables; made for static network configuration.
+This is a sample playbook file for the Ansible role to create kickstart CentOS 7 ISO images on
+localhost with custom variables; made for static network configuration.
 
 ```yaml
 ---
 - hosts: localhost
   become: yes
+
+  pre_tasks:
+    - name: Get all hosts (including IP) from inventory
+      set_fact:
+        image_network_static_hosts: "{{ (image_network_static_hosts|default([])) + [dict(ip=hostvars[item].ansible_host, name=(item.split('.')[0]|lower))] }}"
+      with_items: "{{ groups['all'] }}"
+
   roles:
-    - role: redhat-iso-image
+    - role: kickstart_iso
       vars:
         image_network_bootproto: 'static'
         image_network_static_netmask: '255.255.252.0'
@@ -94,19 +94,17 @@ This is a sample playbook file for the Ansible role to create automated CentOS I
         image_network_static_nameserver:
           - '10.0.2.1'
           - '10.0.3.1'
-        image_network_static_hosts:
-          - { ip: '10.0.1.100', name: 'host01'}
-          - { ip: '10.0.1.200', name: 'host02'}
 ```
 
-To run any of the above sample playbooks create a `image-onprem.yml` file and paste the contents. Executing the Ansible Playbook is then as simple as executing `ansible-playbook image-onprem.yml`.
+To run any of the above sample playbooks create a `playbook.yml` file and paste the contents.
+Executing the Ansible Playbook is then as simple as executing `ansible-playbook playbook.yml`.
 
 License
 -------
 
-[Apache License, Version 2.0](https://github.com/rembik/ansible-role-redhat-iso-image/blob/master/LICENSE)
+[Apache License, Version 2.0](https://github.com/rembik/ansible-role-kickstart-iso/blob/master/LICENSE)
 
 Author Information
 ------------------
 
-Rembik Rain
+This role was created in 2019 by Brian Rimek.
