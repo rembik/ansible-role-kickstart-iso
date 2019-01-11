@@ -1,4 +1,11 @@
 ---
+- name: Ensure requiered system packages are present
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - 'wget'
+
 - name: Ensure empty ISO image source directory and mount point exists
   file:
     path: "{{ item.path }}"
