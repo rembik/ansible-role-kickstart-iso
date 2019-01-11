@@ -118,9 +118,9 @@ cmdline
 # Run the Setup Agent on first boot
 firstboot --enable
 # Keyboard layouts
-keyboard --vckeymap={{ image_country_code|lower }} --xlayouts='{{ image_country_code|lower }}','us' --switch='grp:alt_caps_toggle'
+keyboard --vckeymap={{ image_country|lower }} --xlayouts='{{ image_country|lower }}','us' --switch='grp:alt_caps_toggle'
 # System language
-lang en_US.UTF-8 --addsupport={{ image_country_code|lower }}_{{ image_country_code|upper }}.UTF-8
+lang en_US.UTF-8 --addsupport={{ image_language|lower }}_{{ image_country|upper }}.UTF-8
 # Network information
 {% if image_network_bootproto != 'static'%}
 network --bootproto={{ image_network_bootproto }} --device={{ image_network_device }}

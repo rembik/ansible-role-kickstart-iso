@@ -3,8 +3,6 @@ language: python
 services: docker
 
 env:
-  global:
-    - ROLE_NAME: kickstart_iso
   matrix:
     - MOLECULE_DISTRO: centos7
     - MOLECULE_DISTRO: ubuntu1804

@@ -26,8 +26,7 @@ image_dest_dir: "../.images/{{ image_file_name }}"
 
 image_name: 'CentOS 7 x86_64'
 image_file_name: 'CentOS-7-x86_64-Minimal-1804'
-image_dl_url: 'http://ftp.tu-chemnitz.de/pub/linux/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso'
-image_dl_checksum: 'sha256:714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd'
+image_dl_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1810.iso'
 image_bios_conf_file: 'isolinux/isolinux.cfg'
 image_uefi_conf_file: 'EFI/BOOT/grub.cfg'
 image_boot_name: "{{ image_name|replace(' ','\\x20') }}"
@@ -40,7 +39,8 @@ image_disk_volume_min_size: 60
 image_disk_volume_max_size: 120
 
 image_root_password: 'centos'
-image_country_code: 'de'
+image_language: 'de'
+image_country: 'DE'
 image_timezone: 'Europe/Berlin'
 image_network_bootproto: 'dhcp'
 image_network_device: 'eth0'
