@@ -1,102 +1,108 @@
 ---
-- name: Ensure requiered system packages are present
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - 'wget'
-    - 'xorriso'
+- name: Check custom ISO images not already created
+  find:
+    paths: "{{ image_dest_dir }}"
+    patterns: "{{ image_file_name }}*.iso"
+  register: custom_iso_created
 
-- name: Ensure empty ISO image source directory and mount point exists
-  file:
-    path: "{{ item.path }}"
-    state: "{{ item.state }}"
-    mode: 0755
-  with_items:
-    - {path: "{{ image_src_dir }}/iso", state: 'absent'}
-    - {path: "{{ image_src_dir }}/iso", state: 'directory'}
-    - {path: "/tmp/{{ image_file_name }}", state: 'directory'}
+- name: Create custom ISO images
+  block:
+  when: custom_iso_created.matched|int == 0
 
-# - name: Download ISO image (no redirect)
-#   get_url:
-#     url: "{{ image_url }}"
-#     dest: "{{ image_src_dir }}/image.iso"
-#     mode: 0755
-#     unsafe_writes: true
+    - name: Ensure requiered system packages are present
+      become: true
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - 'wget'
+        - 'xorriso'
 
-- name: Download ISO image (redirect)
-  command: "wget {{ image_url }} -O image.iso"
-  args:
-    chdir: "{{ image_src_dir }}"
-    warn: false
-  when: true
+    - name: Ensure empty ISO image source directory and mount point exists
+      file:
+        path: "{{ item.path }}"
+        state: "{{ item.state }}"
+        mode: 0755
+      with_items:
+        - {path: "{{ image_src_dir }}/iso", state: 'absent'}
+        - {path: "{{ image_src_dir }}/iso", state: 'directory'}
+        - {path: "/tmp/{{ image_file_name }}", state: 'directory'}
 
-- name: Mount ISO image
-  become: true
-  command: "mount -t iso9660 -o loop {{ image_src_dir }}/image.iso /tmp/{{ image_file_name }}"
-  args:
-    warn: false
-  when: true
+#    - name: Download ISO image (no redirect)
+#      get_url:
+#        url: "{{ image_url }}"
+#        dest: "{{ image_src_dir }}/image.iso"
+#        mode: 0755
+#        unsafe_writes: true
 
-# - name: Export ISO image (slow)
-#   become: true
-#   copy:
-#     src: "/tmp/{{ image_file_name }}/"
-#     dest: "{{ image_src_dir }}/iso"
-#     mode: preserve
-#     owner: "{{ ansible_real_user_id }}"
-#     group: "{{ ansible_real_user_id }}"
+    - name: Download ISO image (redirect)
+      command: "wget {{ image_url }} -O image.iso"
+      args:
+        chdir: "{{ image_src_dir }}"
 
-- name: Export ISO image (fast)
-  become: true
-  shell: |
-    cp -pRf /tmp/{{ image_file_name }}/* {{ image_src_dir }}/iso
-    chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ image_src_dir }}/iso
-  args:
-    warn: false
-  when: true
+    - name: Mount ISO image
+      become: true
+      command: "mount -t iso9660 -o loop {{ image_src_dir }}/image.iso /tmp/{{ image_file_name }}"
+      args:
+        warn: false
 
-- name: Unmount ISO image
-  become: true
-  command: "umount /tmp/{{ image_file_name }}"
-  when: true
+#    - name: Export ISO image (slow)
+#      become: true
+#      copy:
+#        src: "/tmp/{{ image_file_name }}/"
+#        dest: "{{ image_src_dir }}/iso"
+#        mode: preserve
+#        owner: "{{ ansible_real_user_id }}"
+#        group: "{{ ansible_real_user_id }}"
 
-- name: Delete origin ISO image and mount point
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ image_src_dir }}/image.iso"
-    - "/tmp/{{ image_file_name }}"
+    - name: Export ISO image (fast)
+      become: true
+      shell: |
+        cp -pRf /tmp/{{ image_file_name }}/* {{ image_src_dir }}/iso
+        chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ image_src_dir }}/iso
+      args:
+        warn: false
 
-- name: Edit Boot-Menu config to automatically run kickstart config
-  lineinfile:
-    path: "{{ item.path }}"
-    state: "{{ item.state }}"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-    insertafter: "{{ item.insertafter }}"
-    firstmatch: "{{ item.firstmatch }}"
-  with_items:
-    - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'absent', regexp: '^  menu default',
-       line: '', insertafter: EOF, firstmatch: false}
-    - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present',
-       regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
-       line: "  append initrd=initrd.img inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
-              inst.stage2=hd:LABEL={{ image_boot_name }} quiet",
-       insertafter: EOF, firstmatch: false}
-    - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present', regexp: '^  menu default',
-       line: '  menu default', insertafter: '^  menu label \^Install', firstmatch: true}
-    - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present', regexp: '^set default=',
-       line: 'set default="0"', insertafter: EOF, firstmatch: false}
-    - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present',
-       regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
-       line: "        linuxefi /images/pxeboot/vmlinuz inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
-              inst.stage2=hd:LABEL={{ image_boot_name }} quiet",
-       insertafter: EOF, firstmatch: false}
+    - name: Unmount ISO image
+      become: true
+      command: "umount /tmp/{{ image_file_name }}"
 
-- name: Loop ISO image creation list
-  include_tasks: create.yml
-  with_items: "{{ (image_network_static_hosts|default([])) + [dict(ip=image_network_bootproto)] }}"
-  loop_control:
-    loop_var: image_host
+    - name: Delete origin ISO image and mount point
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ image_src_dir }}/image.iso"
+        - "/tmp/{{ image_file_name }}"
+
+    - name: Edit Boot-Menu config to automatically run kickstart config
+      lineinfile:
+        path: "{{ item.path }}"
+        state: "{{ item.state }}"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        insertafter: "{{ item.insertafter }}"
+        firstmatch: "{{ item.firstmatch }}"
+      with_items:
+        - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'absent', regexp: '^  menu default',
+          line: '', insertafter: EOF, firstmatch: false}
+        - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present',
+          regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
+          line: "  append initrd=initrd.img inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
+                  inst.stage2=hd:LABEL={{ image_boot_name }} quiet",
+          insertafter: EOF, firstmatch: false}
+        - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present', regexp: '^  menu default',
+          line: '  menu default', insertafter: '^  menu label \^Install', firstmatch: true}
+        - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present', regexp: '^set default=',
+          line: 'set default="0"', insertafter: EOF, firstmatch: false}
+        - {path: "{{ image_src_dir }}/iso/{{ image_uefi_conf_file }}", state: 'present',
+          regexp: ".*{{ ('inst.stage2=hd:LABEL=' + image_boot_name + ' quiet')|regex_escape() }}",
+          line: "        linuxefi /images/pxeboot/vmlinuz inst.ks=hd:LABEL={{ image_boot_name }}:/kickstart.cfg
+                  inst.stage2=hd:LABEL={{ image_boot_name }} quiet",
+          insertafter: EOF, firstmatch: false}
+
+    - name: Loop ISO image creation list
+      include_tasks: create.yml
+      with_items: "{{ (image_network_static_hosts|default([])) + [dict(ip=image_network_bootproto)] }}"
+      loop_control:
+        loop_var: image_host

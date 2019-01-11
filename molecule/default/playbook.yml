@@ -5,6 +5,9 @@
 
   roles:
     - role: rembik.kickstart_iso
+      vars:
+        image_dest_dir: "../.images/{{ image_file_name }}/dhcp"
     - role: rembik.kickstart_iso
       vars:
+        image_dest_dir: "../.images/{{ image_file_name }}/static"
         image_network_bootproto: 'static'

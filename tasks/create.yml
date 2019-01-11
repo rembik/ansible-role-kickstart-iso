@@ -1,12 +1,4 @@
 ---
-- name: Ensure custom ISO image and kickstart config not exist
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ image_src_dir }}/image_custom.iso"
-    - "{{ image_src_dir }}/iso/kickstart.cfg"
-
 - name: Create kickstart config
   template:
     src: "kickstart.cfg.j2"
@@ -33,3 +25,11 @@
     - {src: "{{ image_src_dir }}/iso/kickstart.cfg",
        dest: "{{ image_dest_dir }}/{{ image_file_name }}{{ ('_' +
               (image_host.name|default('')) + '_')|replace('__','_') }}{{ image_host.ip|replace('.','-') }}.cfg"}
+
+- name: Delete custom ISO image and kickstart config
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ image_src_dir }}/image_custom.iso"
+    - "{{ image_src_dir }}/iso/kickstart.cfg"

@@ -49,8 +49,8 @@ image_network_static_gateway: '192.168.1.1'
 image_network_static_nameserver: ['192.168.1.1']
 # If image_network_bootproto is static use image_network_static_hosts
 # to create custom static host ISO images
-#image_network_static_hosts:
-#- {ip:'192.168.1.1', name: 'host01'}
+# image_network_static_hosts:
+#   - {ip:'192.168.1.1', name: 'host01'}
 ```
 
 Dependencies
