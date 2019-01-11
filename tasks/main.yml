@@ -3,11 +3,10 @@
   find:
     paths: "{{ image_dest_dir }}"
     patterns: "{{ image_file_name }}*.iso"
-  register: custom_iso_created
+  register: image_created
 
 - name: Create custom ISO images
   block:
-  when: custom_iso_created.matched|int == 0
 
     - name: Ensure requiered system packages are present
       become: true
@@ -106,3 +105,5 @@
       with_items: "{{ (image_network_static_hosts|default([])) + [dict(ip=image_network_bootproto)] }}"
       loop_control:
         loop_var: image_host
+
+  when: image_created.matched|int == 0
