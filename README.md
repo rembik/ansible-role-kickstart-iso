@@ -1,7 +1,10 @@
 Ansible Role: Kickstart ISO
 ===========================
 
-[![Build Status](https://travis-ci.org/rembik/ansible-role-kickstart-iso.svg?branch=master)](https://travis-ci.org/rembik/ansible-role-kickstart-iso)
+[![Build Status](https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg)](https://travis-ci.org/rembik/ansible-role-kickstart-iso)
+[![GitHub release](https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg)](https://github.com/rembik/ansible-role-kickstart-iso/releases)
+[![Ansible Role](https://img.shields.io/ansible/role/36241.svg)](https://galaxy.ansible.com/rembik/kickstart_iso)
+![Ansible Role](https://img.shields.io/ansible/role/d/36241.svg)
 
 This role creates custom kickstart ISO images for:
 * RHEL 7
@@ -67,10 +70,10 @@ localhost; made for network releases via DHCP.
 ```yaml
 ---
 - hosts: localhost
-  become: yes
+  become: true
 
   roles:
-    - role: kickstart_iso
+    - role: rembik.kickstart_iso
 ```
 
 This is a sample playbook file for the Ansible role to create kickstart CentOS 7 ISO images on
@@ -79,7 +82,7 @@ localhost with custom variables; made for static network configuration.
 ```yaml
 ---
 - hosts: localhost
-  become: yes
+  become: true
 
   pre_tasks:
     - name: Get all hosts (including IP) from inventory
@@ -88,7 +91,7 @@ localhost with custom variables; made for static network configuration.
       with_items: "{{ groups['all'] }}"
 
   roles:
-    - role: kickstart_iso
+    - role: rembik.kickstart_iso
       vars:
         image_network_bootproto: 'static'
         image_network_static_netmask: '255.255.252.0'
