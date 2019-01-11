@@ -5,6 +5,7 @@
     state: present
   with_items:
     - 'wget'
+    - 'genisoimage'
 
 - name: Ensure empty ISO image source directory and mount point exists
   file:
