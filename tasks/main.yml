@@ -1,7 +1,7 @@
 ---
 - name: Get ISO file name and checksum
   set_fact:
-    image_info: "{{ dict(file_name=(item.split(' ')[1]).split('.')[0], checksum=item.split(' ')[0]) }}"
+    image_info: "{{ dict(file_name=(item.split('  ')[1]).split('.')[0], checksum=item.split('  ')[0]) }}"
   loop: "{{ lookup('url', image_check_url, wantlist=True) }}"
   when: item is search(image_type)
   changed_when: false
@@ -59,7 +59,7 @@
       args:
         chdir: "{{ image_src_dir }}"
       register: image_verify
-      failed_when: (image_verify.stdout).split(' ')[0] != image_info.checksum
+      failed_when: (image_verify.stdout).split('  ')[0] != image_info.checksum
 
     - name: Mount ISO image
       become: true
