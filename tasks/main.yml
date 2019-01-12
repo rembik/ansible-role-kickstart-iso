@@ -6,7 +6,7 @@
   when: item is search(image_type)
   changed_when: false
 
-- name: Ensure custom ISO images is not already created
+- name: Ensure custom ISO images are not already created
   find:
     paths: "{{ image_dest_dir }}"
     patterns: "{{ image_info.file_name }}*.iso"
