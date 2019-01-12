@@ -21,7 +21,7 @@
     remote_src: true
   with_items:
     - {src: "{{ image_src_dir }}/image_custom.iso",
-       dest: "{{ image_dest_dir }}/{{ image_file_name }}{{ ('_' +
+       dest: "{{ image_dest_dir }}/{{ image_info.file_name }}{{ ('_' +
               (image_host.name|default('')) + '_')|replace('__','_') }}{{ image_host.ip|replace('.','-') }}.iso"}
 
 - name: Delete custom ISO image and kickstart config

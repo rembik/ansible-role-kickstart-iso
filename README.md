@@ -24,11 +24,13 @@ This role has multiple variables. The defaults for all these variables are the f
 ---
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-boot-menu-customization
 
-image_src_dir: "../.images/{{ image_file_name }}"
-image_dest_dir: "../.images/{{ image_file_name }}"
 image_name: 'CentOS 7 x86_64'
-image_file_name: 'CentOS-7-x86_64-Minimal-1810'
-image_url: "http://isoredirect.centos.org/centos/7/isos/x86_64/{{ image_file_name }}.iso"
+image_type: 'Minimal'
+image_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
+image_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
+
+image_src_dir: ".images/{{ image_name|replace(' ','-') }}"
+image_dest_dir: ".images/{{ image_name|replace(' ','-') }}"
 
 image_bios_conf_file: 'isolinux/isolinux.cfg'
 image_uefi_conf_file: 'EFI/BOOT/grub.cfg'
@@ -53,7 +55,7 @@ image_network_static_nameserver: ['192.168.1.1']
 # If image_network_bootproto is static use image_network_static_hosts
 # to create custom static host ISO images
 # image_network_static_hosts:
-#   - {ip:'192.168.1.1', name: 'host01'}
+#   - {ip: '192.168.1.1', name: 'host01'}
 ```
 
 Dependencies

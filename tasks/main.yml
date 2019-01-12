@@ -1,8 +1,15 @@
 ---
+- name: Get ISO file name and checksum
+  set_fact:
+    image_info: "{{ dict('file_name': (item.split('  ')[1]).split('.')[0], 'checksum': item.split('  ')[0]) }}"
+  loop: "{{ lookup('url', image_check_url, wantlist=True) }}"
+  when: item|search(image_type)
+  changed_when: false
+
 - name: Check custom ISO images not already created
   find:
     paths: "{{ image_dest_dir }}"
-    patterns: "{{ image_file_name }}*.iso"
+    patterns: "{{ image_info.file_name }}*.iso"
   register: image_custom_iso_create
 
 - name: Create custom ISO images
@@ -29,33 +36,41 @@
       with_items:
         - {path: "{{ image_src_dir }}/iso", state: 'absent'}
         - {path: "{{ image_src_dir }}/iso", state: 'directory'}
-        - {path: "/tmp/{{ image_file_name }}", state: 'absent'}
-        - {path: "/tmp/{{ image_file_name }}", state: 'directory'}
+        - {path: "/tmp/{{ image_info.file_name }}", state: 'absent'}
+        - {path: "/tmp/{{ image_info.file_name }}", state: 'directory'}
         - {path: "{{ image_dest_dir }}", state: 'directory'}
 
     # - name: Download ISO image (no redirect)
     #   get_url:
     #     url: "{{ image_url }}"
     #     dest: "{{ image_src_dir }}/image.iso"
+    #     checksum: "{{ image_info.checksum }}"
     #     mode: 0755
     #     unsafe_writes: true
 
     - name: Download ISO image (redirect)
-      command: "wget {{ image_url }} -O image.iso"
+      command: "wget {{ image_base_url }}{{ image_info.file_name }}.iso -O image.iso"
       args:
         chdir: "{{ image_src_dir }}"
         warn: false
 
+    - name: Verify ISO image
+      command: "sha256sum image.iso"
+      args:
+        chdir: "{{ image_src_dir }}"
+      register: image_verify
+      failed_when: (image_verify.stdout).split('  ')[0] != image_info.checksum
+
     - name: Mount ISO image
       become: true
-      command: "mount -t iso9660 -o loop {{ image_src_dir }}/image.iso /tmp/{{ image_file_name }}"
+      command: "mount -t iso9660 -o loop {{ image_src_dir }}/image.iso /tmp/{{ image_info.file_name }}"
       args:
         warn: false
 
     # - name: Export ISO image (slow)
     #   become: true
     #   copy:
-    #     src: "/tmp/{{ image_file_name }}/"
+    #     src: "/tmp/{{ image_info.file_name }}/"
     #     dest: "{{ image_src_dir }}/iso"
     #     mode: preserve
     #     owner: "{{ ansible_real_user_id }}"
@@ -64,14 +79,14 @@
     - name: Export ISO image (fast)
       become: true
       shell: |
-        cp -pRf /tmp/{{ image_file_name }}/* {{ image_src_dir }}/iso
+        cp -pRf /tmp/{{ image_info.file_name }}/* {{ image_src_dir }}/iso
         chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ image_src_dir }}/iso
       args:
         warn: false
 
     - name: Unmount ISO image
       become: true
-      command: "umount /tmp/{{ image_file_name }}"
+      command: "umount /tmp/{{ image_info.file_name }}"
 
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
@@ -112,6 +127,6 @@
       with_items:
         - "{{ image_src_dir }}/image.iso"
         - "{{ image_src_dir }}/iso"
-        - "/tmp/{{ image_file_name }}"
+        - "/tmp/{{ image_info.file_name }}"
 
   when: image_custom_iso_create.matched|int == 0
