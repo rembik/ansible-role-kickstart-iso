@@ -19,7 +19,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     remote_src: true
-  with_items:
+  loop:
     - {src: "{{ image_src_dir }}/image_custom.iso",
        dest: "{{ image_dest_dir }}/{{ image_info.file_name }}{{ ('_' +
               (image_host.name|default('')) + '_')|replace('__','_') }}{{ image_host.ip|replace('.','-') }}.iso"}
@@ -28,6 +28,6 @@
   file:
     path: "{{ item }}"
     state: absent
-  with_items:
+  loop:
     - "{{ image_src_dir }}/image_custom.iso"
     - "{{ image_src_dir }}/iso/kickstart.cfg"

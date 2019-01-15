@@ -89,8 +89,7 @@ fi
 #echo "Partitioning Logic => Physical disks: ${LOGDISKS// /,}; Logical size: ${LOGSIZE}GiB; RAM: ${MEM}MiB; SWAP: ${SWAP}MiB"
 # Create disk partitioning information
 cat > /tmp/kickstart-partitions.cfg <<EOF
-ignoredisk --only-use=${LOGDISKS// /,}
-clearpart --all --drives=${LOGDISKS// /,}
+clearpart --all --initlabel --drives=${LOGDISKS// /,}
 zerombr
 bootloader --append=' crashkernel=auto' --location=mbr --boot-drive=${LOGDISK[0]}
 part /boot --fstype=xfs --size=1024 --label=boot

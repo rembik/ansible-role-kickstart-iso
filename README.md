@@ -91,7 +91,7 @@ localhost with custom variables; made for static network configuration.
       set_fact:
         image_network_static_hosts: "{{ (image_network_static_hosts|default([])) +
                                      [dict(ip=hostvars[item].ansible_host, name=(item.split('.')[0]|lower))] }}"
-      with_items: "{{ groups['all'] }}"
+      loop: "{{ groups['all'] }}"
 
   roles:
     - role: rembik.kickstart_iso

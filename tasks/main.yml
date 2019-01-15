@@ -9,7 +9,7 @@
 - name: Ensure custom ISO images are not already created
   find:
     paths: "{{ image_dest_dir }}"
-    patterns: "{{ image_info.file_name }}*.iso"
+    patterns: "{{ image_info.file_name }}_*.iso"
   register: image_custom_iso_create
 
 - name: Create custom ISO images
@@ -20,7 +20,7 @@
       package:
         name: "{{ item }}"
         state: present
-      with_items:
+      loop:
         - 'wget'
         - 'xorriso'
       register: image_packages_install
@@ -33,7 +33,7 @@
         path: "{{ item.path }}"
         state: "{{ item.state }}"
         mode: 0755
-      with_items:
+      loop:
         - {path: "{{ image_src_dir }}/iso", state: 'absent'}
         - {path: "{{ image_src_dir }}/iso", state: 'directory'}
         - {path: "/tmp/{{ image_info.file_name }}", state: 'absent'}
@@ -96,7 +96,7 @@
         line: "{{ item.line }}"
         insertafter: "{{ item.insertafter }}"
         firstmatch: "{{ item.firstmatch }}"
-      with_items:
+      loop:
         - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'absent', regexp: '^  menu default',
            line: '', insertafter: EOF, firstmatch: false}
         - {path: "{{ image_src_dir }}/iso/{{ image_bios_conf_file }}", state: 'present',
@@ -116,7 +116,7 @@
 
     - name: Loop over ISO image creation list
       include_tasks: create.yml
-      with_items: "{{ (image_network_static_hosts|default([])) + [dict(ip=image_network_bootproto)] }}"
+      loop: "{{ (image_network_static_hosts|default([])) + [dict(ip=image_network_bootproto)] }}"
       loop_control:
         loop_var: image_host
 
@@ -124,7 +124,7 @@
       file:
         path: "{{ item }}"
         state: absent
-      with_items:
+      loop:
         - "{{ image_src_dir }}/image.iso"
         - "{{ image_src_dir }}/iso"
         - "/tmp/{{ image_info.file_name }}"
