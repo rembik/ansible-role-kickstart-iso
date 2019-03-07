@@ -25,7 +25,7 @@ You can decide, if you want to run the tests locally with Docker, Vagrant or on 
 Then run the test with the chosen deployment method:
 ```
 molecule test
-molecule test --senario-name docker-all
+molecule test --scenario-name docker-all
 
 molecule test --scenario-name vagrant
 ```
