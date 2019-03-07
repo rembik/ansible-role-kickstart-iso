@@ -25,7 +25,7 @@
         - 'xorriso'
       register: kickstart_iso_packages_install
       until: kickstart_iso_packages_install is success
-      retries: 3
+      retries: 10
       delay: 60
 
     - name: Ensure required ISO image directories are empty and present
