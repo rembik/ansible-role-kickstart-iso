@@ -28,7 +28,7 @@ env:
     - MOLECULE_DISTRO="ubuntu-devel" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="ubuntu:devel"
 
 matrix:
-  fast_finish: true
+  fast_finish: false
   allow_failures:
     - env: MOLECULE_DISTRO="alpine-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="alpine:latest" MOLECULE_DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'" # yamllint disable-line rule:line-length
     - env: MOLECULE_DISTRO="alpine-edge" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="alpine:edge" MOLECULE_DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'" # yamllint disable-line rule:line-length
