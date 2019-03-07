@@ -4,6 +4,7 @@
   become: true
 
   roles:
+    - role: rembik.bootstrap
     - role: rembik.kickstart_iso
       vars:
         kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}_dhcp/"
