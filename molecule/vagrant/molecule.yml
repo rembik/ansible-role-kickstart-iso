@@ -4,18 +4,17 @@ dependency:
   options:
     role-file: requirements.yml
 driver:
-  name: docker
+  name: vagrant
+  provider:
+    name: virtualbox
 lint:
   name: yamllint
   options:
     config-file: molecule/.yamllint
 platforms:
-  # https://hub.docker.com/search/?type=image
-  - name: "${MOLECULE_INSTANCE_PREFIX:-instance}-${MOLECULE_DISTRO:-centos-latest}-${MOLECULE_TOXENV:-docker}"
-    image: ${MOLECULE_DOCKER:-centos:latest}
-    command: ${MOLECULE_COMMAND:-sleep infinity}
-    groups:
-      - ${MOLECULE_DISTRO:-centos-latest}-docker
+  # https://app.vagrantup.com/boxes/search
+  - name: "${MOLECULE_INSTANCE_PREFIX:-instance}-${MOLECULE_DISTRO:-centos-latest}-vagrant"
+    image: ${MOLECULE_VBOX:-centos/7}
 provisioner:
   name: ansible
   lint:
@@ -23,14 +22,10 @@ provisioner:
   config_options:
     defaults:
       callback_plugins: /usr/lib/python2.7/site-packages/ara/plugins/callbacks
-  playbooks:
+  playbook:
     converge: ${MOLECULE_PLAYBOOK:-../playbook.yml}
-  inventory:
-    group_vars:
-      fedora-rawhide-docker:
-        ansible_python_interpreter: /usr/bin/python3
 scenario:
-  name: default
+  name: vagrant
 verifier:
   name: goss
   directory: ../tests

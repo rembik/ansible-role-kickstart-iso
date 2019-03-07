@@ -1,60 +1,61 @@
 Ansible Role: Kickstart ISO
 ===========================
 
-[![Build Status](https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg)](https://travis-ci.org/rembik/ansible-role-kickstart-iso)
-[![GitHub release](https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg)](https://github.com/rembik/ansible-role-kickstart-iso/releases)
-[![Ansible Role](https://img.shields.io/ansible/role/36241.svg)](https://galaxy.ansible.com/rembik/kickstart_iso)
-[![Ansible Role downloads](https://img.shields.io/ansible/role/d/36241.svg)](https://galaxy.ansible.com/rembik/kickstart_iso)
+[![Build Status](https://img.shields.io/travis/robertdebock/ansible-role-users/master.svg?logo=travis&logoColor=EEE)](https://travis-ci.org/rembik/ansible-role-kickstart-iso)
+[![GitHub release](https://img.shields.io/github/release/robertdebock/ansible-role-users.svg?&colorB=56b4b6&logo=github&logoColor=EEE)](https://github.com/rembik/ansible-role-kickstart-iso/releases)
+[![Ansible Role](https://img.shields.io/ansible/role/36241.svg?colorB=56b4b6&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEdUlEQVRYR61Xa4iUVRh+n8PMCjXOzHlPmZUlZlgpoVBBUdBlUyExTRJsyUrqdxcw6EKhBEUX6fKvG5l0IUvZUKSr1I8uZpCUCVLE0lZo6znn29mVcpv53jjTzDLOzux3Vvv+fs/znOf7zvO+7zmgE3hE5NQkSU4HcBoAJSJHSqXSEICRqcohllCpVObVarVb0jTtAzCvE09EDgPYLSKfAniPmYez9DMNeO+vTdP0QQCLs8Ta3h8hoke01i8BSLtxuxpwzpVEZDuA66a4cDv8u56enhsKhcKhTjodDXjvZ6dp+iGAC05y8TpdRH4noqXGmB/b9SYYsNbOIqJvAZzxfyze1BCRChFdYYw50Kp7nIGQbufcXgAXRS5eI6JfiWhOJH4wn89fMn369KEm/jgD1tqtAFZHihGAdeVyeYtz7msAl0XyvmDmqyYYSJLk0jRN90aKhH09xMxnh4Rba1cD2BrLJaJbmfnNgB//A9bajwFcHysC4FGt9WONkOWcc4MAZsbwReQPZj4PwLG6Ae/9QhHZF0NuYKq5XG5msVi03vs7tNabrbUbg6kpaNT/Qt2Ac+4JInpgCuS3mbnPe3+NiLzGzHNGR0dnjo2NhXJTkTrvMPOapoGQ5HMiiWH/rzTGfGmt3QzgdgA3aa37rbXbAKyK1BnWWht478si4iNJYfEDxpgFbbz3mXllkiS9aZp+EquVy+UuhLV2AYD9sSQRucsY86r3/l4ReXa8nIA5WusB59xPRHR+jJ5SqhdJkixO0/SjGELoZsw8I6TXe79SRDYTUalRCRuNMRu89/eIyHMxekS0NhhYEvp+DAHAJq31+ibWe7+oYWIhEQ2EMFpriwD+JKJpWZr1/DjnLiai77PA/80UmW2MGXTOvaCU6i+Xy7sbWQh/YkUzjN77l8NWZWkqpZaiUqmYarUaZnfWs4uZlzXwodzyYd4z8+OBaK3dAGBRCGNsrgK+WYa/RAyUZcy8yzl3PxE91eJ2p9Z6DYCjoS8Q0T6tdWKt/QrA5ZN81ZjWmusGrLXPA7h7EvCg1np2o2sOENG5rVgROZjP51cUi8WDLflYKyJbJtHcwcw31g1kVYKIrDfGbLLWLgXwQSdRETmqlLpNa729URXTvPdhq0wnPIDQwl+vGxCREMb9AOZ3AB8TkRnGmIpzrj+ELSMsT2qtH2pMyVcA3NkBb7XWswD8PT4NvfdXi8hnHcA/i0gYnQrAw5G9fgeA7SKyiYi4XRPAfVrreq9oP5C8C+DmrHI4mfci8hszzwUwNsGAiBScc3u6bMXJrFvnishfoTKYebzvdDqUhqn4TezhYoquljPzzlZO12N5uN0Q0dwpLtAN/g8RrWsewzINBMDw8DDXarVtRBSaywk/IjKilFqutf68YzlmKTvn+kTkGQBnZmFb34vIqFLqxXw+/3ShUDjcjZt5N2yE5xTv/SoR6SWiJQDO6iYoInuUUm8ppd4olUouy3SUgXaRkZGRGdVqdb6IhAtMGL9DIhKu5z+EQ0nWoq3v/wWf4hm52dSUyAAAAABJRU5ErkJggg==)](https://galaxy.ansible.com/rembik/kickstart_iso)
+[![Ansible Role downloads](https://img.shields.io/ansible/role/d/36241.svg?label=downloads&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEdUlEQVRYR61Xa4iUVRh+n8PMCjXOzHlPmZUlZlgpoVBBUdBlUyExTRJsyUrqdxcw6EKhBEUX6fKvG5l0IUvZUKSr1I8uZpCUCVLE0lZo6znn29mVcpv53jjTzDLOzux3Vvv+fs/znOf7zvO+7zmgE3hE5NQkSU4HcBoAJSJHSqXSEICRqcohllCpVObVarVb0jTtAzCvE09EDgPYLSKfAniPmYez9DMNeO+vTdP0QQCLs8Ta3h8hoke01i8BSLtxuxpwzpVEZDuA66a4cDv8u56enhsKhcKhTjodDXjvZ6dp+iGAC05y8TpdRH4noqXGmB/b9SYYsNbOIqJvAZzxfyze1BCRChFdYYw50Kp7nIGQbufcXgAXRS5eI6JfiWhOJH4wn89fMn369KEm/jgD1tqtAFZHihGAdeVyeYtz7msAl0XyvmDmqyYYSJLk0jRN90aKhH09xMxnh4Rba1cD2BrLJaJbmfnNgB//A9bajwFcHysC4FGt9WONkOWcc4MAZsbwReQPZj4PwLG6Ae/9QhHZF0NuYKq5XG5msVi03vs7tNabrbUbg6kpaNT/Qt2Ac+4JInpgCuS3mbnPe3+NiLzGzHNGR0dnjo2NhXJTkTrvMPOapoGQ5HMiiWH/rzTGfGmt3QzgdgA3aa37rbXbAKyK1BnWWht478si4iNJYfEDxpgFbbz3mXllkiS9aZp+EquVy+UuhLV2AYD9sSQRucsY86r3/l4ReXa8nIA5WusB59xPRHR+jJ5SqhdJkixO0/SjGELoZsw8I6TXe79SRDYTUalRCRuNMRu89/eIyHMxekS0NhhYEvp+DAHAJq31+ibWe7+oYWIhEQ2EMFpriwD+JKJpWZr1/DjnLiai77PA/80UmW2MGXTOvaCU6i+Xy7sbWQh/YkUzjN77l8NWZWkqpZaiUqmYarUaZnfWs4uZlzXwodzyYd4z8+OBaK3dAGBRCGNsrgK+WYa/RAyUZcy8yzl3PxE91eJ2p9Z6DYCjoS8Q0T6tdWKt/QrA5ZN81ZjWmusGrLXPA7h7EvCg1np2o2sOENG5rVgROZjP51cUi8WDLflYKyJbJtHcwcw31g1kVYKIrDfGbLLWLgXwQSdRETmqlLpNa729URXTvPdhq0wnPIDQwl+vGxCREMb9AOZ3AB8TkRnGmIpzrj+ELSMsT2qtH2pMyVcA3NkBb7XWswD8PT4NvfdXi8hnHcA/i0gYnQrAw5G9fgeA7SKyiYi4XRPAfVrreq9oP5C8C+DmrHI4mfci8hszzwUwNsGAiBScc3u6bMXJrFvnishfoTKYebzvdDqUhqn4TezhYoquljPzzlZO12N5uN0Q0dwpLtAN/g8RrWsewzINBMDw8DDXarVtRBSaywk/IjKilFqutf68YzlmKTvn+kTkGQBnZmFb34vIqFLqxXw+/3ShUDjcjZt5N2yE5xTv/SoR6SWiJQDO6iYoInuUUm8ppd4olUouy3SUgXaRkZGRGdVqdb6IhAtMGL9DIhKu5z+EQ0nWoq3v/wWf4hm52dSUyAAAAABJRU5ErkJggg==)](https://galaxy.ansible.com/rembik/kickstart_iso)
 
-This role creates custom kickstart ISO images for:
+This role creates kickstart ISO images for:
 * RHEL 7
 * CentOS 7
 
 Requirements
 ------------
 
-None.
+- Access to a repository containing ISO base images, likely on the internet.
+- A recent Ansible version (tested last 3 major versions).
 
 Role Variables
 --------------
 
-This role has multiple variables. The defaults for all these variables are the following:
+These defaults are set in `defaults/main.yml`:
 
 ```yaml
 ---
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-boot-menu-customization
 
-image_name: 'CentOS 7 x86_64'
-image_type: 'Minimal'
-image_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
-image_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
+kickstart_iso_name: 'CentOS 7 x86_64'
+kickstart_iso_type: 'Minimal'
+kickstart_iso_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
+kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
 
-image_src_dir: ".images/{{ image_name|replace(' ','-') }}"
-image_dest_dir: ".images/{{ image_name|replace(' ','-') }}"
+# Directory where the kickstart ISO images are saved, if they do not already exist
+kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}"
 
-image_bios_conf_file: 'isolinux/isolinux.cfg'
-image_uefi_conf_file: 'EFI/BOOT/grub.cfg'
-image_boot_name: "{{ image_name|replace(' ','\\x20') }}"
+kickstart_iso_bios_conf_file: 'isolinux/isolinux.cfg'
+kickstart_iso_uefi_conf_file: 'EFI/BOOT/grub.cfg'
+kickstart_iso_boot_name: "{{ kickstart_iso_name|replace(' ','\\x20') }}"
 
-# Pick first disks with minimal physical size image_disk_drive_min_size (GiB)
-# until a overall minimal logical OS volume size image_disk_volume_min_size (GiB)
-# and create a logical OS volume with maximal size image_disk_volume_max_size (GiB)
-image_disk_drive_min_size: 10
-image_disk_volume_min_size: 60
-image_disk_volume_max_size: 120
+# Pick first disks with minimal physical size kickstart_iso_disk_drive_min_size (GiB)
+# until a overall minimal logical OS volume size kickstart_iso_disk_volume_min_size (GiB)
+# and create a logical OS volume with maximal size kickstart_iso_disk_volume_max_size (GiB)
+kickstart_iso_disk_drive_min_size: 10
+kickstart_iso_disk_volume_min_size: 60
+kickstart_iso_disk_volume_max_size: 120
 
-image_root_password: 'centos'
-image_language: 'de'
-image_country: 'DE'
-image_timezone: 'Europe/Berlin'
-image_network_bootproto: 'dhcp'
-image_network_device: 'eth0'
-image_network_static_netmask: '255.255.255.0'
-image_network_static_gateway: '192.168.1.1'
-image_network_static_nameserver: ['192.168.1.1']
-# If image_network_bootproto is static use image_network_static_hosts
-# to create custom static host ISO images
-# image_network_static_hosts:
+kickstart_iso_root_password: 'centos'
+kickstart_iso_language: 'de'
+kickstart_iso_country: 'DE'
+kickstart_iso_timezone: 'Europe/Berlin'
+kickstart_iso_network_bootproto: 'dhcp'
+kickstart_iso_network_device: 'eth0'
+kickstart_iso_network_static_netmask: '255.255.255.0'
+kickstart_iso_network_static_gateway: '192.168.1.1'
+kickstart_iso_network_static_nameserver: ['192.168.1.1']
+# If kickstart_iso_network_bootproto is static use kickstart_iso_network_static_hosts
+# to create additional custom static host ISO images
+# kickstart_iso_network_static_hosts:
 #   - {ip: '192.168.1.1', name: 'host01'}
 ```
 
@@ -89,23 +90,42 @@ localhost with custom variables; made for static network configuration.
   pre_tasks:
     - name: Get all hosts (including IP) from inventory
       set_fact:
-        image_network_static_hosts: "{{ (image_network_static_hosts|default([])) +
+        kickstart_iso_network_static_hosts: "{{ (kickstart_iso_network_static_hosts|default([])) +
                                      [dict(ip=hostvars[item].ansible_host, name=(item.split('.')[0]|lower))] }}"
       loop: "{{ groups['all'] }}"
 
   roles:
     - role: rembik.kickstart_iso
       vars:
-        image_network_bootproto: 'static'
-        image_network_static_netmask: '255.255.252.0'
-        image_network_static_gateway: '10.0.0.1'
-        image_network_static_nameserver:
+        kickstart_iso_network_bootproto: 'static'
+        kickstart_iso_network_static_netmask: '255.255.252.0'
+        kickstart_iso_network_static_gateway: '10.0.0.1'
+        kickstart_iso_network_static_nameserver:
           - '10.0.2.1'
           - '10.0.3.1'
 ```
 
-To run any of the above sample playbooks create a `playbook.yml` file and paste the contents.
-Executing the Ansible Playbook is then as simple as executing `ansible-playbook playbook.yml`.
+Role Tests
+----------
+
+This role is tested periodically against the following Linux distributions and Ansible versions:
+
+| Distribution ||
+|---|---|
+| [![DockerDistro](https://img.shields.io/badge/Alpine-latest%20%7C%20edge%2A-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/alpine) | [![Ansible](https://img.shields.io/badge/Ansible-2.5%20%7C%202.6%20%7C%202.7%20%7C%20devel%2A-56b4b6.svg)](https://docs.ansible.com/) |
+| [![DockerDistro](https://img.shields.io/badge/ArchLinux-latest-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/r/archlinux/base) | [![Ansible](https://img.shields.io/badge/Ansible-2.5%20%7C%202.6%20%7C%202.7%20%7C%20devel%2A-56b4b6.svg)](https://docs.ansible.com/) |
+| [![DockerDistro](https://img.shields.io/badge/CentOS-latest-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/centos) | [![Ansible](https://img.shields.io/badge/Ansible-2.5%20%7C%202.6%20%7C%202.7%20%7C%20devel%2A-56b4b6.svg)](https://docs.ansible.com/) |
+| [![DockerDistro](https://img.shields.io/badge/Debian-latest%20%7C%20unstable%2A-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/debian) | [![Ansible](https://img.shields.io/badge/Ansible-2.5%20%7C%202.6%20%7C%202.7%20%7C%20devel%2A-56b4b6.svg)](https://docs.ansible.com/) |
+| [![DockerDistro](https://img.shields.io/badge/Fedora-latest%20%7C%20rawhide%2A-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/fedora) | [![Ansible](https://img.shields.io/badge/Ansible-2.5%20%7C%202.6%20%7C%202.7%20%7C%20devel%2A-56b4b6.svg)](https://docs.ansible.com/) |
+| [![DockerDistro](https://img.shields.io/badge/openSUSE-Leap%20%7C%20Tumbleweed-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/opensuse) | [![Ansible](https://img.shields.io/badge/Ansible-2.5%20%7C%202.6%20%7C%202.7%20%7C%20devel%2A-56b4b6.svg)](https://docs.ansible.com/) |
+| [![DockerDistro](https://img.shields.io/badge/Ubuntu-latest%20%7C%20devel%2A-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/ubuntu) | [![Ansible](https://img.shields.io/badge/Ansible-2.5%20%7C%202.6%20%7C%202.7%20%7C%20devel%2A-56b4b6.svg)](https://docs.ansible.com/) |
+
+> Asteriks means the build is allowed to fail, it's marked as an experimental build.
+
+Contributing
+------------
+
+If you find issues, please register them at this [GitHub project issue page](https://github.com/rembik/ansible-role-kickstart-iso/issues/new/choose) or consider contributing code by following this [guideline](http://github.com/rembik/ansible-role-kickstart-iso/tree/master/.github/CONTRIBUTING.md).
 
 License
 -------
@@ -115,4 +135,4 @@ License
 Author Information
 ------------------
 
-This role was created in 2019 by Brian Rimek.
+[Brian Rimek](https://github.com/rembik)

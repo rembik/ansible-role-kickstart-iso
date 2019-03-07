@@ -1,16 +1,64 @@
 ---
+sudo: required
 language: python
-services: docker
+services:
+  - docker
 
 env:
   matrix:
-    - MOLECULE_DISTRO: centos7
-    - MOLECULE_DISTRO: ubuntu1804
-    - MOLECULE_DISTRO: debian9
+    - MOLECULE_DISTRO="alpine-latest" ANSIBLE="stable" MOLECULE_DOCKER_IMAGE="alpine:latest" MOLECULE_DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'"
+    - MOLECULE_DISTRO="alpine-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="alpine:latest" MOLECULE_DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'"
+    - MOLECULE_DISTRO="alpine-edge" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="alpine:edge" MOLECULE_DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'"
+    - MOLECULE_DISTRO="archlinux-latest" ANSIBLE="stable" MOLECULE_DOCKER_IMAGE="archlinux/base"
+    - MOLECULE_DISTRO="archlinux-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="archlinux/base"
+    - MOLECULE_DISTRO="centos-latest" ANSIBLE="stable" MOLECULE_DOCKER_IMAGE="centos:latest"
+    - MOLECULE_DISTRO="centos-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="centos:latest"
+    - MOLECULE_DISTRO="debian-latest" ANSIBLE="stable" MOLECULE_DOCKER_IMAGE="debian:latest"
+    - MOLECULE_DISTRO="debian-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="debian:latest"
+    - MOLECULE_DISTRO="debian-unstable" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="debian:unstable"
+    - MOLECULE_DISTRO="fedora-latest" ANSIBLE="stable" MOLECULE_DOCKER_IMAGE="fedora:latest"
+    - MOLECULE_DISTRO="fedora-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="fedora:latest"
+    - MOLECULE_DISTRO="fedora-rawhide" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="fedora:rawhide"
+    - MOLECULE_DISTRO="opensuse-leap" ANSIBLE="stable" MOLECULE_DOCKER_IMAGE="opensuse/leap:latest"
+    - MOLECULE_DISTRO="opensuse-leap" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="opensuse/leap:latest"
+    - MOLECULE_DISTRO="opensuse-tumbleweed" ANSIBLE="stable" MOLECULE_DOCKER_IMAGE="opensuse/tumbleweed:latest"
+    - MOLECULE_DISTRO="opensuse-tumbleweed" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="opensuse/tumbleweed:latest"
+    - MOLECULE_DISTRO="ubuntu-latest" ANSIBLE="stable" MOLECULE_DOCKER_IMAGE="ubuntu:latest"
+    - MOLECULE_DISTRO="ubuntu-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="ubuntu:latest"
+    - MOLECULE_DISTRO="ubuntu-devel" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="ubuntu:devel"
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: MOLECULE_DISTRO="alpine-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="alpine:latest" MOLECULE_DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'"
+    - env: MOLECULE_DISTRO="alpine-edge" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="alpine:edge" MOLECULE_DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'"
+    - env: MOLECULE_DISTRO="archlinux-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="base/archlinux"
+    - env: MOLECULE_DISTRO="centos-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="centos:latest"
+    - env: MOLECULE_DISTRO="debian-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="debian:latest"
+    - env: MOLECULE_DISTRO="debian-unstable" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="debian:unstable"
+    - env: MOLECULE_DISTRO="fedora-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="fedora:latest"
+    - env: MOLECULE_DISTRO="fedora-rawhide" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="fedora:rawhide"
+    - env: MOLECULE_DISTRO="opensuse-leap" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="opensuse/leap:latest"
+    - env: MOLECULE_DISTRO="opensuse-tumbleweed" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="opensuse/tumbleweed:latest"
+    - env: MOLECULE_DISTRO="ubuntu-latest" ANSIBLE="devel" MOLECULE_DOCKER_IMAGE="ubuntu:latest"
+    - env: MOLECULE_DISTRO="ubuntu-devel" ANSIBLE="all" MOLECULE_DOCKER_IMAGE="ubuntu:devel"
+
+addons:
+  apt:
+    packages:
+      # Hotfix for text coloring
+      # https://github.com/travis-ci/travis-ci/issues/7967#issuecomment-424521694
+      - expect-dev
+
+cache:
+  - pip
+
+before_install:
+  - sudo apt-get -qq update
 
 install:
-  # Install test dependencies.
-  - pip install molecule docker
+  - pip install --upgrade pip
+  - pip install tox-travis
 
 before_script:
   # Use actual Ansible Galaxy role name for the project directory.
@@ -19,8 +67,8 @@ before_script:
   - cd rembik.kickstart_iso
 
 script:
-  # Run tests.
-  - molecule test
+  - unbuffer tox
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  email: true
