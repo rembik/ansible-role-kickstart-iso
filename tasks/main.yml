@@ -22,6 +22,7 @@
         state: present
       loop:
         - 'wget'
+        - 'gcc'
       register: kickstart_iso_packages_install
       until: kickstart_iso_packages_install is succeeded
       retries: 3
@@ -87,11 +88,11 @@
       args:
         chdir: "{{ kickstart_iso_storage }}"
 
-    #- name: Mount ISO image
-    #  become: true
-    #  command: "mount -t iso9660 -o loop {{ kickstart_iso_storage }}/image.iso /tmp/{{ kickstart_iso_info.file_name }}"
-    #  args:
-    #    warn: false
+    # - name: Mount ISO image
+    #   become: true
+    #   command: "mount -t iso9660 -o loop {{ kickstart_iso_storage }}/image.iso /tmp/{{ kickstart_iso_info.file_name }}"
+    #   args:
+    #     warn: false
 
     # - name: Export ISO image (slow)
     #   become: true
@@ -102,17 +103,17 @@
     #     owner: "{{ ansible_real_user_id }}"
     #     group: "{{ ansible_real_user_id }}"
 
-    #- name: Export ISO image (fast)
-    #  become: true
-    #  shell: |
-    #    cp -pRf /tmp/{{ kickstart_iso_info.file_name }}/* {{ kickstart_iso_storage }}/iso
-    #    chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ kickstart_iso_storage }}/iso
-    #  args:
-    #    warn: false
+    # - name: Export ISO image (fast)
+    #   become: true
+    #   shell: |
+    #     cp -pRf /tmp/{{ kickstart_iso_info.file_name }}/* {{ kickstart_iso_storage }}/iso
+    #     chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ kickstart_iso_storage }}/iso
+    #   args:
+    #     warn: false
 
-    #- name: Unmount ISO image
-    #  become: true
-    #  command: "umount /tmp/{{ kickstart_iso_info.file_name }}"
+    # - name: Unmount ISO image
+    #   become: true
+    #   command: "umount /tmp/{{ kickstart_iso_info.file_name }}"
 
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
