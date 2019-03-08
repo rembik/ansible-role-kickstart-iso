@@ -36,7 +36,7 @@ kickstart_iso_type: 'Minimal'
 kickstart_iso_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
 kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
 
-# Directory where the kickstart ISO images are saved, if they do not already exist
+# Directory where the kickstart ISO images are created, if they do not already exist
 kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}"
 
 kickstart_iso_bios_conf_file: 'isolinux/isolinux.cfg'

@@ -36,7 +36,7 @@
       ignore_errors: true
       changed_when: false
 
-    - name: Ensure ephemeral files and directories are empty
+    - name: Prepare ephemeral files and directories
       file:
         path: "{{ item.path }}"
         state: "{{ item.state }}"
@@ -108,13 +108,13 @@
                   inst.stage2=hd:LABEL={{ kickstart_iso_boot_name }} quiet",
            insertafter: EOF, firstmatch: false}
 
-    - name: Loop kickstart ISO image creation
+    - name: Create kickstart ISO images
       include_tasks: create.yml
       loop: "{{ (kickstart_iso_network_static_hosts|default([])) + [dict(ip=kickstart_iso_network_bootproto)] }}"
       loop_control:
         loop_var: kickstart_iso_host
 
-    - name: Delete ephemeral files and directories
+    - name: Clean ephemeral files and directories
       file:
         path: "{{ item }}"
         state: absent
