@@ -12,6 +12,7 @@
     -boot-info-table -eltorito-alt-boot -e images/efiboot.img -no-emul-boot -o ../image_custom.iso .
   args:
     chdir: "{{ kickstart_iso_storage }}/iso"
+  when: true
 
 - name: Copy custom ISO image and kickstart config to destination directory
   copy:
