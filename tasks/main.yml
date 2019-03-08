@@ -31,6 +31,7 @@
       become: true
       command: xorriso -version
       register: kickstart_iso_xorriso_check
+      ignore_errors: true
       changed_when: false
 
     - name: Ensure required ISO image directories are empty and present
