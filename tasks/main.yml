@@ -51,15 +51,15 @@
     - name: Build xorriso CLT
       become: true
       shell: |
-        cd /tmp/xorriso
-        wget https://ftp.gnu.org/gnu/xorriso/xorriso-1.5.0.tar.gz
-        tar xzf xorriso-1.5.0.tar.gz
-        cd xorriso-1.5.0
-        ./configure --prefix=/usr
-        ./xorriso/xorriso
-        make buildstamped
-        strip ./xorriso/xorriso
-        make install
+          cd /tmp/xorriso
+          wget https://ftp.gnu.org/gnu/xorriso/xorriso-1.5.0.tar.gz
+          tar xzf xorriso-1.5.0.tar.gz
+          cd xorriso-1.5.0
+          ./configure --prefix=/usr
+          ./xorriso/xorriso
+          make buildstamped
+          strip ./xorriso/xorriso
+          make install
       when: kickstart_iso_xorriso_check is failed
 
     # - name: Download ISO image (no redirect)
@@ -90,7 +90,9 @@
 
     # - name: Mount ISO image
     #   become: true
-    #   command: "mount -t iso9660 -o loop {{ kickstart_iso_storage }}/image.iso /tmp/{{ kickstart_iso_info.file_name }}"
+    #   command: >
+    #       mount -t iso9660 -o loop {{ kickstart_iso_storage }}/image.iso
+    #       /tmp/{{ kickstart_iso_info.file_name }}
     #   args:
     #     warn: false
 
