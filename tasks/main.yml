@@ -1,5 +1,5 @@
 ---
-- name: Get ISO file name and checksum
+- name: Get base ISO image file name and checksum
   set_fact:
     kickstart_iso_info: "{{ dict(file_name=(item.split('  ')[1]).split('.')[0], checksum=item.split('  ')[0]) }}"
   loop: "{{ lookup('url', kickstart_iso_check_url, wantlist=True) }}"
@@ -36,23 +36,22 @@
       ignore_errors: true
       changed_when: false
 
-    - name: Ensure ephemeral directories are present and empty
+    - name: Ensure ephemeral files and directories are empty
       file:
         path: "{{ item.path }}"
         state: "{{ item.state }}"
         mode: 0755
       loop:
+        - {path: "{{ kickstart_iso_storage }}/image.iso", state: 'absent'}
         - {path: "{{ kickstart_iso_storage }}/iso", state: 'absent'}
         - {path: "{{ kickstart_iso_storage }}/iso", state: 'directory'}
-        - {path: "/tmp/{{ kickstart_iso_info.file_name }}", state: 'absent'}
-        - {path: "/tmp/{{ kickstart_iso_info.file_name }}", state: 'directory'}
         - {path: "{{ kickstart_iso_storage }}/xorriso", state: 'absent'}
         - {path: "{{ kickstart_iso_storage }}/xorriso", state: 'directory'}
 
     - name: Build xorriso CLT
       become: true
       shell: |
-        "cd {{ kickstart_iso_storage }}/xorriso"
+        cd '{{ kickstart_iso_storage }}/xorriso'
         wget https://ftp.gnu.org/gnu/xorriso/xorriso-1.5.0.tar.gz
         tar xzf xorriso-1.5.0.tar.gz
         cd xorriso-1.5.0
@@ -64,60 +63,23 @@
         make install
       when: kickstart_iso_xorriso_check is failed
 
-    # - name: Download ISO image (no redirect)
-    #   get_url:
-    #     url: "{{ kickstart_iso_url }}"
-    #     dest: "{{ kickstart_iso_storage }}/image.iso"
-    #     checksum: "{{ kickstart_iso_info.checksum }}"
-    #     mode: 0755
-    #     unsafe_writes: true
-
-    - name: Download ISO image (redirect)
+    - name: Download base ISO image (support redirect)
       command: "wget {{ kickstart_iso_base_url }}{{ kickstart_iso_info.file_name }}.iso -O image.iso"
       args:
         chdir: "{{ kickstart_iso_storage }}"
         warn: false
 
-    - name: Verify ISO image
+    - name: Verify base ISO image
       command: "sha256sum image.iso"
       args:
         chdir: "{{ kickstart_iso_storage }}"
       register: kickstart_iso_verify
       failed_when: (kickstart_iso_verify.stdout).split('  ')[0] != kickstart_iso_info.checksum
 
-    - name: Extract ISO image
+    - name: Extract base ISO image
       command: xorriso -osirrox on -indev image.iso -extract / iso
       args:
         chdir: "{{ kickstart_iso_storage }}"
-
-    # - name: Mount ISO image
-    #   become: true
-    #   command: >
-    #       mount -t iso9660 -o loop {{ kickstart_iso_storage }}/image.iso
-    #       /tmp/{{ kickstart_iso_info.file_name }}
-    #   args:
-    #     warn: false
-
-    # - name: Export ISO image (slow)
-    #   become: true
-    #   copy:
-    #     src: "/tmp/{{ kickstart_iso_info.file_name }}/"
-    #     dest: "{{ kickstart_iso_storage }}/iso"
-    #     mode: preserve
-    #     owner: "{{ ansible_real_user_id }}"
-    #     group: "{{ ansible_real_user_id }}"
-
-    # - name: Export ISO image (fast)
-    #   become: true
-    #   shell: |
-    #     cp -pRf /tmp/{{ kickstart_iso_info.file_name }}/* {{ kickstart_iso_storage }}/iso
-    #     chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ kickstart_iso_storage }}/iso
-    #   args:
-    #     warn: false
-
-    # - name: Unmount ISO image
-    #   become: true
-    #   command: "umount /tmp/{{ kickstart_iso_info.file_name }}"
 
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
@@ -146,7 +108,7 @@
                   inst.stage2=hd:LABEL={{ kickstart_iso_boot_name }} quiet",
            insertafter: EOF, firstmatch: false}
 
-    - name: Loop over ISO image creation list
+    - name: Loop custom ISO image creation
       include_tasks: create.yml
       loop: "{{ (kickstart_iso_network_static_hosts|default([])) + [dict(ip=kickstart_iso_network_bootproto)] }}"
       loop_control:
@@ -159,7 +121,6 @@
       loop:
         - "{{ kickstart_iso_storage }}/image.iso"
         - "{{ kickstart_iso_storage }}/iso"
-        - "/tmp/{{ kickstart_iso_info.file_name }}"
         - "{{ kickstart_iso_storage }}/xorriso"
 
   when: kickstart_iso_check.matched|int == 0
