@@ -29,13 +29,12 @@
       delay: 60
 
     - name: Ensure required xorriso CLT exists
-      become: true
       command: xorriso -version
       register: kickstart_iso_xorriso_check
       ignore_errors: true
       changed_when: false
 
-    - name: Ensure required ISO image directories are empty and present
+    - name: Ensure ephemeral directories are present and empty
       file:
         path: "{{ item.path }}"
         state: "{{ item.state }}"
@@ -45,8 +44,8 @@
         - {path: "{{ kickstart_iso_storage }}/iso", state: 'directory'}
         - {path: "/tmp/{{ kickstart_iso_info.file_name }}", state: 'absent'}
         - {path: "/tmp/{{ kickstart_iso_info.file_name }}", state: 'directory'}
-        - {path: "/tmp/xorriso", state: 'absent'}
-        - {path: "/tmp/xorriso", state: 'directory'}
+        - {path: "{{ kickstart_iso_storage }}/xorriso", state: 'absent'}
+        - {path: "{{ kickstart_iso_storage }}/xorriso", state: 'directory'}
 
     - name: Build xorriso CLT
       become: true
@@ -151,7 +150,7 @@
       loop_control:
         loop_var: kickstart_iso_host
 
-    - name: Delete ISO image source directories
+    - name: Delete ephemeral files and directories
       file:
         path: "{{ item }}"
         state: absent
@@ -159,6 +158,6 @@
         - "{{ kickstart_iso_storage }}/image.iso"
         - "{{ kickstart_iso_storage }}/iso"
         - "/tmp/{{ kickstart_iso_info.file_name }}"
-        - "/tmp/xorriso"
+        - "{{ kickstart_iso_storage }}/xorriso"
 
   when: kickstart_iso_check.matched|int == 0
