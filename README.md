@@ -11,7 +11,7 @@ This role creates kickstart ISO images for RHEL/CentOS.
 Requirements
 ------------
 
-- Access to a repository containing ISO base images, likely on the internet.
+- Access to repositories containing system packages and base ISO images, likely on the internet.
 - A recent Ansible version (tested last 3 major versions).
 
 The following roles can be installed to ensure all requirements are met, using `ansible-galaxy install -r requirements.yml`:
