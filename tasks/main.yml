@@ -22,6 +22,8 @@
         state: present
       loop:
         - 'wget'
+        - 'libc'
+        - 'libpthread'
       register: kickstart_iso_packages_install
       until: kickstart_iso_packages_install is succeeded
       retries: 3
