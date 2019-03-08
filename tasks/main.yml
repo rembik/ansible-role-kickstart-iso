@@ -22,14 +22,12 @@
         state: present
       loop:
         - 'wget'
-        - 'libc'
-        - 'libpthread'
       register: kickstart_iso_packages_install
       until: kickstart_iso_packages_install is succeeded
       retries: 3
       delay: 60
 
-    - name: Ensure required xorriso CLT is present
+    - name: Ensure required xorriso CLT exists
       become: true
       command: xorriso -version
       register: kickstart_iso_xorriso_check
@@ -84,11 +82,16 @@
       register: kickstart_iso_verify
       failed_when: (kickstart_iso_verify.stdout).split('  ')[0] != kickstart_iso_info.checksum
 
-    - name: Mount ISO image
-      become: true
-      command: "mount -t iso9660 -o loop {{ kickstart_iso_storage }}/image.iso /tmp/{{ kickstart_iso_info.file_name }}"
+    - name: Extract ISO image
+      command: xorriso -osirrox on -indev image.iso -extract / iso
       args:
-        warn: false
+        chdir: "{{ kickstart_iso_storage }}"
+
+    #- name: Mount ISO image
+    #  become: true
+    #  command: "mount -t iso9660 -o loop {{ kickstart_iso_storage }}/image.iso /tmp/{{ kickstart_iso_info.file_name }}"
+    #  args:
+    #    warn: false
 
     # - name: Export ISO image (slow)
     #   become: true
@@ -99,17 +102,17 @@
     #     owner: "{{ ansible_real_user_id }}"
     #     group: "{{ ansible_real_user_id }}"
 
-    - name: Export ISO image (fast)
-      become: true
-      shell: |
-        cp -pRf /tmp/{{ kickstart_iso_info.file_name }}/* {{ kickstart_iso_storage }}/iso
-        chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ kickstart_iso_storage }}/iso
-      args:
-        warn: false
+    #- name: Export ISO image (fast)
+    #  become: true
+    #  shell: |
+    #    cp -pRf /tmp/{{ kickstart_iso_info.file_name }}/* {{ kickstart_iso_storage }}/iso
+    #    chown -R {{ ansible_real_user_id }}:{{ ansible_real_user_id }} {{ kickstart_iso_storage }}/iso
+    #  args:
+    #    warn: false
 
-    - name: Unmount ISO image
-      become: true
-      command: "umount /tmp/{{ kickstart_iso_info.file_name }}"
+    #- name: Unmount ISO image
+    #  become: true
+    #  command: "umount /tmp/{{ kickstart_iso_info.file_name }}"
 
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
