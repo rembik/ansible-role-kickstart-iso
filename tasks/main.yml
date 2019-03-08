@@ -49,7 +49,7 @@
 
     - name: Build xorriso CLT
       become: true
-      command: |
+      shell: |
         cd /tmp/xorriso
         wget https://ftp.gnu.org/gnu/xorriso/xorriso-1.5.0.tar.gz
         tar xzf xorriso-1.5.0.tar.gz
