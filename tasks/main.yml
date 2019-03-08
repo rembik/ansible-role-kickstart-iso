@@ -108,7 +108,7 @@
                   inst.stage2=hd:LABEL={{ kickstart_iso_boot_name }} quiet",
            insertafter: EOF, firstmatch: false}
 
-    - name: Loop custom ISO image creation
+    - name: Loop kickstart ISO image creation
       include_tasks: create.yml
       loop: "{{ (kickstart_iso_network_static_hosts|default([])) + [dict(ip=kickstart_iso_network_bootproto)] }}"
       loop_control:

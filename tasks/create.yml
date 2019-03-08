@@ -5,7 +5,7 @@
     dest: "{{ kickstart_iso_storage }}/iso/kickstart.cfg"
     mode: 0644
 
-- name: Create custom ISO image
+- name: Create kickstart ISO image
   command: >
     xorrisofs -U -r -v -T -J -joliet-long -V '{{ kickstart_iso_name }}' -volset '{{ kickstart_iso_name }}'
     -A '{{ kickstart_iso_name }}' -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4
