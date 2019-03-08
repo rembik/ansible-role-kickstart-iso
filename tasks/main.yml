@@ -26,7 +26,7 @@
       until: kickstart_iso_packages_install is succeeded
       retries: 3
       delay: 60
-    
+
     - name: Ensure required xorriso CLT is present
       become: true
       command: xorriso -version
