@@ -8,10 +8,10 @@
     - role: rembik.bootstrap
     - role: rembik.kickstart_iso
       vars:
-        kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}_dhcp/"
+        kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}_dhcp"
     - role: rembik.kickstart_iso
       vars:
-        kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}_static/"
+        kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}_static"
         kickstart_iso_network_bootproto: 'static'
         kickstart_iso_network_static_netmask: '255.255.252.0'
         kickstart_iso_network_static_gateway: '10.0.0.1'
