@@ -12,6 +12,12 @@ echo "#       Static Network Configuration       #"
 echo "############################################"
 CONFIRM=no
 while [ "$CONFIRM" != "y" ];do
+    echo -en "Enter Device (\\e[01;36m{{ kickstart_iso_network_device }}\\e[00m): "
+    read DEVICE
+    if [ -z $DEVICE ]
+    then
+        DEVICE="{{ kickstart_iso_network_device }}"
+    fi
     echo -n "Enter Hostname: "
     read HOSTNAME
     echo -n "Enter IP Address: "
@@ -35,12 +41,13 @@ while [ "$CONFIRM" != "y" ];do
         NAMESERVER="{{ kickstart_iso_network_static_nameserver|join(',') }}"
     fi
     echo
+    echo -e "Device:   \\e[01;36m$DEVICE \\e[00m"
     echo -e "Hostname:   \\e[01;36m$HOSTNAME \\e[00m"
     echo -e "IP Address: \\e[01;36m$IPADDRESS \\e[00m"
     echo -e "Netmask:    \\e[01;36m$NETMASK \\e[00m"
     echo -e "Gateway:    \\e[01;36m$GATEWAY \\e[00m"
     echo -e "Nameserver: \\e[01;36m$NAMESERVER \\e[00m"
-    NETWORK="network --bootproto={{ kickstart_iso_network_bootproto }} --device={{ kickstart_iso_network_device }} --gateway=$GATEWAY --ip=$IPADDRESS --nameserver=$NAMESERVER --netmask=$NETMASK --hostname=$HOSTNAME"
+    NETWORK="network --bootproto={{ kickstart_iso_network_bootproto }} --device=$DEVICE --gateway=$GATEWAY --ip=$IPADDRESS --nameserver=$NAMESERVER --netmask=$NETMASK --hostname=$HOSTNAME"
     echo -n "Is the above configuration correct?(y/n): "
     read CONFIRM
     echo
