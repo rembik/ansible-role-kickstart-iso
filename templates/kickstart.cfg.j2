@@ -136,15 +136,15 @@ network --bootproto={{ kickstart_iso_network_bootproto }} --device={{ kickstart_
 %include /tmp/kickstart-network.cfg
 {% endif %}
 # Root password
-rootpw --iscrypted {{ kickstart_iso_root_password | password_hash('sha512') }}
+rootpw --iscrypted {{ kickstart_iso_root_password|password_hash('sha512') }}
 # System services
 services --enabled='chronyd'
 # System timezone
 timezone {{ kickstart_iso_timezone }} --isUtc
 # Disk partitioning information
 %include /tmp/kickstart-partitions.cfg
-# Power off system after installation
-poweroff
+# Kickstart completion
+{{ kickstart_iso_completion }}
 
 %packages
 @^minimal
