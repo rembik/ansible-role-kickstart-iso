@@ -21,8 +21,8 @@ provisioner:
     name: ansible-lint
   config_options:
     defaults:
-      callback_plugins: /usr/lib/python2.7/site-packages/ara/plugins/callbacks
-  playbook:
+      callback_plugins: /usr/lib/python${MOLECULE_PYTHON:-2.7}/site-packages/ara/plugins/callbacks
+  playbooks:
     converge: ${MOLECULE_PLAYBOOK:-../playbook.yml}
 scenario:
   name: vagrant

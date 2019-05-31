@@ -25,10 +25,6 @@ provisioner:
       callback_plugins: /usr/lib/python${MOLECULE_PYTHON:-2.7}/site-packages/ara/plugins/callbacks
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-../playbook.yml}
-  inventory:
-    group_vars:
-      fedora-rawhide-docker:
-        ansible_python_interpreter: /usr/bin/python3
 scenario:
   name: default
 verifier:

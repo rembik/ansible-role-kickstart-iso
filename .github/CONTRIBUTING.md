@@ -18,7 +18,7 @@ sudo pip install ansible
 sudo pip install molecule
 ```
 
-You can decide, if you want to run the tests locally with Docker, Vagrant or on Amazon EC2. Follow the respective requirements for that:
+You can decide, if you want to run the tests locally with Docker or Vagrant. Follow the respective requirements for that:
 - [Docker](http://github.com/rembik/ansible-role-kickstart-iso/tree/master/molecule/docker-all/INSTALL.rst)
 - [Vagrant](http://github.com/rembik/ansible-role-kickstart-iso/tree/master/molecule/vagrant/INSTALL.rst)
 

@@ -70,7 +70,7 @@ before_script:
   - cd rembik.kickstart_iso
 
 script:
-  - unbuffer tox
+  - travis_wait unbuffer tox
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
