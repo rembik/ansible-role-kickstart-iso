@@ -69,6 +69,9 @@
       args:
         chdir: "{{ kickstart_iso_storage }}"
         warn: false
+      register: kickstart_iso_download
+      until: kickstart_iso_download is succeeded
+      retries: 3
 
     - name: Verify base ISO image
       command: "sha256sum image.iso"
