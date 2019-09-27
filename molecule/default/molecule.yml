@@ -12,8 +12,8 @@ lint:
 platforms:
   # https://hub.docker.com/search/?type=image
   - name: "${MOLECULE_INSTANCE_PREFIX:-instance}-${MOLECULE_DISTRO:-centos-latest}-${MOLECULE_TOXENV:-docker}"
-    image: ${MOLECULE_DOCKER:-centos:latest}
-    command: ${MOLECULE_COMMAND:-sleep infinity}
+    image: ${MOLECULE_DOCKER_IMAGE:-centos:latest}
+    command: ${MOLECULE_DOCKER_COMMAND:-sleep infinity}
     groups:
       - ${MOLECULE_DISTRO:-centos-latest}-docker
 provisioner:
