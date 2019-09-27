@@ -10,7 +10,6 @@ lint:
   options:
     config-file: molecule/.yamllint.yml
 platforms:
-  # https://hub.docker.com/search/?type=image
   - name: "${MOLECULE_INSTANCE_PREFIX:-instance}-${MOLECULE_DISTRO:-centos-latest}-${MOLECULE_TOXENV:-docker}"
     image: ${MOLECULE_DOCKER_IMAGE:-centos:latest}
     command: ${MOLECULE_DOCKER_COMMAND:-sleep infinity}
