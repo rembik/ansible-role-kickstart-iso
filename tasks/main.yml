@@ -28,8 +28,9 @@
       loop:
         - 'wget'
         - 'gcc'
-        - "{{ 'g++' if ansible_os_family in (['Debian']) else 'gcc-c++' }}"
+        - "{{ 'g++' if ansible_os_family in (['Debian','Alpine']) else 'gcc-c++' }}"
         - 'make'
+        - 'tar'
       register: kickstart_iso_packages_install
       until: kickstart_iso_packages_install is succeeded
       retries: 3

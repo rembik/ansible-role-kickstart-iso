@@ -30,7 +30,7 @@ These defaults are set in `defaults/main.yml`:
 ```yaml
 ---
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-boot-menu-customization
-# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/performing_an_advanced_rhel_installation
 
 kickstart_iso_name: 'CentOS 8 x86_64'
 kickstart_iso_type: 'boot'

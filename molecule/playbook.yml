@@ -8,7 +8,12 @@
     - role: rembik.bootstrap
     - role: rembik.kickstart_iso
       vars:
+        kickstart_iso_name: 'CentOS 8 x86_64'
+        kickstart_iso_type: 'boot'
+        kickstart_iso_check_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
+        kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
         kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}_dhcp"
+        kickstart_iso_network_bootproto: 'dhcp'
     - role: rembik.kickstart_iso
       vars:
         kickstart_iso_name: 'CentOS 7 x86_64'

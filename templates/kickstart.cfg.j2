@@ -1,6 +1,6 @@
 # Go to a manually installed RHEL/CentOS server, look at the /root/anaconda-ks.cfg and edit this kickstart template for your purpose
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-syntax
-# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/performing_an_advanced_rhel_installation
 
 %pre --log=/tmp/kickstart-pre.log
 {% if kickstart_iso_network_bootproto == 'static' and kickstart_iso_host.ip == 'static' %}
