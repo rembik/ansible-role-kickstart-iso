@@ -2,7 +2,7 @@
 - name: Get base ISO image file name and checksum
   set_fact:
     kickstart_iso_info: "{{ dict(file_name=(
-                         item|regex_replace('^.*('~ kickstart_iso_name.replace(' ','-') ~'.*)(?=\\.iso).*)', '\\1') ),
+                         item|regex_replace('^.*('~ kickstart_iso_name.replace(' ','-') ~'.*)\\.iso.*', '\\1') ),
                          checksum=(
                          item|regex_replace('^.*([a-z0-9]{64,}).*', '\\1') )) }}"
     kickstart_iso_checksum: "{{  }}"
