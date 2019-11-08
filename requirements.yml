@@ -1,3 +1,2 @@
 ---
 - name: rembik.bootstrap
-  version: '>=3.6.1'
