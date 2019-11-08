@@ -30,11 +30,12 @@ These defaults are set in `defaults/main.yml`:
 ```yaml
 ---
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-boot-menu-customization
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation
 
-kickstart_iso_name: 'CentOS 7 x86_64'
-kickstart_iso_type: 'Minimal'
-kickstart_iso_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
-kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
+kickstart_iso_name: 'CentOS 8 x86_64'
+kickstart_iso_type: 'boot'
+kickstart_iso_check_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
+kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
 kickstart_iso_download_delay: 300
 
 # Directory where the kickstart ISO images are created, if they do not already exist

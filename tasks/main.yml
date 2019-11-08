@@ -5,7 +5,6 @@
                          item|regex_replace('^.*('~ kickstart_iso_name.replace(' ','-') ~'.*)\\.iso.*', '\\1') ),
                          checksum=(
                          item|regex_replace('^.*([a-z0-9]{64,}).*', '\\1') )) }}"
-    kickstart_iso_checksum: "{{  }}"
   loop: "{{ lookup('url', kickstart_iso_check_url, wantlist=True) }}"
   when:
     - item is search(kickstart_iso_type)
