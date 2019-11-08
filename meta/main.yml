@@ -7,9 +7,12 @@ galaxy_info:
   description: Creates kickstart ISO images for RHEL/CentOS.
   license: "Apache 2.0"
   company: none
-  min_ansible_version: 2.6
+  min_ansible_version: 2.7
   platforms:
     - name: Alpine
+      versions:
+        - all
+    - name: Amazon
       versions:
         - all
     - name: ArchLinux
@@ -20,8 +23,7 @@ galaxy_info:
         - all
     - name: EL
       version:
-        - 6
-        - 7
+        - all
     - name: Fedora
       versions:
         - all

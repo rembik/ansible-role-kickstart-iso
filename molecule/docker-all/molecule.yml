@@ -8,37 +8,74 @@ driver:
 lint:
   name: yamllint
   options:
-    config-file: molecule/.yamllint.yml
+    config-file: molecule/.yamllint
 platforms:
   # https://hub.docker.com/search/?type=image
-  - name: instance-alpine-latest-docker
+  - name: instance_alpine_latest_docker
     image: alpine:latest
+    pre_build_image: yes
     command: sh -c "while true ; do sleep 1 ; done"
-  - name: instance-archlinux-latest-docker
-    image: archlinux/base:latest
-  - name: instance-centos-latest-docker
+    groups:
+      - alpine_latest_docker
+  - name: instance_amazonlinux_latest_docker
+    image: amazonlinux:latest
+    pre_build_image: yes
+  - name: instance_centos_latest_docker
     image: centos:latest
-  - name: instance-debian-latest-docker
+    pre_build_image: yes
+    groups:
+      - centos_latest_docker
+  - name: instance_debian_latest_docker
     image: debian:latest
-  - name: instance-fedora-latest-docker
+    pre_build_image: yes
+    groups:
+      - debian_latest_docker
+  - name: instance_fedora_latest_docker
     image: fedora:latest
-  - name: instance-opensuse-leap-docker
+    pre_build_image: yes
+    groups:
+      - fedora_latest_docker
+  - name: instance_opensuse_leap_docker
     image: opensuse/leap:latest
-  - name: instance-opensuse-tumbleweed-docker
+    pre_build_image: yes
+  - name: instance_opensuse_tumbleweed_docker
     image: opensuse/tumbleweed:latest
-  - name: instance-ubuntu-latest-docker
+    pre_build_image: yes
+  - name: instance_redhat_latest_docker
+    image: registry.access.redhat.com/ubi8/ubi:latest
+    pre_build_image: yes
+    groups:
+      - redhat_latest_docker
+  - name: instance_ubuntu_latest_docker
     image: ubuntu:latest
+    pre_build_image: yes
+    groups:
+      - ubuntu_latest_docker
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
   config_options:
     defaults:
-      callback_plugins: /usr/lib/python${MOLECULE_PYTHON:-2.7}/site-packages/ara/plugins/callbacks
+      callback_plugins: /usr/lib/python${TOX_PYTHON_VERSION:-3.7}/site-packages/ara/plugins/callbacks
   playbooks:
-    converge: ${MOLECULE_PLAYBOOK:-../playbook.yml}
+    converge: ${TEST_PLAYBOOK:-../playbook.yml}
+  inventory:
+    group_vars:
+      alpine_latest_docker:
+        ansible_python_interpreter: /usr/bin/python3
+      centos_latest_docker:
+        ansible_python_interpreter: /usr/bin/python3
+      debian_latest_docker:
+        ansible_python_interpreter: /usr/bin/python3
+      fedora_latest_docker:
+        ansible_python_interpreter: /usr/bin/python3
+      redhat_latest_docker:
+        ansible_python_interpreter: /usr/bin/python3
+      ubuntu_latest_docker:
+        ansible_python_interpreter: /usr/bin/python3
 scenario:
-  name: default-all
+  name: docker-all
 verifier:
   name: goss
   directory: ../tests

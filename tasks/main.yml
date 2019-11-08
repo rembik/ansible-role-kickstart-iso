@@ -1,9 +1,15 @@
 ---
 - name: Get base ISO image file name and checksum
   set_fact:
-    kickstart_iso_info: "{{ dict(file_name=(item.split('  ')[1]).split('.')[0], checksum=item.split('  ')[0]) }}"
+    kickstart_iso_info: "{{ dict(file_name=(
+                         item|regex_replace('^.*('~ kickstart_iso_name.replace(' ','-') ~'.*)(?=\\.iso).*)', '\\1') ),
+                         checksum=(
+                         item|regex_replace('^.*([a-z0-9]{64,}).*', '\\1') )) }}"
+    kickstart_iso_checksum: "{{  }}"
   loop: "{{ lookup('url', kickstart_iso_check_url, wantlist=True) }}"
-  when: item is search(kickstart_iso_type)
+  when:
+    - item is search(kickstart_iso_type)
+    - item is search('[a-z0-9]{64,}')
   changed_when: false
 
 - name: Ensure kickstart ISO images not already exist
@@ -25,7 +31,6 @@
         - 'gcc'
         - "{{ 'g++' if ansible_os_family in (['Debian']) else 'gcc-c++' }}"
         - 'make'
-        - 'texinfo'
       register: kickstart_iso_packages_install
       until: kickstart_iso_packages_install is succeeded
       retries: 3
@@ -34,8 +39,8 @@
     - name: Ensure required xorriso CLT exists
       command: xorriso -version
       register: kickstart_iso_xorriso_check
-      ignore_errors: true
       changed_when: false
+      failed_when: false
 
     - name: Prepare ephemeral files and directories
       file:
@@ -62,7 +67,7 @@
         make buildstamped
         strip ./xorriso/xorriso
         make install
-      when: kickstart_iso_xorriso_check is failed
+      when: kickstart_iso_xorriso_check.rc != 0
 
     - name: Download base ISO image (support redirect)
       command: "wget {{ kickstart_iso_base_url }}{{ kickstart_iso_info.file_name }}.iso -O image.iso"

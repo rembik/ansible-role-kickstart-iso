@@ -10,20 +10,26 @@ driver:
 lint:
   name: yamllint
   options:
-    config-file: molecule/.yamllint.yml
+    config-file: molecule/.yamllint
 platforms:
   # https://app.vagrantup.com/boxes/search
-  - name: "${MOLECULE_INSTANCE_PREFIX:-instance}-${MOLECULE_DISTRO:-centos-latest}-vagrant"
-    image: ${MOLECULE_VBOX:-centos/7}
+  - name: "${TEST_INSTANCE_PREFIX:-instance}_${TEST_DISTRO:-centos_latest}_vagrant"
+    image: ${TEST_VBOX:-centos/7}
+    groups:
+      - ${TEST_DISTRO:-centos_latest}_vagrant
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
   config_options:
     defaults:
-      callback_plugins: /usr/lib/python${MOLECULE_PYTHON:-2.7}/site-packages/ara/plugins/callbacks
+      callback_plugins: /usr/lib/python${TOX_PYTHON_VERSION:-3.7}/site-packages/ara/plugins/callbacks
   playbooks:
-    converge: ${MOLECULE_PLAYBOOK:-../playbook.yml}
+    converge: ${TEST_PLAYBOOK:-../playbook.yml}
+  inventory:
+    group_vars:
+      centos_latest_vagrant:
+        ansible_python_interpreter: /usr/bin/python3
 scenario:
   name: vagrant
 verifier:
