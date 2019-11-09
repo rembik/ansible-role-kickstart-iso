@@ -14,8 +14,8 @@ _kickstart_iso_packages:
   Fedora: gcc gcc-c++ make wget
   Gentoo: gcc gcc-c++ make wget
   Kali: gcc g++ make wget
-  openSUSE Leap: gcc gcc-c++ make wget
-  openSUSE Tumbleweed: gcc gcc-c++ make wget
+  openSUSE Leap: gcc gcc-c++ gzip make wget tar
+  openSUSE Tumbleweed: gcc gcc-c++ gzip make wget tar
   RedHat: gcc gcc-c++ make wget
   Ubuntu: gcc g++ make wget
 
