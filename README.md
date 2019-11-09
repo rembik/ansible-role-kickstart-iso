@@ -41,10 +41,6 @@ kickstart_iso_download_delay: 300
 # Directory where the kickstart ISO images are created, if they do not already exist
 kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}"
 
-kickstart_iso_bios_conf_file: 'isolinux/isolinux.cfg'
-kickstart_iso_uefi_conf_file: 'EFI/BOOT/grub.cfg'
-kickstart_iso_boot_name: "{{ kickstart_iso_name|replace(' ','\\x20') }}"
-
 # Pick first disks with minimal physical size kickstart_iso_disk_drive_min_size (GiB)
 # until a overall minimal logical OS volume size kickstart_iso_disk_volume_min_size (GiB)
 # and create a logical OS volume with maximal size kickstart_iso_disk_volume_max_size (GiB)

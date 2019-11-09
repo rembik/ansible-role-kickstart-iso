@@ -25,14 +25,7 @@
       package:
         name: "{{ item }}"
         state: present
-      loop:
-        - 'file'
-        - 'gcc'
-        - "{{ 'g++' if ansible_os_family in (['Debian','Alpine']) else 'gcc-c++' }}"
-        - 'gzip'
-        - 'make'
-        - 'tar'
-        - 'wget'
+      with_items: "{{ kickstart_iso_packages.split() }}"
       register: kickstart_iso_packages_install
       until: kickstart_iso_packages_install is succeeded
       retries: 3
@@ -60,9 +53,9 @@
       become: true
       shell: |
         cd '{{ kickstart_iso_storage }}/xorriso'
-        wget https://ftp.gnu.org/gnu/xorriso/xorriso-1.5.0.tar.gz
-        tar xzf xorriso-1.5.0.tar.gz
-        cd xorriso-1.5.0
+        wget https://ftp.gnu.org/gnu/xorriso/xorriso-1.5.2.tar.gz
+        tar xzf xorriso-1.5.2.tar.gz
+        cd xorriso-1.5.2
         ./configure --prefix=/usr
         make
         ./xorriso/xorriso
