@@ -19,5 +19,6 @@ _kickstart_iso_packages:
   Ubuntu: gcc g++ make wget
 
 # Map the right set of packages, based on gathered facts.
-kickstart_iso_packages: "{{ _kickstart_iso_packages[ansible_distribution ~'-'~ ansible_distribution_major_version]|(
-                         default(_kickstart_iso_packages[ansible_distribution])) }}"
+# yamllint disable-line rule:line-length
+kickstart_iso_packages: "{{ _kickstart_iso_packages[ansible_distribution ~'-'~ ansible_distribution_major_version]|default(
+                         _kickstart_iso_packages[ansible_distribution]) }}"
