@@ -2,6 +2,3 @@ molecule/*/.molecule
 *.log
 *.swp
 .tox
-*.retry
-*/__pycache__
-*.pyc

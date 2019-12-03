@@ -1,25 +1,19 @@
 ---
-
 kickstart_iso_bios_conf_file: 'isolinux/isolinux.cfg'
 kickstart_iso_uefi_conf_file: 'EFI/BOOT/grub.cfg'
 kickstart_iso_boot_name: "{{ kickstart_iso_name|replace(' ','\\x20') }}"
 
 _kickstart_iso_packages:
-  NA: gcc gcc-c++ make wget
-  Amazon: gcc gcc-c++ gzip make tar wget
-  Alpine: file gcc g++ gzip linux-headers make tar wget
-  Archlinux: gcc gcc-c++ make wget
-  CentOS: gcc gcc-c++ make wget
-  Debian: gcc g++ make wget
-  Fedora: gcc gcc-c++ make wget
-  Gentoo: gcc gcc-c++ make wget
-  Kali: gcc g++ make wget
-  openSUSE Leap: gcc gcc-c++ gzip make wget tar
-  openSUSE Tumbleweed: gcc gcc-c++ gzip make wget tar
-  RedHat: gcc gcc-c++ make wget
-  Ubuntu: gcc g++ make wget
+  Alpine: [file, gcc, g++, gzip, linux-headers, make, tar, wget]
+  Archlinux: [gcc, gcc-c++, make, wget]
+  Debian: [gcc, g++, make, wget]
+  Gentoo: [gcc, gcc-c++, make, wget]
+  RedHat: [gcc, gcc-c++, make, wget]
+  Suse: [gcc, gcc-c++, gzip, make, tar, wget]
+  Amazon: [gcc, gcc-c++, gzip, make, tar, wget]
 
 # Map the right set of packages, based on gathered facts.
 # yamllint disable-line rule:line-length
 kickstart_iso_packages: "{{ _kickstart_iso_packages[ansible_distribution ~'-'~ ansible_distribution_major_version]|default(
-                         _kickstart_iso_packages[ansible_distribution]) }}"
+                         _kickstart_iso_packages[ansible_distribution])|default(
+                         _kickstart_iso_packages[ansible_os_family])|default([]) }}"

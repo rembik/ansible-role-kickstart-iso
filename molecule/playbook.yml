@@ -1,12 +1,12 @@
 ---
 - name: Converge
   hosts: all
-  gather_facts: false
-  become: true
+  gather_facts: no
+  become: yes
 
   roles:
     - role: rembik.bootstrap
-    - role: rembik.kickstart_iso
+    - role: ansible-role-kickstart-iso
       vars:
         kickstart_iso_name: 'CentOS 8 x86_64'
         kickstart_iso_type: 'boot'
@@ -14,7 +14,7 @@
         kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
         kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}_dhcp"
         kickstart_iso_network_bootproto: 'dhcp'
-    - role: rembik.kickstart_iso
+    - role: ansible-role-kickstart-iso
       vars:
         kickstart_iso_name: 'CentOS 7 x86_64'
         kickstart_iso_type: 'Minimal'

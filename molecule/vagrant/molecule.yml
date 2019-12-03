@@ -26,10 +26,6 @@ provisioner:
       callback_plugins: /usr/lib/python${TOX_PYTHON_VERSION:-3.7}/site-packages/ara/plugins/callbacks
   playbooks:
     converge: ${TEST_PLAYBOOK:-../playbook.yml}
-  inventory:
-    group_vars:
-      centos_latest_vagrant:
-        ansible_python_interpreter: /usr/bin/python3
 scenario:
   name: vagrant
 verifier:
