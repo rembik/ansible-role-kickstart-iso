@@ -90,7 +90,7 @@
       set_fact:
         kickstart_iso_boot_name: "{{ lookup('file', kickstart_iso_storage +'/iso/'+ kickstart_iso_bios_conf_file,
                                   wantList=True)|join(',')|regex_replace(
-                                  '.*inst.stage2=hd:LABEL=(\S+)\squiet.*','\\1') }}"
+                                  '.*inst.stage2=hd:LABEL=(\\S+) quiet.*','\\1') }}"
 
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
