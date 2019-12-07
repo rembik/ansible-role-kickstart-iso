@@ -7,8 +7,9 @@
 
 - name: Create kickstart ISO image
   command: >
-    xorrisofs -U -r -v -T -J -joliet-long -V '{{ kickstart_iso_name }}' -volset '{{ kickstart_iso_name }}'
-    -A '{{ kickstart_iso_name }}' -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4
+    xorrisofs -U -r -v -T -J -joliet-long -V '{{ kickstart_iso_boot_name|replace('\\x20',' ') }}'
+    -volset '{{ kickstart_iso_boot_name|replace('\\x20',' ') }}' -A '{{ kickstart_iso_boot_name|replace('\\x20',' ') }}'
+    -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4
     -boot-info-table -eltorito-alt-boot -e images/efiboot.img -no-emul-boot
     -o "../{{ kickstart_iso_info.file_name }}{{ ('_' + (kickstart_iso_host.name|default(''))
     + '_')|replace('__','_') }}{{ kickstart_iso_host.ip|replace('.','-') }}.iso" .

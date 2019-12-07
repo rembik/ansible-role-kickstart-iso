@@ -1,10 +1,10 @@
 ---
-- name: Get base ISO image file name and checksum
+- name: Lookup base ISO image file name and checksum
   set_fact:
     kickstart_iso_info: "{{ dict(file_name=(
-                         item|regex_replace('^.*('~ kickstart_iso_name.replace(' ','-') ~'.*)\\.iso.*', '\\1') ),
+                         item|regex_replace('.*([\\w-]+)\\.iso.*','\\1') ),
                          checksum=(
-                         item|regex_replace('^.*([a-z0-9]{64,}).*', '\\1') )) }}"
+                         item|regex_replace('.*([a-z0-9]{64,}).*','\\1') )) }}"
   loop: "{{ lookup('url', kickstart_iso_check_url, wantlist=True) }}"
   when:
     - item is search(kickstart_iso_type)
@@ -37,22 +37,11 @@
       changed_when: false
       failed_when: false
 
-    - name: Prepare ephemeral files and directories
-      file:
-        path: "{{ item.path }}"
-        state: "{{ item.state }}"
-        mode: 0755
-      loop:
-        - {path: "{{ kickstart_iso_storage }}/image.iso", state: 'absent'}
-        - {path: "{{ kickstart_iso_storage }}/iso", state: 'absent'}
-        - {path: "{{ kickstart_iso_storage }}/iso", state: 'directory'}
-        - {path: "{{ kickstart_iso_storage }}/xorriso", state: 'absent'}
-        - {path: "{{ kickstart_iso_storage }}/xorriso", state: 'directory'}
-
     - name: Build xorriso CLT
       become: true
       shell: |
-        cd '{{ kickstart_iso_storage }}/xorriso'
+        mkdir -p /tmp/xorriso
+        cd /tmp/xorriso
         wget https://ftp.gnu.org/gnu/xorriso/xorriso-1.5.2.tar.gz
         tar xzf xorriso-1.5.2.tar.gz
         cd xorriso-1.5.2
@@ -62,7 +51,18 @@
         make buildstamped
         strip ./xorriso/xorriso
         make install
+        rm -rf /tmp/xorriso
       when: kickstart_iso_xorriso_check.rc != 0
+
+      - name: Prepare ephemeral files and directories
+      file:
+        path: "{{ item.path }}"
+        state: "{{ item.state }}"
+        mode: 0755
+      loop:
+        - {path: "{{ kickstart_iso_storage }}/image.iso", state: 'absent'}
+        - {path: "{{ kickstart_iso_storage }}/iso", state: 'absent'}
+        - {path: "{{ kickstart_iso_storage }}/iso", state: 'directory'}
 
     - name: Download base ISO image (support redirect)
       command: "wget {{ kickstart_iso_base_url }}{{ kickstart_iso_info.file_name }}.iso -O image.iso"
@@ -85,6 +85,11 @@
       command: xorriso -osirrox on -indev image.iso -extract / iso
       args:
         chdir: "{{ kickstart_iso_storage }}"
+
+    - name: Lookup Boot-Menu ISO name
+      set_fact:
+        kickstart_iso_boot_name: "{{ lookup('file', kickstart_iso_storage +'/iso/'+ kickstart_iso_bios_conf_file,
+                                  wantList=True)|join(',')|regex_replace('.*inst.stage2=hd:LABEL=(\S+)\squiet.*','\\1') }}"
 
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
@@ -113,7 +118,7 @@
                   inst.stage2=hd:LABEL={{ kickstart_iso_boot_name }} quiet",
            insertafter: EOF, firstmatch: false}
       loop_control:
-        label: "{{ item.line }}"
+        label: "{{ item.line|replace('  ', '') }}"
 
     - name: Create kickstart ISO images
       include_tasks: create.yml
@@ -128,6 +133,5 @@
       loop:
         - "{{ kickstart_iso_storage }}/image.iso"
         - "{{ kickstart_iso_storage }}/iso"
-        - "{{ kickstart_iso_storage }}/xorriso"
 
   when: kickstart_iso_check.matched|int == 0

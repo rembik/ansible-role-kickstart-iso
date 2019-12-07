@@ -8,19 +8,15 @@
     - role: rembik.bootstrap
     - role: ansible-role-kickstart-iso
       vars:
-        kickstart_iso_name: 'CentOS 8 x86_64'
         kickstart_iso_type: 'boot'
         kickstart_iso_check_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
         kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
-        kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}_dhcp"
         kickstart_iso_network_bootproto: 'dhcp'
     - role: ansible-role-kickstart-iso
       vars:
-        kickstart_iso_name: 'CentOS 7 x86_64'
         kickstart_iso_type: 'Minimal'
         kickstart_iso_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
         kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
-        kickstart_iso_storage: ".images/{{ kickstart_iso_name|replace(' ','-') }}_static"
         kickstart_iso_network_bootproto: 'static'
         kickstart_iso_network_static_netmask: '255.255.252.0'
         kickstart_iso_network_static_gateway: '10.0.0.1'

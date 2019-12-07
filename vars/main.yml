@@ -1,7 +1,6 @@
 ---
 kickstart_iso_bios_conf_file: 'isolinux/isolinux.cfg'
 kickstart_iso_uefi_conf_file: 'EFI/BOOT/grub.cfg'
-kickstart_iso_boot_name: "{{ kickstart_iso_name|replace(' ','\\x20') }}"
 
 _kickstart_iso_packages:
   Alpine: [file, gcc, g++, gzip, linux-headers, make, tar, wget]
