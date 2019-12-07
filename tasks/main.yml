@@ -54,7 +54,7 @@
         rm -rf /tmp/xorriso
       when: kickstart_iso_xorriso_check.rc != 0
 
-      - name: Prepare ephemeral files and directories
+    - name: Prepare ephemeral files and directories
       file:
         path: "{{ item.path }}"
         state: "{{ item.state }}"
@@ -89,7 +89,8 @@
     - name: Lookup Boot-Menu ISO name
       set_fact:
         kickstart_iso_boot_name: "{{ lookup('file', kickstart_iso_storage +'/iso/'+ kickstart_iso_bios_conf_file,
-                                  wantList=True)|join(',')|regex_replace('.*inst.stage2=hd:LABEL=(\S+)\squiet.*','\\1') }}"
+                                  wantList=True)|join(',')|regex_replace(
+                                  '.*inst.stage2=hd:LABEL=(\S+)\squiet.*','\\1') }}"
 
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
