@@ -52,6 +52,8 @@
         strip ./xorriso/xorriso
         make install
         rm -rf /tmp/xorriso
+      args:
+        warn: false
       when: kickstart_iso_xorriso_check.rc != 0
 
     - name: Prepare ephemeral files and directories
