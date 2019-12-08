@@ -106,7 +106,7 @@
       loop:
         - {path: "{{ kickstart_iso_bios_conf_file }}", state: 'absent', regexp: '^  menu default', line: ''}
         - {path: "{{ kickstart_iso_bios_conf_file }}", regexp: '^  menu default', line: '  menu default',
-          insertafter: '^  menu label \^Install', firstmatch: true}
+           insertafter: '^  menu label \^Install', firstmatch: true}
         - {path: "{{ kickstart_iso_bios_conf_file }}",
            regexp: ".*{{ ('inst.stage2=hd:LABEL='+ kickstart_iso_boot_name +' quiet')|regex_escape() }}",
            line: "  append initrd=initrd.img inst.ks=hd:LABEL={{ kickstart_iso_boot_name }}:/kickstart.cfg
