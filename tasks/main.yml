@@ -85,13 +85,12 @@
         chdir: "{{ kickstart_iso_storage }}"
 
     - name: Lookup Boot-Menu config
-      slurp:
-        src: "{{ kickstart_iso_storage +'/iso/'+ kickstart_iso_bios_conf_file }}"
+      command: "cat {{ kickstart_iso_storage +'/iso/'+ kickstart_iso_bios_conf_file }}"
       register: kickstart_iso_bios_conf
 
     - name: Lookup Boot-Menu ISO name
       set_fact:
-        kickstart_iso_boot_name: "{{ kickstart_iso_bios_conf.content|b64decode|regex_replace(
+        kickstart_iso_boot_name: "{{ kickstart_iso_bios_conf.stdout_lines|join(';')|regex_replace(
                                   '.*inst.stage2=hd:LABEL=(\\S+) quiet.*','\\1') }}"
 
     - name: Edit Boot-Menu config to automatically run kickstart config
