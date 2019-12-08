@@ -6,6 +6,8 @@
                          checksum=(
                          item|regex_replace('.*([a-z0-9]{64,}).*','\\1') )) }}"
   loop: "{{ lookup('url', kickstart_iso_check_url, wantlist=True) }}"
+  loop_control:
+    label: "{{ item if item is search('[a-z0-9]{64,}') else '...' }}"
   when:
     - item is search(kickstart_iso_type)
     - item is search('[a-z0-9]{64,}')
@@ -95,32 +97,28 @@
 
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
-        path: "{{ item.path }}"
-        state: "{{ item.state }}"
+        path: "{{ kickstart_iso_storage }}/iso/{{ item.path }}"
+        state: "{{ item.state|default('present') }}"
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }}"
-        insertafter: "{{ item.insertafter }}"
-        firstmatch: "{{ item.firstmatch }}"
+        insertafter: "{{ item.insertafter|default(EOF) }}"
+        firstmatch: "{{ item.firstmatch|default(false) }}"
       loop:
-        - {path: "{{ kickstart_iso_storage }}/iso/{{ kickstart_iso_bios_conf_file }}", state: 'absent',
-           regexp: '^  menu default', line: '', insertafter: EOF, firstmatch: false}
-        - {path: "{{ kickstart_iso_storage }}/iso/{{ kickstart_iso_bios_conf_file }}", state: 'present',
-           regexp: ".*{{ ('inst.stage2=hd:LABEL=' + kickstart_iso_boot_name + ' quiet')|regex_escape() }}",
+        - {path: "{{ kickstart_iso_bios_conf_file }}", state: 'absent', regexp: '^  menu default', line: ''}
+        - {path: "{{ kickstart_iso_bios_conf_file }}", regexp: '^  menu default', line: '  menu default',
+          insertafter: '^  menu label \^Install', firstmatch: true}
+        - {path: "{{ kickstart_iso_bios_conf_file }}",
+           regexp: ".*{{ ('inst.stage2=hd:LABEL='+ kickstart_iso_boot_name +' quiet')|regex_escape() }}",
            line: "  append initrd=initrd.img inst.ks=hd:LABEL={{ kickstart_iso_boot_name }}:/kickstart.cfg
-                  inst.stage2=hd:LABEL={{ kickstart_iso_boot_name }} quiet",
-           insertafter: EOF, firstmatch: false}
-        - {path: "{{ kickstart_iso_storage }}/iso/{{ kickstart_iso_bios_conf_file }}", state: 'present',
-           regexp: '^  menu default', line: '  menu default', insertafter: '^  menu label \^Install', firstmatch: true}
-        - {path: "{{ kickstart_iso_storage }}/iso/{{ kickstart_iso_uefi_conf_file }}", state: 'present',
-           regexp: '^set default=', line: 'set default="0"', insertafter: EOF, firstmatch: false}
-        - {path: "{{ kickstart_iso_storage }}/iso/{{ kickstart_iso_uefi_conf_file }}", state: 'present',
-           regexp: ".*{{ ('inst.stage2=hd:LABEL=' + kickstart_iso_boot_name + ' quiet')|regex_escape() }}",
+                  inst.stage2=hd:LABEL={{ kickstart_iso_boot_name }} quiet"}
+        - {path: "{{ kickstart_iso_uefi_conf_file }}", regexp: '^set default=', line: 'set default="0"'}
+        - {path: "{{ kickstart_iso_uefi_conf_file }}",
+           regexp: ".*{{ ('inst.stage2=hd:LABEL='+ kickstart_iso_boot_name +' quiet')|regex_escape() }}",
            line: "        linuxefi /images/pxeboot/vmlinuz
                   inst.ks=hd:LABEL={{ kickstart_iso_boot_name }}:/kickstart.cfg
-                  inst.stage2=hd:LABEL={{ kickstart_iso_boot_name }} quiet",
-           insertafter: EOF, firstmatch: false}
+                  inst.stage2=hd:LABEL={{ kickstart_iso_boot_name }} quiet"}
       loop_control:
-        label: "{{ item.line|replace('  ', '') }}"
+        label: "{{ item.path +': '+ item.line|replace('  ', '') }}"
 
     - name: Create kickstart ISO images
       include_tasks: create.yml
