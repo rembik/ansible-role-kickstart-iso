@@ -101,10 +101,9 @@ localhost; made for static network configuration.
   roles:
     - role: rembik.kickstart_iso
       vars:
-        kickstart_iso_name: 'CentOS 7 x86_64'
-        kickstart_iso_type: 'Minimal'
         kickstart_iso_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
         kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
+        kickstart_iso_type: 'Minimal'
         kickstart_iso_network_bootproto: 'static'
         kickstart_iso_network_static_netmask: '255.255.252.0'
         kickstart_iso_network_static_gateway: '10.0.0.1'

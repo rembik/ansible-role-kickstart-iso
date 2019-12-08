@@ -32,7 +32,6 @@
 
     - name: Lookup xorriso CLT
       command: xorriso -version
-      register: kickstart_iso_xorriso_check
       changed_when: false
   rescue:
     - name: Build xorriso CLT
@@ -52,7 +51,6 @@
         rm -rf /tmp/xorriso
       args:
         warn: false
-      when: kickstart_iso_xorriso_check.rc != 0
   always:
     - name: Prepare ephemeral files and directories
       file:
@@ -86,10 +84,14 @@
       args:
         chdir: "{{ kickstart_iso_storage }}"
 
+    - name: Lookup Boot-Menu config
+      slurp:
+        src: "{{ kickstart_iso_storage +'/iso/'+ kickstart_iso_bios_conf_file }}"
+      register: kickstart_iso_bios_conf
+
     - name: Lookup Boot-Menu ISO name
       set_fact:
-        kickstart_iso_boot_name: "{{ lookup('file', kickstart_iso_storage +'/iso/'+ kickstart_iso_bios_conf_file,
-                                  wantList=True)|join(',')|regex_replace(
+        kickstart_iso_boot_name: "{{ kickstart_iso_bios_conf.content|b64decode|regex_replace(
                                   '.*inst.stage2=hd:LABEL=(\\S+) quiet.*','\\1') }}"
 
     - name: Edit Boot-Menu config to automatically run kickstart config
