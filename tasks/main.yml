@@ -98,11 +98,11 @@
     - name: Edit Boot-Menu config to automatically run kickstart config
       lineinfile:
         path: "{{ kickstart_iso_storage }}/iso/{{ item.path }}"
-        state: "{{ item.state|default('present') }}"
+        state: "{{ item.state|default(omit) }}"
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }}"
-        insertafter: "{{ item.insertafter|default(EOF) }}"
-        firstmatch: "{{ item.firstmatch|default(false) }}"
+        insertafter: "{{ item.insertafter|default(omit) }}"
+        firstmatch: "{{ item.firstmatch|default(omit) }}"
       loop:
         - {path: "{{ kickstart_iso_bios_conf_file }}", state: 'absent', regexp: '^  menu default', line: ''}
         - {path: "{{ kickstart_iso_bios_conf_file }}", regexp: '^  menu default', line: '  menu default',
