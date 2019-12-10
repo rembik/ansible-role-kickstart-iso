@@ -32,9 +32,9 @@ These defaults are set in `defaults/main.yml`:
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-boot-menu-customization
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/performing_an_advanced_rhel_installation
 
+kickstart_iso_type: 'boot'
 kickstart_iso_check_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
 kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
-kickstart_iso_type: 'boot'
 kickstart_iso_download_delay: 300
 
 # Directory where the kickstart ISO images are created, if they do not already exist
@@ -47,6 +47,7 @@ kickstart_iso_disk_drive_min_size: 10
 kickstart_iso_disk_volume_min_size: 60
 kickstart_iso_disk_volume_max_size: 120
 
+kickstart_iso_install_media: 'url --url http://mirror.centos.org/centos/8/BaseOS/x86_64/os/'
 kickstart_iso_root_password: 'centos'
 kickstart_iso_language: 'de'
 kickstart_iso_country: 'DE'
@@ -101,9 +102,10 @@ localhost; made for static network configuration.
   roles:
     - role: rembik.kickstart_iso
       vars:
+        kickstart_iso_type: 'Minimal'
         kickstart_iso_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
         kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
-        kickstart_iso_type: 'Minimal'
+        kickstart_iso_install_media: 'cdrom'
         kickstart_iso_network_bootproto: 'static'
         kickstart_iso_network_static_netmask: '255.255.252.0'
         kickstart_iso_network_static_gateway: '10.0.0.1'

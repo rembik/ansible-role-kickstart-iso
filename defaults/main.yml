@@ -2,9 +2,9 @@
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-boot-menu-customization
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/considerations_in_adopting_rhel_8/installer-and-image-creation_considerations-in-adopting-rhel-8#kickstart-changes_installation-and-booting
 
+kickstart_iso_type: 'boot'
 kickstart_iso_check_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
 kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
-kickstart_iso_type: 'boot'
 kickstart_iso_download_delay: 300
 
 # Directory where the kickstart ISO images are saved, if they do not already exist
@@ -17,6 +17,7 @@ kickstart_iso_disk_drive_min_size: 10
 kickstart_iso_disk_volume_min_size: 60
 kickstart_iso_disk_volume_max_size: 120
 
+kickstart_iso_install_media: 'url --url http://mirror.centos.org/centos/8/BaseOS/x86_64/os/'
 kickstart_iso_root_password: 'centos'
 kickstart_iso_language: 'de'
 kickstart_iso_country: 'DE'

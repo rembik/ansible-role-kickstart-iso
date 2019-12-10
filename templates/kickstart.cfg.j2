@@ -118,8 +118,8 @@ EOF
 #version=DEVEL
 # System authorization information
 auth --enableshadow --passalgo=sha512
-# Use CDROM installation media
-cdrom
+# Use installation media
+{{ kickstart_iso_install_media }}
 # Use cmdline install
 cmdline
 # Run the Setup Agent on first boot
@@ -148,11 +148,8 @@ timezone {{ kickstart_iso_timezone }} --isUtc
 {{ kickstart_iso_completion }}
 
 %packages
-@^minimal
-@core
+@^Minimal Install
 chrony
-kexec-tools
-
 %end
 
 %addon com_redhat_kdump --enable --reserve-mb='auto'
