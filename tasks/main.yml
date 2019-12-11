@@ -95,7 +95,7 @@
         kickstart_iso_boot_name: "{{ kickstart_iso_bios_conf.stdout_lines|join(';')|regex_replace(
                                   '.*inst.stage2=hd:LABEL=(\\S+) quiet.*','\\1') }}"
 
-    - name: Edit Boot-Menu config to automatically run kickstart config
+    - name: Edit Boot-Menu config
       lineinfile:
         path: "{{ kickstart_iso_storage }}/iso/{{ item.path }}"
         state: "{{ item.state|default(omit) }}"
