@@ -38,7 +38,7 @@ kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
 kickstart_iso_download_delay: 300
 
 # Directory where the kickstart ISO images are created, if they do not already exist
-kickstart_iso_storage: ".images/{{ kickstart_iso_info.file_name if kickstart_iso_info is defined else 'RHEL/CentOS' }}"
+kickstart_iso_storage: ".images/{{ kickstart_iso_info.file_name if kickstart_iso_info is defined else 'RHEL_CentOS' }}"
 
 # Pick first disks with minimal physical size kickstart_iso_disk_drive_min_size (GiB)
 # until a overall minimal logical OS volume size kickstart_iso_disk_volume_min_size (GiB)
