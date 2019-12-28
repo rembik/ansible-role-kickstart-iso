@@ -15,3 +15,4 @@
     + '_')|replace('__','_') }}{{ kickstart_iso_host.ip|replace('.','-') }}.iso" .
   args:
     chdir: "{{ kickstart_iso_storage }}/iso"
+  when: True
