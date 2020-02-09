@@ -2,7 +2,7 @@
 - name: Lookup base ISO image file name and checksum
   set_fact:
     kickstart_iso_info: "{{ dict(file_name=(
-                         item|regex_replace('.*[^\\w-]([\\w-]+)\\.iso.*','\\1') ),
+                         item|regex_replace('.*[^\\w-\\.]([\\w-\\.]+)\\.iso.*','\\1') ),
                          checksum=(
                          item|regex_replace('.*([a-z0-9]{64,}).*','\\1') )) }}"
   loop: "{{ lookup('url', kickstart_iso_check_url, wantlist=True) }}"
