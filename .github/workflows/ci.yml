@@ -38,14 +38,14 @@ jobs:
         python-version: [3.8]
         experimental: [true]
         include:
-          - {distro: alpine-latest, ansible: stable, python: 3.8, experimental: false}
-          - {distro: amazonlinux-latest, ansible: stable, python: 3.8, experimental: false}
-          - {distro: debian-latest, ansible: stable, python: 3.8, experimental: false}
-          - {distro: fedora-latest, ansible: stable, python: 3.8, experimental: false}
-          - {distro: opensuse-leap, ansible: stable, python: 3.8, experimental: false}
-          - {distro: opensuse-tumbleweed, ansible: stable, python: 3.8, experimental: false}
-          - {distro: redhat-latest, ansible: stable, python: 3.8, experimental: false}
-          - {distro: ubuntu-latest, ansible: stable, python: 3.8, experimental: false}
+          - {distro: alpine-latest, ansible: stable, python-version: 3.8, experimental: false}
+          - {distro: amazonlinux-latest, ansible: stable, python-version: 3.8, experimental: false}
+          - {distro: debian-latest, ansible: stable, python-version: 3.8, experimental: false}
+          - {distro: fedora-latest, ansible: stable, python-version: 3.8, experimental: false}
+          - {distro: opensuse-leap, ansible: stable, python-version: 3.8, experimental: false}
+          - {distro: opensuse-tumbleweed, ansible: stable, python-version: 3.8, experimental: false}
+          - {distro: redhat-latest, ansible: stable, python-version: 3.8, experimental: false}
+          - {distro: ubuntu-latest, ansible: stable, python-version: 3.8, experimental: false}
 
     steps:
       - name: Check out the codebase.
