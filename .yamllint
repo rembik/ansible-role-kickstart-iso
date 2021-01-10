@@ -12,3 +12,6 @@ rules:
     max: 120
     level: warning
   truthy: disable
+
+ignore: |
+  .travis.yml
