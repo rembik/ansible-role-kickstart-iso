@@ -2,7 +2,7 @@
 name: CI
 on:
   schedule:
-    - cron: '0 22 * * 0' # every sunday at 10pm
+    - cron: '0 22 * * 0'  # every sunday at 10pm
   push:
     branches:
       - 'master'
@@ -50,7 +50,7 @@ jobs:
     steps:
       - name: Check out the codebase.
         uses: actions/checkout@v2
-      
+
       - name: Set environment variables
         id: prep
         run: |
