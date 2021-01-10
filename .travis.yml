@@ -4,13 +4,13 @@ dist: bionic
 sudo: required
 language: python
 python:
-  - "3.8"
+  - "3.9"
 services:
   - docker
 
 env:
   global:
-    - TEST_PYTHON_VERSION="3.8"
+    - TEST_PYTHON_VERSION="${TRAVIS_PYTHON_VERSION}"
   matrix:
     - TEST_DISTRO="alpine_latest" ANSIBLE="stable" TEST_DOCKER_IMAGE="alpine:latest" TEST_DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'"
     - TEST_DISTRO="alpine_latest" ANSIBLE="devel" TEST_DOCKER_IMAGE="alpine:latest" TEST_DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'"

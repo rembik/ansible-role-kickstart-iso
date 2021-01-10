@@ -80,8 +80,9 @@ localhost; made for network releases via DHCP.
 - hosts: localhost
   become: true
 
-  roles:
-    - role: rembik.kickstart_iso
+  tasks:
+    - include_role:
+        name: rembik.kickstart_iso
 ```
 
 This is a sample playbook to create kickstart CentOS 7 ISO images on
@@ -99,8 +100,9 @@ localhost; made for static network configuration.
                                              [dict(ip=hostvars[item].ansible_host,name=(item.split('.')[0]|lower))] }}"
       loop: "{{ groups['all'] }}"
 
-  roles:
-    - role: rembik.kickstart_iso
+  tasks:
+    - include_role:
+        name: rembik.kickstart_iso
       vars:
         kickstart_iso_type: 'Minimal'
         kickstart_iso_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
