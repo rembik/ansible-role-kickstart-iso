@@ -23,7 +23,8 @@ provisioner:
     defaults:
       callback_plugins: /usr/lib/python${TOX_PYTHON_VERSION:-3.8}/site-packages/ara/plugins/callbacks
   playbooks:
-    converge: ${TEST_PLAYBOOK:-../converge.yml}
+    converge: ${TEST_CONVERGE:-../resources/converge.yml}
+    verify: ${TEST_VERIFY:-../resources/verify.yml}
 scenario:
   name: default
 verifier:
