@@ -7,7 +7,7 @@ driver:
   name: docker
 lint: |
   set -e
-  yamllint -f parsable .
+  yamllint .
   ansible-lint
 platforms:
   # https://hub.docker.com/search/?type=image
@@ -21,7 +21,7 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      callback_plugins: /usr/lib/python${GITHUB_PYTHON_VERSION:-3.8}/site-packages/ara/plugins/callbacks
+      callback_plugins: /usr/lib/python${TOX_PYTHON_VERSION:-3.8}/site-packages/ara/plugins/callbacks
   playbooks:
     converge: ${TEST_PLAYBOOK:-../converge.yml}
 scenario:
