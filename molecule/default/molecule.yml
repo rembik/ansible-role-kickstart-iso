@@ -7,7 +7,7 @@ driver:
   name: docker
 lint: |
   set -e
-  yamllint -f github .
+  yamllint -f parsable .
   ansible-lint
 platforms:
   # https://hub.docker.com/search/?type=image
