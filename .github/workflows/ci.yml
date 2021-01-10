@@ -22,30 +22,30 @@ jobs:
       matrix:
         distro:
           - alpine-latest
-          - alpine-edge
           - amazonlinux-latest
           - centos-latest
           - debian-latest
-          - debian-unstable
           - fedora-latest
-          - fedora-rawhide
           - opensuse-leap
           - opensuse-tumbleweed
           - redhat-latest
           - ubuntu-latest
-          - ubuntu-devel
-        ansible: [stable, devel]
+        ansible: [stable]
         python-version: [3.8]
-        experimental: [true]
+        experimental: [false]
         include:
-          - {distro: alpine-latest, ansible: stable, python-version: 3.8, experimental: false}
-          - {distro: amazonlinux-latest, ansible: stable, python-version: 3.8, experimental: false}
-          - {distro: debian-latest, ansible: stable, python-version: 3.8, experimental: false}
-          - {distro: fedora-latest, ansible: stable, python-version: 3.8, experimental: false}
-          - {distro: opensuse-leap, ansible: stable, python-version: 3.8, experimental: false}
-          - {distro: opensuse-tumbleweed, ansible: stable, python-version: 3.8, experimental: false}
-          - {distro: redhat-latest, ansible: stable, python-version: 3.8, experimental: false}
-          - {distro: ubuntu-latest, ansible: stable, python-version: 3.8, experimental: false}
+          - {distro: alpine-latest, ansible: devel, python-version: 3.8, experimental: true}
+          - {distro: alpine-edge, ansible: all, python-version: 3.8, experimental: true}
+          - {distro: amazonlinux-latest, ansible: devel, python-version: 3.8, experimental: true}
+          - {distro: debian-latest, ansible: devel, python-version: 3.8, experimental: true}
+          - {distro: debian-unstable, ansible: all, python-version: 3.8, experimental: true}
+          - {distro: fedora-latest, ansible: devel, python-version: 3.8, experimental: true}
+          - {distro: fedora-rawhide, ansible: all, python-version: 3.8, experimental: true}
+          - {distro: opensuse-leap, ansible: devel, python-version: 3.8, experimental: true}
+          - {distro: opensuse-tumbleweed, ansible: devel, python-version: 3.8, experimental: true}
+          - {distro: redhat-latest, ansible: devel, python-version: 3.8, experimental: true}
+          - {distro: ubuntu-latest, ansible: devel, python-version: 3.8, experimental: true}
+          - {distro: ubuntu-devel, ansible: devel, python-version: 3.8, experimental: true}
 
     steps:
       - name: Check out the codebase.
@@ -92,7 +92,7 @@ jobs:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
           ANSIBLE: ${{ matrix.ansible }}
-          GITHUB_PYTHON_VERSION: ${{ matrix.python-version }}
+          TEST_PYTHON_VERSION: ${{ matrix.python-version }}
           TEST_DISTRO: ${{ matrix.distro }}
           TEST_DOCKER_IMAGE: ${{ steps.prep.outputs.docker-image }}
           TEST_DOCKER_COMMAND: ${{ steps.prep.outputs.docker-command }}
