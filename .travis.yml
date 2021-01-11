@@ -69,7 +69,6 @@ install:
 
 script:
   - export TEST_PYTHON_VERSION="${TRAVIS_PYTHON_VERSION}"
-  - echo $TEST_PYTHON_VERSION
   - unbuffer tox
 
 notifications:
