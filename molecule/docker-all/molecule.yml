@@ -14,7 +14,7 @@ platforms:
   - name: instance_alpine_latest_docker
     image: alpine:latest
     pre_build_image: yes
-    command: sh -c "while true ; do sleep 1 ; done"
+    command: sh -c "while true; do sleep 1; done"
     groups:
       - alpine_latest_docker
   - name: instance_amazonlinux_latest_docker
