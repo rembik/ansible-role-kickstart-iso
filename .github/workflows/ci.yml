@@ -71,7 +71,7 @@ jobs:
           esac
           echo ::set-output name=docker-image::${DOCKER_IMAGE}
           if [[ "${{ matrix.distro }}" == alpine* ]]; then
-            DOCKER_COMMAND="sh -c 'while true ; do sleep 1 ; done'"
+            DOCKER_COMMAND="sh -c 'trap : TERM INT; sleep 9999999999d & wait'"
           fi
           echo ::set-output name=docker-command::${DOCKER_COMMAND:-}
 
@@ -86,7 +86,7 @@ jobs:
           pip install tox tox-gh-actions
 
       - name: Test with molecule
-        timeout-minutes: 30
+        timeout-minutes: 60
         run: |
           tox
         env:

@@ -1,8 +1,8 @@
 Ansible Role: Kickstart ISO
 ===========================
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/rembik/ansible-role-kickstart-iso/CI/master?logo=github&label=build)][github_actions]
-[![Build Status](https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg?logo=travis-ci&logoColor=EEE)][travis_ci]
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/rembik/ansible-role-kickstart-iso/CI/master?logo=github&label=test)][github_actions]
+[![Build Status](https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg?logo=travis-ci&logoColor=EEE&label=test)][travis_ci]
 [![GitHub release (latest SemVer)](https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg?sort=semver&colorB=56b4b6&logo=github&logoColor=EEE)][github_releases]
 [![Ansible Role](https://img.shields.io/ansible/role/36241.svg?colorB=56b4b6&logo=ansible&logoColor=EEE)][ansible_galaxy]
 [![Ansible Role downloads](https://img.shields.io/ansible/role/d/36241.svg?label=downloads&logo=ansible&logoColor=EEE)][ansible_galaxy]

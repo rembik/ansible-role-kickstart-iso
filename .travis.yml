@@ -70,6 +70,7 @@ install:
   - pip install tox-travis
 
 script:
+  - echo "python-version = $TEST_PYTHON_VERSION"
   - unbuffer tox
 
 notifications:
