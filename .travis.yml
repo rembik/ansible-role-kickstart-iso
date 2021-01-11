@@ -9,8 +9,6 @@ services:
   - docker
 
 env:
-  global:
-    - TEST_PYTHON_VERSION="${TRAVIS_PYTHON_VERSION}"
   matrix:
     - TEST_DISTRO="alpine_latest" ANSIBLE="stable" TEST_DOCKER_IMAGE="alpine:latest" TEST_DOCKER_COMMAND="sh -c 'while true; do sleep 1; done'"
     - TEST_DISTRO="alpine_latest" ANSIBLE="devel" TEST_DOCKER_IMAGE="alpine:latest" TEST_DOCKER_COMMAND="sh -c 'while true; do sleep 1; done'"
