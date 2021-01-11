@@ -1,8 +1,9 @@
 Ansible Role: Kickstart ISO
 ===========================
 
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/rembik/ansible-role-kickstart-iso/CI/master?logo=github&label=build)][github_actions]
 [![Build Status](https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg?logo=travis-ci&logoColor=EEE)][travis_ci]
-[![GitHub release](https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg?&colorB=56b4b6&logo=github&logoColor=EEE)](https://github.com/rembik/ansible-role-kickstart-iso/releases)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg?sort=semver&colorB=56b4b6&logo=github&logoColor=EEE)][github_releases]
 [![Ansible Role](https://img.shields.io/ansible/role/36241.svg?colorB=56b4b6&logo=ansible&logoColor=EEE)][ansible_galaxy]
 [![Ansible Role downloads](https://img.shields.io/ansible/role/d/36241.svg?label=downloads&logo=ansible&logoColor=EEE)][ansible_galaxy]
 
@@ -119,12 +120,12 @@ localhost; made for static network configuration.
 Role Tests
 ----------
 
-[![Python](https://img.shields.io/badge/python-3.7-1488C6.svg)](https://www.python.org/)
-[![Ansible](https://img.shields.io/badge/Ansible-2.8%20%7C%202.9%20%7C%20devel%2A-56b4b6.svg)](https://ansible.com/)
+[![Python](https://img.shields.io/badge/python-3.9-1488C6.svg)](https://www.python.org/)
+[![Ansible](https://img.shields.io/badge/Ansible-2.9%20%7C%202.10%20%7C%20devel%2A-56b4b6.svg)](https://ansible.com/)
 
 This role is tested periodically against the following Linux distributions:
 
-|| [![Ansible](https://img.shields.io/badge/2.8-56b4b6.svg)](https://docs.ansible.com/ansible/2.8/) | [![Ansible](https://img.shields.io/badge/2.9-56b4b6.svg)](https://docs.ansible.com/ansible/2.9/)| [![Ansible](https://img.shields.io/badge/devel%2A-56b4b6.svg)](https://docs.ansible.com/ansible/devel/) |
+|| [![Ansible](https://img.shields.io/badge/2.9-56b4b6.svg)](https://docs.ansible.com/ansible/2.9/) | [![Ansible](https://img.shields.io/badge/2.10-56b4b6.svg)](https://docs.ansible.com/ansible/2.10/)| [![Ansible](https://img.shields.io/badge/devel%2A-56b4b6.svg)](https://docs.ansible.com/ansible/devel/) |
 |---|---|---|---|
 | [![DockerDistro](https://img.shields.io/badge/Alpine-latest%20%7C%20edge%2A-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/alpine) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
 | [![DockerDistro](https://img.shields.io/badge/AmazonLinux-latest-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/amazonlinux) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
@@ -140,12 +141,12 @@ This role is tested periodically against the following Linux distributions:
 Contributing
 ------------
 
-If you find issues, please register them at this [GitHub project issue page](https://github.com/rembik/ansible-role-kickstart-iso/issues/new/choose) or consider contributing code by following this [guideline](http://github.com/rembik/ansible-role-kickstart-iso/tree/master/.github/CONTRIBUTING.md).
+If you find issues, please register them at this [GitHub project issue page][github_issue] or consider contributing code by following this [guideline][github_guide].
 
 License
 -------
 
-[Apache License, Version 2.0](https://github.com/rembik/ansible-role-kickstart-iso/blob/master/LICENSE)
+[Apache License, Version 2.0][github_licence]
 
 Author Information
 ------------------
@@ -153,4 +154,10 @@ Author Information
 [Brian Rimek](https://github.com/rembik)
 
 [travis_ci]: https://travis-ci.org/rembik/ansible-role-kickstart-iso
+[github_actions]: https://github.com/rembik/ansible-role-kickstart-iso/actions
+[github_releases]: https://github.com/rembik/ansible-role-kickstart-iso/releases
 [ansible_galaxy]: https://galaxy.ansible.com/rembik/kickstart_iso
+
+[github_issue]: http://github.com/rembik/ansible-role-kickstart-iso/issues/new/choose
+[github_guide]: http://github.com/rembik/ansible-role-kickstart-iso/tree/master/.github/CONTRIBUTING.md
+[github_licence]: http://github.com/rembik/ansible-role-kickstart-iso/tree/master/LICENSE

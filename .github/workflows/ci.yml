@@ -35,17 +35,17 @@ jobs:
         experimental: [false]
         include:
           - {distro: alpine-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: alpine-edge, ansible: all, python-version: 3.9, experimental: true}
           - {distro: amazonlinux-latest, ansible: devel, python-version: 3.9, experimental: true}
           - {distro: debian-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: debian-unstable, ansible: all, python-version: 3.9, experimental: true}
           - {distro: fedora-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: fedora-rawhide, ansible: all, python-version: 3.9, experimental: true}
           - {distro: opensuse-leap, ansible: devel, python-version: 3.9, experimental: true}
           - {distro: opensuse-tumbleweed, ansible: devel, python-version: 3.9, experimental: true}
           - {distro: redhat-latest, ansible: devel, python-version: 3.9, experimental: true}
           - {distro: ubuntu-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: ubuntu-devel, ansible: devel, python-version: 3.9, experimental: true}
+          - {distro: alpine-edge, ansible: all, python-version: 3.9, experimental: true}
+          - {distro: debian-unstable, ansible: all, python-version: 3.9, experimental: true}
+          - {distro: fedora-rawhide, ansible: all, python-version: 3.9, experimental: true}
+          - {distro: ubuntu-devel, ansible: all, python-version: 3.9, experimental: true}
 
     steps:
       - name: Check out the codebase.
@@ -86,6 +86,7 @@ jobs:
           pip install tox tox-gh-actions
 
       - name: Test with molecule
+        timeout-minutes: 30
         run: |
           tox
         env:
