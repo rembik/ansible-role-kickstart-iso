@@ -21,7 +21,6 @@ provisioner:
   name: ansible
   options:
     vvvv: True
-    log: True
   config_options:
     defaults:
       callback_plugins: /usr/lib/python${TEST_PYTHON_VERSION:-3.9}/site-packages/ara/plugins/callbacks
