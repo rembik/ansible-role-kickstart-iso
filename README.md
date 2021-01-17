@@ -1,11 +1,10 @@
 Ansible Role: Kickstart ISO
 ===========================
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/rembik/ansible-role-kickstart-iso/CI/master?logo=github&label=test)][github_actions]
-[![Build Status](https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg?logo=travis-ci&logoColor=EEE&label=test)][travis_ci]
-[![GitHub release (latest SemVer)](https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg?sort=semver&colorB=56b4b6&logo=github&logoColor=EEE)][github_releases]
-[![Ansible Role](https://img.shields.io/ansible/role/36241.svg?colorB=56b4b6&logo=ansible&logoColor=EEE)][ansible_galaxy]
-[![Ansible Role downloads](https://img.shields.io/ansible/role/d/36241.svg?label=downloads&logo=ansible&logoColor=EEE)][ansible_galaxy]
+[![][ci_badge]][ci]
+[![][release_badge]][release]
+[![][ansible_role_badge]][ansible_role]
+[![][ansible_downloads_badge]][ansible_role]
 
 This role creates kickstart ISO images for RHEL/CentOS.
 
@@ -117,47 +116,85 @@ localhost; made for static network configuration.
           - '10.0.3.1'
 ```
 
-Role Tests
-----------
+Tests
+-----
 
-[![Python](https://img.shields.io/badge/python-3.9-1488C6.svg)](https://www.python.org/)
-[![Ansible](https://img.shields.io/badge/Ansible-2.9%20%7C%202.10%20%7C%20devel%2A-56b4b6.svg)](https://ansible.com/)
+[![][python_badge]][python]
+[![][ansible_badge]][ansible]
 
 This role is tested periodically against the following Linux distributions:
 
-|| [![Ansible](https://img.shields.io/badge/2.9-56b4b6.svg)](https://docs.ansible.com/ansible/2.9/) | [![Ansible](https://img.shields.io/badge/2.10-56b4b6.svg)](https://docs.ansible.com/ansible/2.10/)| [![Ansible](https://img.shields.io/badge/devel%2A-56b4b6.svg)](https://docs.ansible.com/ansible/devel/) |
+|| [![][ansible_before_badge]][ansible_before] | [![][ansible_current_badge]][ansible_current] | [![][ansible_next_badge]][ansible_next] |
 |---|---|---|---|
-| [![DockerDistro](https://img.shields.io/badge/Alpine-latest%20%7C%20edge%2A-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/alpine) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
-| [![DockerDistro](https://img.shields.io/badge/AmazonLinux-latest-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/amazonlinux) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
-| [![DockerDistro](https://img.shields.io/badge/CentOS-latest-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/centos) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
-| [![DockerDistro](https://img.shields.io/badge/Debian-latest%20%7C%20unstable%2A-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/debian) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
-| [![DockerDistro](https://img.shields.io/badge/Fedora-latest%20%7C%20rawhide%2A-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/fedora) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
-| [![DockerDistro](https://img.shields.io/badge/openSUSE-Leap%20%7C%20Tumbleweed-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/opensuse) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
-| [![DockerDistro](https://img.shields.io/badge/RedHat-latest-1488C6.svg?logo=docker&logoColor=EEE)](https://access.redhat.com/containers/#/registry.access.redhat.com/ubi8/ubi) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
-| [![DockerDistro](https://img.shields.io/badge/Ubuntu-latest%20%7C%20devel%2A-1488C6.svg?logo=docker&logoColor=EEE)](https://hub.docker.com/_/ubuntu) | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] | [![Check](https://img.shields.io/badge/X-grey.svg)][travis_ci] |
+| [![][alpine_badge]][alpine] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
+| [![][amazonlinux_badge]][amazonlinux] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
+| [![][centos_badge]][centos] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
+| [![][debian_badge]][debian] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
+| [![][fedora_badge]][fedora] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
+| [![][opensuse_badge]][opensuse] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
+| [![][redhat_badge]][redhat] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
+| [![][ubuntu_badge]][ubuntu] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
 
 > Asteriks means the build is allowed to fail, it's marked as an experimental build.
 
 Contributing
 ------------
 
-If you find issues, please register them at this [GitHub project issue page][github_issue] or consider contributing code by following this [guideline][github_guide].
+If you find issues, please register them at this [GitHub project issue page][issues] or consider contributing code by following this [guideline][contributing].
 
 License
 -------
 
-[Apache License, Version 2.0][github_licence]
+[Apache License, Version 2.0][license]
 
 Author Information
 ------------------
 
 [Brian Rimek](https://github.com/rembik)
 
-[travis_ci]: https://travis-ci.org/rembik/ansible-role-kickstart-iso
-[github_actions]: https://github.com/rembik/ansible-role-kickstart-iso/actions
-[github_releases]: https://github.com/rembik/ansible-role-kickstart-iso/releases
-[ansible_galaxy]: https://galaxy.ansible.com/rembik/kickstart_iso
 
-[github_issue]: http://github.com/rembik/ansible-role-kickstart-iso/issues/new/choose
-[github_guide]: http://github.com/rembik/ansible-role-kickstart-iso/tree/master/.github/CONTRIBUTING.md
-[github_licence]: http://github.com/rembik/ansible-role-kickstart-iso/tree/master/LICENSE
+[ci]: https://github.com/rembik/ansible-role-kickstart-iso/actions
+[travis_ci]: https://travis-ci.org/github/rembik/ansible-role-kickstart-iso
+[release]: https://github.com/rembik/ansible-role-kickstart-iso/releases
+[ansible_role]: https://galaxy.ansible.com/rembik/kickstart_iso
+
+[ci_badge]: https://img.shields.io/github/workflow/status/rembik/ansible-role-kickstart-iso/CI/master?logo=github&label=test
+[travis_ci_badge]: https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg?logo=travis-ci&logoColor=EEE&label=test
+[release_badge]: https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg?sort=semver&colorB=56b4b6&logo=github&logoColor=EEE
+[ansible_role_badge]: https://img.shields.io/ansible/role/36241.svg?colorB=56b4b6&logo=ansible&logoColor=EEE
+[ansible_downloads_badge]: https://img.shields.io/ansible/role/d/36241.svg?label=downloads&logo=ansible&logoColor=EEE
+
+[issues]: http://github.com/rembik/ansible-role-kickstart-iso/issues/new/choose
+[contributing]: http://github.com/rembik/ansible-role-kickstart-iso/tree/master/.github/CONTRIBUTING.md
+[license]: http://github.com/rembik/ansible-role-kickstart-iso/tree/master/LICENSE
+
+[python]: https://www.python.org/
+[ansible]: https://ansible.com/
+[ansible_before]: https://docs.ansible.com/ansible/2.9/
+[ansible_current]: https://docs.ansible.com/ansible/2.10/
+[ansible_next]: https://docs.ansible.com/ansible/devel/
+
+[python_badge]: https://img.shields.io/badge/python-3.9-1488C6.svg
+[ansible_badge]: https://img.shields.io/badge/Ansible-2.9%20%7C%202.10%20%7C%20devel%2A-56b4b6.svg
+[ansible_before_badge]: https://img.shields.io/badge/2.9-56b4b6.svg
+[ansible_current_badge]: https://img.shields.io/badge/2.10-56b4b6.svg
+[ansible_next_badge]: https://img.shields.io/badge/devel%2A-56b4b6.svg
+
+[alpine]: https://hub.docker.com/_/alpine
+[amazonlinux]: https://hub.docker.com/_/amazonlinux
+[centos]: https://hub.docker.com/_/centos
+[debian]: https://hub.docker.com/_/debian
+[fedora]: https://hub.docker.com/_/fedora
+[opensuse]: https://hub.docker.com/_/opensuse
+[redhat]: https://access.redhat.com/containers/#/registry.access.redhat.com/ubi8/ubi
+[ubuntu]: https://hub.docker.com/_/ubuntu
+
+[alpine_badge]: https://img.shields.io/badge/Alpine-latest%20%7C%20edge%2A-1488C6.svg?logo=docker&logoColor=EEE
+[amazonlinux_badge]: https://img.shields.io/badge/AmazonLinux-latest-1488C6.svg?logo=docker&logoColor=EEE
+[centos_badge]: https://img.shields.io/badge/CentOS-latest-1488C6.svg?logo=docker&logoColor=EEE
+[debian_badge]: https://img.shields.io/badge/Debian-latest%20%7C%20unstable%2A-1488C6.svg?logo=docker&logoColor=EEE
+[fedora_badge]: https://img.shields.io/badge/Fedora-latest%20%7C%20rawhide%2A-1488C6.svg?logo=docker&logoColor=EEE
+[opensuse_badge]: https://img.shields.io/badge/openSUSE-Leap%20%7C%20Tumbleweed-1488C6.svg?logo=docker&logoColor=EEE
+[redhat_badge]: https://img.shields.io/badge/RedHat-latest-1488C6.svg?logo=docker&logoColor=EEE
+[ubuntu_badge]: https://img.shields.io/badge/Ubuntu-latest%20%7C%20devel%2A-1488C6.svg?logo=docker&logoColor=EEE
+[x]: https://img.shields.io/badge/X-grey.svg

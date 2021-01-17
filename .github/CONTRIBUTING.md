@@ -12,27 +12,24 @@ You are very welcome to develop bug fixes or features. Please make sure to run t
 
 ## Test
 
-This role uses [Molecule](https://github.com/metacloud/molecule) for testing and that, in turn, uses Ansible to deploy the needed test infrastructure:
+This role uses [Molecule](https://github.com/ansible-community/molecule) for testing and that, in turn, uses Ansible to deploy the needed test infrastructure:
 ```
 sudo pip install ansible
 sudo pip install molecule
 ```
 
-You can decide, if you want to run the tests locally with Docker or Vagrant. Follow the respective requirements for that:
+Furthermore, tests use Docker. Follow the respective requirements for that:
 - [Docker](http://github.com/rembik/ansible-role-kickstart-iso/tree/master/molecule/default/INSTALL.rst)
-- [Vagrant](http://github.com/rembik/ansible-role-kickstart-iso/tree/master/molecule/vagrant/INSTALL.rst)
 
-Then run the test with the chosen deployment method:
+Then run the test with the chosen molecule scenario:
 ```
 molecule test
-molecule test --scenario-name docker-all
-
-molecule test --scenario-name vagrant
+molecule test --scenario-name docker-all-latest
 ```
 
 In addition, if you want to run the tests on different Ansible versions locally with Docker use [tox](https://tox.readthedocs.io/en/latest/):
 ```
-sudo pip install tox-travis
+sudo pip install tox
 
 tox
 ```
