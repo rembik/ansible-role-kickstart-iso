@@ -19,6 +19,7 @@ platforms:
       - ${TEST_DISTRO:-centos_latest}_docker
 provisioner:
   name: ansible
+  log: True
   options:
     vvv: True
   config_options:
