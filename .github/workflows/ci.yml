@@ -70,6 +70,10 @@ jobs:
             ubuntu-devel)  DOCKER_IMAGE="ubuntu:devel";;
           esac
           echo ::set-output name=docker-image::${DOCKER_IMAGE}
+          if [[ "${{ matrix.distro }}" == alpine* ]]; then
+            DOCKER_COMMAND="sh -c 'sleep infinity & wait'"
+          fi
+          echo ::set-output name=docker-command::${DOCKER_COMMAND:-}
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -92,6 +96,7 @@ jobs:
           TEST_PYTHON_VERSION: ${{ matrix.python-version }}
           TEST_DISTRO: ${{ matrix.distro }}
           TEST_DOCKER_IMAGE: ${{ steps.env.outputs.docker-image }}
+          TEST_DOCKER_COMMAND: ${{ steps.env.outputs.docker-command }}
 
   release:
     name: Release Ansible role

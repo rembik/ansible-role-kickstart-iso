@@ -14,6 +14,7 @@ platforms:
   - name: instance_alpine_latest_docker
     image: alpine:latest
     pre_build_image: yes
+    command: "sh -c 'sleep infinity & wait'"
     groups:
       - alpine_latest_docker
   - name: instance_amazonlinux_latest_docker
