@@ -14,6 +14,7 @@ platforms:
   - name: "${TEST_INSTANCE_PREFIX:-instance}_${TEST_DISTRO:-centos_latest}_${TOX_ENVNAME:-docker}"
     image: ${TEST_DOCKER_IMAGE:-centos:latest}
     pre_build_image: yes
+    command: "sleep infinity & wait"
     groups:
       - ${TEST_DISTRO:-centos_latest}_docker
 provisioner:
