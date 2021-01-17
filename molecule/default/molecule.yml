@@ -19,11 +19,11 @@ platforms:
       - ${TEST_DISTRO:-centos_latest}_docker
 provisioner:
   name: ansible
-  log: True
-  options:
-    vvv: True
+  ansible_args:
+    - -vvvv
   config_options:
     defaults:
+      stdout_callback: yaml
       callback_plugins: /usr/lib/python${TEST_PYTHON_VERSION:-3.9}/site-packages/ara/plugins/callbacks
   playbooks:
     converge: ${TEST_CONVERGE:-../resources/converge.yml}
