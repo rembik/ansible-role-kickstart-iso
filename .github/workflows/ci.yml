@@ -7,7 +7,7 @@ on:
     branches:
       - 'master'
     tags:
-      - 'v?[0-9]+.[0-9]+.[0-9]+*'
+      - 'v?[0-9]+\.[0-9]+\.[0-9]+'
   pull_request:
 
 jobs:
@@ -21,31 +21,30 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          - alpine-latest
-          - amazonlinux-latest
-          - centos-latest
-          - debian-latest
-          - fedora-latest
-          - opensuse-leap
-          - opensuse-tumbleweed
-          - redhat-latest
-          - ubuntu-latest
+          - alpine_latest
+          - centos_latest
+          - debian_latest
+          - fedora_latest
+          - opensuse_leap
+          - opensuse_tumbleweed
+          - redhat_latest
+          - ubuntu_latest
         ansible: [stable]
         python-version: [3.9]
         experimental: [false]
         include:
-          - {distro: alpine-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: amazonlinux-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: debian-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: fedora-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: opensuse-leap, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: opensuse-tumbleweed, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: redhat-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: ubuntu-latest, ansible: devel, python-version: 3.9, experimental: true}
-          - {distro: alpine-edge, ansible: all, python-version: 3.9, experimental: true}
-          - {distro: debian-unstable, ansible: all, python-version: 3.9, experimental: true}
-          - {distro: fedora-rawhide, ansible: all, python-version: 3.9, experimental: true}
-          - {distro: ubuntu-devel, ansible: all, python-version: 3.9, experimental: true}
+          - {distro: amazonlinux_latest, ansible: latest, python-version: 3.9, experimental: false}
+          - {distro: alpine_latest, ansible: devel, python-version: 3.9, experimental: true}
+          - {distro: debian_latest, ansible: devel, python-version: 3.9, experimental: true}
+          - {distro: fedora_latest, ansible: devel, python-version: 3.9, experimental: true}
+          - {distro: opensuse_leap, ansible: devel, python-version: 3.9, experimental: true}
+          - {distro: opensuse_tumbleweed, ansible: devel, python-version: 3.9, experimental: true}
+          - {distro: redhat_latest, ansible: devel, python-version: 3.9, experimental: true}
+          - {distro: ubuntu_latest, ansible: devel, python-version: 3.9, experimental: true}
+          - {distro: alpine_edge, ansible: preview, python-version: 3.9, experimental: true}
+          - {distro: debian_unstable, ansible: preview, python-version: 3.9, experimental: true}
+          - {distro: fedora_rawhide, ansible: preview, python-version: 3.9, experimental: true}
+          - {distro: ubuntu_devel, ansible: preview, python-version: 3.9, experimental: true}
 
     steps:
       - name: Check out codebase
@@ -55,19 +54,19 @@ jobs:
         id: env
         run: |
           case "${{ matrix.distro }}" in
-            alpine-latest)  DOCKER_IMAGE="alpine:latest";;
-            alpine-edge)  DOCKER_IMAGE="alpine:edge";;
-            amazonlinux-latest)  DOCKER_IMAGE="amazonlinux:latest";;
-            centos-latest)  DOCKER_IMAGE="centos:latest";;
-            debian-latest)  DOCKER_IMAGE="debian:latest";;
-            debian-unstable)  DOCKER_IMAGE="debian:unstable";;
-            fedora-latest)  DOCKER_IMAGE="fedora:latest";;
-            fedora-rawhide)  DOCKER_IMAGE="fedora:rawhide";;
-            opensuse-leap)  DOCKER_IMAGE="opensuse/leap:latest";;
-            opensuse-tumbleweed)  DOCKER_IMAGE="opensuse/tumbleweed:latest";;
-            redhat-latest)  DOCKER_IMAGE="registry.access.redhat.com/ubi8/ubi:latest";;
-            ubuntu-latest)  DOCKER_IMAGE="ubuntu:latest";;
-            ubuntu-devel)  DOCKER_IMAGE="ubuntu:devel";;
+            alpine_latest)  DOCKER_IMAGE="alpine:latest";;
+            alpine_edge)  DOCKER_IMAGE="alpine:edge";;
+            amazonlinux_latest)  DOCKER_IMAGE="amazonlinux:latest";;
+            centos_latest)  DOCKER_IMAGE="centos:latest";;
+            debian_latest)  DOCKER_IMAGE="debian:latest";;
+            debian_unstable)  DOCKER_IMAGE="debian:unstable";;
+            fedora_latest)  DOCKER_IMAGE="fedora:latest";;
+            fedora_rawhide)  DOCKER_IMAGE="fedora:rawhide";;
+            opensuse_leap)  DOCKER_IMAGE="opensuse/leap:latest";;
+            opensuse_tumbleweed)  DOCKER_IMAGE="opensuse/tumbleweed:latest";;
+            redhat_latest)  DOCKER_IMAGE="registry.access.redhat.com/ubi8/ubi:latest";;
+            ubuntu_latest)  DOCKER_IMAGE="ubuntu:latest";;
+            ubuntu_devel)  DOCKER_IMAGE="ubuntu:devel";;
           esac
           echo ::set-output name=docker-image::${DOCKER_IMAGE}
           if [[ "${{ matrix.distro }}" == alpine* ]]; then
@@ -100,21 +99,28 @@ jobs:
 
   release:
     name: Release Ansible role
-    needs:
-      - test
-    if: false
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out codebase
         uses: actions/checkout@v2
 
+      - name: Check out tag
+        id: tag
+        run: |
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo ::set-output name=release::true
+          fi
+
       - name: Install dependencies
+        if: steps.tag.outputs.release == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install ansible
 
       - name: Publish
+        if: steps.tag.outputs.release == 'true'
         run: >
-          ansible-galaxy role import --api-key ${{ secrets.ansible-galaxy-api-key }}
+          ansible-galaxy role import --api-key ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
           $(echo $GITHUB_REPOSITORY | cut -d/ -f1) $(echo $GITHUB_REPOSITORY | cut -d/ -f2)
