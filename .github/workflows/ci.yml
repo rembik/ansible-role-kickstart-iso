@@ -16,6 +16,8 @@ jobs:
     name: Test Ansible role
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.experimental }}
+    outputs:
+      release: ${{ steps.env.outputs.release }}
     strategy:
       max-parallel: 4
       fail-fast: false
@@ -50,7 +52,7 @@ jobs:
       - name: Check out codebase
         uses: actions/checkout@v2
 
-      - name: Set test environment variables
+      - name: Set environment variables
         id: env
         run: |
           case "${{ matrix.distro }}" in
@@ -73,6 +75,10 @@ jobs:
             DOCKER_COMMAND="sh -c 'sleep infinity & wait'"
           fi
           echo ::set-output name=docker-command::${DOCKER_COMMAND:-}
+          if [[ ${{ github.event.ref }} =~ ^refs/tags/v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            RELEASE=true
+          fi
+          echo ::set-output name=release::${RELEASE:-false}
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -84,7 +90,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox tox-gh-actions
 
-      - name: Test role
+      - name: Molecule test
         timeout-minutes: 60
         run: |
           tox
@@ -100,27 +106,19 @@ jobs:
   release:
     name: Release Ansible role
     needs: test
+    if: needs.test.outputs.release == 'true'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out codebase
+      - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Check out tag
-        id: tag
-        run: |
-          if [[ ${{ github.event.ref }} =~ ^refs/tags/v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              echo ::set-output name=release::true
-          fi
-
       - name: Install dependencies
-        if: steps.tag.outputs.release == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install ansible
 
-      - name: Publish
-        if: steps.tag.outputs.release == 'true'
+      - name: Publish to Ansible Galaxy
         run: >
           ansible-galaxy role import --api-key ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
           $(echo $GITHUB_REPOSITORY | cut -d/ -f1) $(echo $GITHUB_REPOSITORY | cut -d/ -f2)

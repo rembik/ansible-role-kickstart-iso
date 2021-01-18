@@ -157,13 +157,13 @@ Author Information
 [Brian Rimek](https://github.com/rembik)
 
 
-[ci]: https://github.com/rembik/ansible-role-kickstart-iso/actions
+[ci]: https://github.com/rembik/ansible-role-kickstart-iso/actions?query=workflow%3ACI
 [travis_ci]: https://travis-ci.org/github/rembik/ansible-role-kickstart-iso
 [release]: https://github.com/rembik/ansible-role-kickstart-iso/releases
 [ansible_role]: https://galaxy.ansible.com/rembik/kickstart_iso
 
-[ci_badge]: https://img.shields.io/github/workflow/status/rembik/ansible-role-kickstart-iso/CI/master?logo=github&label=test
-[travis_ci_badge]: https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg?logo=travis-ci&logoColor=EEE&label=test
+[ci_badge]: https://img.shields.io/github/workflow/status/rembik/ansible-role-kickstart-iso/CI/master?logo=github&label=CI
+[travis_ci_badge]: https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg?logo=travis-ci&logoColor=EEE&label=CI
 [release_badge]: https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg?sort=semver&colorB=56b4b6&logo=github&logoColor=EEE
 [ansible_role_badge]: https://img.shields.io/ansible/role/36241.svg?colorB=56b4b6&logo=ansible&logoColor=EEE
 [ansible_downloads_badge]: https://img.shields.io/ansible/role/d/36241.svg?label=downloads&logo=ansible&logoColor=EEE
@@ -201,7 +201,7 @@ Author Information
 [debian_preview_badge]: https://img.shields.io/badge/Debian-unstable%2A-1488C6.svg?logo=docker&logoColor=EEE
 [fedora_badge]: https://img.shields.io/badge/Fedora-latest-1488C6.svg?logo=docker&logoColor=EEE
 [fedora_preview_badge]: https://img.shields.io/badge/Fedora-rawhide%2A-1488C6.svg?logo=docker&logoColor=EEE
-[opensuse_badge]: https://img.shields.io/badge/openSUSE-Leap%20%7C%20Tumbleweed-1488C6.svg?logo=docker&logoColor=EEE
+[opensuse_badge]: https://img.shields.io/badge/openSUSE-leap%20%7C%20tumbleweed-1488C6.svg?logo=docker&logoColor=EEE
 [redhat_badge]: https://img.shields.io/badge/RedHat-latest-1488C6.svg?logo=docker&logoColor=EEE
 [ubuntu_badge]: https://img.shields.io/badge/Ubuntu-latest-1488C6.svg?logo=docker&logoColor=EEE
 [ubuntu_preview_badge]: https://img.shields.io/badge/Ubuntu-devel%2A-1488C6.svg?logo=docker&logoColor=EEE
