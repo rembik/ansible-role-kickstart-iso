@@ -35,7 +35,6 @@ jobs:
         python-version: [3.9]
         experimental: [false]
         include:
-          - {distro: amazonlinux_latest, ansible: latest, python-version: 3.9, experimental: false}
           - {distro: alpine_latest, ansible: devel, python-version: 3.9, experimental: true}
           - {distro: debian_latest, ansible: devel, python-version: 3.9, experimental: true}
           - {distro: fedora_latest, ansible: devel, python-version: 3.9, experimental: true}

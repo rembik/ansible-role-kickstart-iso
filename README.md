@@ -1,10 +1,10 @@
 Ansible Role: Kickstart ISO
 ===========================
 
-[![][ci_badge]][ci]
-[![][release_badge]][release]
-[![][ansible_role_badge]][ansible_role]
-[![][ansible_downloads_badge]][ansible_role]
+[![ci_badge]][ci]
+[![release_badge]][release]
+[![ansible_role_badge]][ansible_role]
+[![ansible_downloads_badge]][ansible_role]
 
 This role creates kickstart ISO images for RHEL/CentOS.
 
@@ -119,27 +119,18 @@ localhost; made for static network configuration.
 Tests
 -----
 
-[![][python_badge]][python]
-[![][ansible_badge]][ansible]
-
 This role is tested periodically against the following Linux distributions:
 
-|| [![][ansible_previous_badge]][ansible_previous] | [![][ansible_latest_badge]][ansible_latest] | [![][ansible_devel_badge]][ansible_devel] |
-|---|---|---|---|
-| [![][alpine_badge]][alpine] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
-| [![][amazonlinux_badge]][amazonlinux] || [![][x]][ci] ||
-| [![][centos_badge]][centos] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
-| [![][debian_badge]][debian] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
-| [![][fedora_badge]][fedora] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
-| [![][opensuse_badge]][opensuse] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
-| [![][redhat_badge]][redhat] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
-| [![][ubuntu_badge]][ubuntu] | [![][x]][ci] | [![][x]][ci] | [![][x]][ci] |
-| [![][alpine_preview_badge]][alpine] || [![][x]][ci] | [![][x]][ci] |
-| [![][debian_preview_badge]][debian] || [![][x]][ci] | [![][x]][ci] |
-| [![][fedora_preview_badge]][fedora] || [![][x]][ci] | [![][x]][ci] |
-| [![][ubuntu_preview_badge]][ubuntu] || [![][x]][ci] | [![][x]][ci] |
-
-> Asteriks means the build is allowed to fail, it's marked as an experimental build.
+| [![python_badge] ![ansible_badge]][python] | [![ansible_previous_badge]][ansible_previous] | [![ansible_latest_badge]][ansible_latest] | [![ansible_devel_badge]][ansible_devel] |
+|:--|:--|:--|:--|
+| [![alpine_badge]][alpine] | [![x1]][ci] | [![x1] ![e2]][ci] | [![e1] ![e2]][ci] |
+| [![centos_badge]][centos] | [![x]][ci] | [![x]][ci] | [![e]][ci] |
+| [![debian_badge]][debian] | [![x1]][ci] | [![x1] ![e2]][ci] | [![e1] ![e2]][ci] |
+| [![fedora_badge]][fedora] | [![x1]][ci] | [![x1] ![e2]][ci] | [![e1] ![e2]][ci] |
+| [![opensuse_badge]][opensuse] | [![x1] ![x2]][ci] | [![x1] ![x2]][ci] | [![e1] ![e2]][ci] |
+| [![redhat_badge]][redhat] | [![x]][ci] | [![x]][ci] | [![e]][ci] |
+| [![ubuntu_badge]][ubuntu] | [![x1]][ci] | [![x1] ![e2]][ci] | [![e1] ![e2]][ci] |
+| [![xl] ![el]][ci] ||||
 
 Contributing
 ------------
@@ -156,36 +147,33 @@ Author Information
 
 [Brian Rimek](https://github.com/rembik)
 
-
 [ci]: https://github.com/rembik/ansible-role-kickstart-iso/actions?query=workflow%3ACI
 [travis_ci]: https://travis-ci.org/github/rembik/ansible-role-kickstart-iso
 [release]: https://github.com/rembik/ansible-role-kickstart-iso/releases
 [ansible_role]: https://galaxy.ansible.com/rembik/kickstart_iso
 
 [ci_badge]: https://img.shields.io/github/workflow/status/rembik/ansible-role-kickstart-iso/CI/master?logo=github&label=CI
-[travis_ci_badge]: https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master.svg?logo=travis-ci&logoColor=EEE&label=CI
-[release_badge]: https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso.svg?sort=semver&colorB=56b4b6&logo=github&logoColor=EEE
-[ansible_role_badge]: https://img.shields.io/ansible/role/36241.svg?colorB=56b4b6&logo=ansible&logoColor=EEE
-[ansible_downloads_badge]: https://img.shields.io/ansible/role/d/36241.svg?label=downloads&logo=ansible&logoColor=EEE
+[travis_ci_badge]: https://img.shields.io/travis/rembik/ansible-role-kickstart-iso/master?logo=travis-ci&logoColor=EEE&label=CI
+[release_badge]: https://img.shields.io/github/release/rembik/ansible-role-kickstart-iso?sort=semver&colorB=56b4b6&logo=github&logoColor=EEE
+[ansible_role_badge]: https://img.shields.io/ansible/role/36241?colorB=56b4b6&logo=ansible&logoColor=EEE
+[ansible_downloads_badge]: https://img.shields.io/ansible/role/d/36241?label=downloads&logo=ansible&logoColor=EEE
 
 [issues]: http://github.com/rembik/ansible-role-kickstart-iso/issues/new/choose
 [contributing]: http://github.com/rembik/ansible-role-kickstart-iso/tree/master/.github/CONTRIBUTING.md
 [license]: http://github.com/rembik/ansible-role-kickstart-iso/tree/master/LICENSE
 
 [python]: https://www.python.org/
-[ansible]: https://ansible.com/
 [ansible_previous]: https://docs.ansible.com/ansible/2.9/
 [ansible_latest]: https://docs.ansible.com/ansible/2.10/
 [ansible_devel]: https://docs.ansible.com/ansible/devel/
 
-[python_badge]: https://img.shields.io/badge/python-3.9-1488C6.svg
-[ansible_badge]: https://img.shields.io/badge/Ansible-2.9%20%7C%202.10%20%7C%20devel%2A-56b4b6.svg
-[ansible_previous_badge]: https://img.shields.io/badge/2.9-56b4b6.svg
-[ansible_latest_badge]: https://img.shields.io/badge/2.10-56b4b6.svg
-[ansible_devel_badge]: https://img.shields.io/badge/devel%2A-56b4b6.svg
+[python_badge]: https://img.shields.io/badge/python-3.9-1488C6
+[ansible_badge]: https://img.shields.io/badge/Ansible--56b4b6
+[ansible_previous_badge]: https://img.shields.io/badge/2.9-56b4b6
+[ansible_latest_badge]: https://img.shields.io/badge/2.10-56b4b6
+[ansible_devel_badge]: https://img.shields.io/badge/devel-56b4b6
 
 [alpine]: https://hub.docker.com/_/alpine
-[amazonlinux]: https://hub.docker.com/_/amazonlinux
 [centos]: https://hub.docker.com/_/centos
 [debian]: https://hub.docker.com/_/debian
 [fedora]: https://hub.docker.com/_/fedora
@@ -193,16 +181,19 @@ Author Information
 [redhat]: https://access.redhat.com/containers/#/registry.access.redhat.com/ubi8/ubi
 [ubuntu]: https://hub.docker.com/_/ubuntu
 
-[alpine_badge]: https://img.shields.io/badge/Alpine-latest-1488C6.svg?logo=docker&logoColor=EEE
-[alpine_preview_badge]: https://img.shields.io/badge/Alpine-edge%2A-1488C6.svg?logo=docker&logoColor=EEE
-[amazonlinux_badge]: https://img.shields.io/badge/AmazonLinux-latest-1488C6.svg?logo=docker&logoColor=EEE
-[centos_badge]: https://img.shields.io/badge/CentOS-latest-1488C6.svg?logo=docker&logoColor=EEE
-[debian_badge]: https://img.shields.io/badge/Debian-latest-1488C6.svg?logo=docker&logoColor=EEE
-[debian_preview_badge]: https://img.shields.io/badge/Debian-unstable%2A-1488C6.svg?logo=docker&logoColor=EEE
-[fedora_badge]: https://img.shields.io/badge/Fedora-latest-1488C6.svg?logo=docker&logoColor=EEE
-[fedora_preview_badge]: https://img.shields.io/badge/Fedora-rawhide%2A-1488C6.svg?logo=docker&logoColor=EEE
-[opensuse_badge]: https://img.shields.io/badge/openSUSE-leap%20%7C%20tumbleweed-1488C6.svg?logo=docker&logoColor=EEE
-[redhat_badge]: https://img.shields.io/badge/RedHat-latest-1488C6.svg?logo=docker&logoColor=EEE
-[ubuntu_badge]: https://img.shields.io/badge/Ubuntu-latest-1488C6.svg?logo=docker&logoColor=EEE
-[ubuntu_preview_badge]: https://img.shields.io/badge/Ubuntu-devel%2A-1488C6.svg?logo=docker&logoColor=EEE
-[x]: https://img.shields.io/badge/X-grey.svg
+[alpine_badge]: https://img.shields.io/badge/Alpine-latest%20%7C%20edge-1488C6?logo=docker&logoColor=EEE
+[centos_badge]: https://img.shields.io/badge/CentOS-latest-1488C6?logo=docker&logoColor=EEE
+[debian_badge]: https://img.shields.io/badge/Debian-latest%20%7C%20unstable-1488C6?logo=docker&logoColor=EEE
+[fedora_badge]: https://img.shields.io/badge/Fedora-latest%20%7C%20rawhide-1488C6?logo=docker&logoColor=EEE
+[opensuse_badge]: https://img.shields.io/badge/openSUSE-leap%20%7C%20tumbleweed-1488C6?logo=docker&logoColor=EEE
+[redhat_badge]: https://img.shields.io/badge/RedHat-latest-1488C6?logo=docker&logoColor=EEE
+[ubuntu_badge]: https://img.shields.io/badge/Ubuntu-latest%20%7C%20devel-1488C6?logo=docker&logoColor=EEE
+
+[xl]: https://img.shields.io/badge/%b7-mandatory-grey?labelColor=green
+[el]: https://img.shields.io/badge/%b7-experimental-grey?labelColor=yellow
+[x]: https://img.shields.io/badge/%b7-green
+[e]: https://img.shields.io/badge/%b7-yellow
+[x1]: https://img.shields.io/badge/%b9-green
+[e1]: https://img.shields.io/badge/%b9-yellow
+[x2]: https://img.shields.io/badge/%b2-green
+[e2]: https://img.shields.io/badge/%b2-yellow
