@@ -2,7 +2,7 @@
 - name: Create kickstart config
   template:
     src: "kickstart.cfg.j2"
-    dest: "{{ kickstart_iso_storage }}/iso/kickstart.cfg"
+    dest: "{{ kickstart_iso_dest }}/iso/kickstart.cfg"
     mode: 0644
 
 - name: Create kickstart ISO image
@@ -14,5 +14,5 @@
     -o "../{{ kickstart_iso_info.file_name }}{{ ('_' + (kickstart_iso_host.name|default(''))
     + '_')|replace('__','_') }}{{ kickstart_iso_host.ip|replace('.','-') }}.iso" .
   args:
-    chdir: "{{ kickstart_iso_storage }}/iso"
+    chdir: "{{ kickstart_iso_dest }}/iso"
   when: True

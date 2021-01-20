@@ -17,6 +17,8 @@ platforms:
     command: ${TEST_DOCKER_COMMAND:-"bash -c 'sleep infinity & wait'"}
     groups:
       - ${TEST_DISTRO:-centos_latest}_docker
+    volumes:
+      - ${MOLECULE_PROJECT_DIRECTORY}/.images/base:/tmp/images/base:ro
 provisioner:
   name: ansible
   ansible_args:
@@ -28,6 +30,7 @@ provisioner:
   playbooks:
     docker:
       prepare: ${TEST_PREPARE:-../resources/docker/prepare.yml}
+      converge: ${TEST_CONVERGE:-../resources/docker/converge.yml}
     prepare: ${TEST_PREPARE:-../resources/prepare.yml}
     converge: ${TEST_CONVERGE:-../resources/converge.yml}
     verify: ${TEST_VERIFY:-../resources/verify.yml}

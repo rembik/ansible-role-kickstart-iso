@@ -15,9 +15,9 @@
 
 - name: Ensure kickstart ISO images not already exist
   find:
-    paths: "{{ kickstart_iso_storage }}"
+    paths: "{{ kickstart_iso_dest }}"
     patterns: "{{ kickstart_iso_info.file_name }}_*.iso"
-  register: kickstart_iso_check
+  register: kickstart_iso_dest_check
 
 - name: Create kickstart ISO images
   block:
@@ -60,44 +60,44 @@
         state: "{{ item.state }}"
         mode: 0755
       loop:
-        - {path: "{{ kickstart_iso_storage }}/iso", state: 'absent'}
-        - {path: "{{ kickstart_iso_storage }}/iso", state: 'directory'}
+        - {path: "{{ kickstart_iso_src }}", state: 'directory'}
+        - {path: "{{ kickstart_iso_dest }}/iso", state: 'absent'}
+        - {path: "{{ kickstart_iso_dest }}/iso", state: 'directory'}
 
-    - name: Ensure base ISO image not already exist
+    - name: Ensure base ISO image not already exists
       stat:
-        path: "{{ kickstart_iso_storage }}/{{ kickstart_iso_info.file_name }}.iso"
-      register: kickstart_iso_base_check
+        path: "{{ kickstart_iso_src }}/{{ kickstart_iso_info.file_name }}.iso"
+      register: kickstart_iso_src_check
 
     - name: Download base ISO image (support redirect)
       command: >
         wget {{ kickstart_iso_base_url }}{{ kickstart_iso_info.file_name }}.iso
         -O {{ kickstart_iso_info.file_name }}.iso
       args:
-        chdir: "{{ kickstart_iso_storage }}"
+        chdir: "{{ kickstart_iso_src }}"
         warn: false
       register: kickstart_iso_download
       until: kickstart_iso_download is succeeded
       retries: 3
       delay: "{{ kickstart_iso_download_delay }}"
       when:
-        - not kickstart_iso_base_check.stat.exists
-        - not kickstart_iso_base_check.stat.isreg|default('false')
+        - not (kickstart_iso_src_check.stat.exists and
+          kickstart_iso_src_check.stat.isreg|default('false'))
 
     - name: Verify base ISO image
       command: "sha256sum {{ kickstart_iso_info.file_name }}.iso"
       args:
-        chdir: "{{ kickstart_iso_storage }}"
+        chdir: "{{ kickstart_iso_dest }}"
       register: kickstart_iso_verify
       failed_when: (kickstart_iso_verify.stdout).split('  ')[0] != kickstart_iso_info.checksum
 
     - name: Extract base ISO image
       command: >
-        xorriso -osirrox on -indev {{ kickstart_iso_info.file_name }}.iso -extract / iso
-      args:
-        chdir: "{{ kickstart_iso_storage }}"
+        xorriso -osirrox on -indev {{ kickstart_iso_src }}/{{ kickstart_iso_info.file_name }}.iso
+        -extract / {{ kickstart_iso_dest }}/iso
 
     - name: Lookup Boot-Menu config
-      command: "cat {{ kickstart_iso_storage +'/iso/'+ kickstart_iso_bios_conf_file }}"
+      command: "cat {{ kickstart_iso_dest }}/iso/{{ kickstart_iso_bios_conf_file }}"
       register: kickstart_iso_bios_conf
 
     - name: Lookup Boot-Menu ISO name
@@ -107,7 +107,7 @@
 
     - name: Edit Boot-Menu config
       lineinfile:
-        path: "{{ kickstart_iso_storage }}/iso/{{ item.path }}"
+        path: "{{ kickstart_iso_dest }}/iso/{{ item.path }}"
         state: "{{ item.state|default(omit) }}"
         regexp: "{{ item.regexp }}"
         line: "{{ item.line }}"
@@ -141,5 +141,5 @@
         path: "{{ item }}"
         state: absent
       loop:
-        - "{{ kickstart_iso_storage }}/iso"
+        - "{{ kickstart_iso_dest }}/iso"
   when: kickstart_iso_check.matched|int == 0

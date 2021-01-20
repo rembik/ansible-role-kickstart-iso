@@ -66,7 +66,7 @@ jobs:
         run: |
           check_url=()
           base_url=()
-          base_dir='.images'
+          base_dir='.images/base'
           check_url[0]='http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
           check_url[1]='http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
           base_url[0]='http://isoredirect.centos.org/centos/8/isos/x86_64/'
@@ -82,24 +82,17 @@ jobs:
             check="$(echo "${check}" |
               sed -En 's/.*([a-z0-9]{64,}).*/\1/p')"
             url="${base_url[$i]}${name}.iso"
-            dir="${base_dir}/${name}"
-            if [ ! -d "${dir}" ]; then
-              mkdir -p "${dir}"
-              (cd "${dir}" && curl -LOsw "%{filename_effective} %{time_total}s\n" $url)
-              (cd "${dir}" && echo "${check}  ${name}.iso" | sha256sum -c --status)
+            if [ ! -f "${base_dir}/${name}.iso" ]; then
+              mkdir -p "${base_dir}"
+              (cd "${base_dir}" && curl -LOsw "%{filename_effective} %{time_total}s\n" $url)
+              (cd "${base_dir}" && echo "${check}  ${name}.iso" | sha256sum -c --status)
             fi
             image_name[$i]="${name}"
           done
-          dir="${image_name[*]}"
+          image_file="${image_name[*]/%/.iso}"
           find "${base_dir}" -depth -mindepth 1 -maxdepth 1 \
-            ! -regex "^.*/\(${dir// /\\\|}\)$" \
+            ! -regex "^.*/\(${image_file// /\\\|}\)$" \
             -exec rm -rf '{}' \;
-          mapfile -t paths < <(find "${base_dir}" -depth -mindepth 2 -maxdepth 2)
-          for path in "${paths[@]}"; do
-            if [ "$(basename "$(dirname "${path}")")" != "$(basename -s .iso "${path}")" ]; then
-              rm -rf "${path}"
-            fi
-          done
 
   test:
     name: Test Ansible role

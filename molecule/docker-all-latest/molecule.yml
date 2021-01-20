@@ -64,6 +64,7 @@ provisioner:
   playbooks:
     docker:
       prepare: ${TEST_PREPARE:-../resources/docker/prepare.yml}
+      converge: ${TEST_CONVERGE:-../resources/docker/converge.yml}
     prepare: ${TEST_PREPARE:-../resources/prepare.yml}
     converge: ${TEST_CONVERGE:-../resources/converge.yml}
     verify: ${TEST_VERIFY:-../resources/verify.yml}

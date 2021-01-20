@@ -8,18 +8,18 @@
   - include_role:
       name: rembik.bootstrap
 
-  - name: Ensure images cache exist
-    stat:
-      path: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images"
-    register: molecule_image_cache
-    delegate_to: 127.0.0.1
-
-  - name: Copy images cache
-    copy:
-      src: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images"
-      dest: ".images"
-      mode: 0755
-      decrypt: no
-    when:
-      - molecule_image_cache.stat.exists
-      - molecule_image_cache.stat.isdir
+#  - name: Ensure base ISO images cache exist
+#    stat:
+#      path: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images"
+#    register: molecule_image_cache
+#    delegate_to: 127.0.0.1
+#
+#  - name: Copy base ISO images cache
+#    copy:
+#      src: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images"
+#      dest: "/tmp/images"
+#      mode: 0755
+#      decrypt: no
+#    when:
+#      - molecule_image_cache.stat.exists
+#      - molecule_image_cache.stat.isdir
