@@ -3,16 +3,31 @@ kickstart_iso_bios_conf_file: 'isolinux/isolinux.cfg'
 kickstart_iso_uefi_conf_file: 'EFI/BOOT/grub.cfg'
 
 _kickstart_iso_packages:
-  Alpine: [file, gcc, g++, gzip, linux-headers, make, tar, wget, xorriso]
-  Archlinux: [gcc, gcc-c++, make, wget, libisoburn]
-  Debian: [gcc, g++, make, wget, xorriso]
-  Gentoo: [gcc, gcc-c++, make, wget, xorriso]
-  RedHat: [gcc, gcc-c++, make, wget, xorriso]
-  Suse: [gcc, gcc-c++, gzip, make, tar, wget, xorriso]
-  Amazon: [gcc, gcc-c++, gzip, make, tar, wget, xorriso]
+  Alpine: [wget, xorriso]
+  Archlinux: [wget, libisoburn]
+  Debian: [wget, xorriso]
+  Gentoo: [wget, xorriso]
+  RedHat: [wget, xorriso]
+  Suse: [wget, xorriso]
+  Amazon: [wget, xorriso]
+
+_kickstart_iso_compile_packages:
+  Alpine: [file, gcc, g++, gzip, linux-headers, make, tar]
+  Archlinux: [gcc, gcc-c++, make]
+  Debian: [gcc, g++, make]
+  Gentoo: [gcc, gcc-c++, make]
+  RedHat: [gcc, gcc-c++, make]
+  Suse: [gcc, gcc-c++, gzip, make, tar]
+  Amazon: [gcc, gcc-c++, gzip, make, tar]
 
 # Map the right set of packages, based on gathered facts.
 # yamllint disable-line rule:line-length
 kickstart_iso_packages: "{{ _kickstart_iso_packages[ansible_distribution ~'-'~ ansible_distribution_major_version]|default(
                          _kickstart_iso_packages[ansible_distribution])|default(
                          _kickstart_iso_packages[ansible_os_family])|default([]) }}"
+
+# Map the right set of packages, based on gathered facts.
+# yamllint disable-line rule:line-length
+kickstart_iso_compile_packages: "{{ _kickstart_iso_compile_packages[ansible_distribution ~'-'~ ansible_distribution_major_version]|default(
+                                 _kickstart_iso_compile_packages[ansible_distribution])|default(
+                                 _kickstart_iso_compile_packages[ansible_os_family])|default([]) }}"
