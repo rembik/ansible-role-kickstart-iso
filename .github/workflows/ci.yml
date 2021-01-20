@@ -61,9 +61,10 @@ jobs:
           pip install tox tox-gh-actions
           tox --notest
 
-      - name: Update base images
+      - name: Update images
         if: steps.cache-images.outputs.cache-hit != 'true'
         run: |
+          set -Eeuo pipefail
           check_url=()
           base_url=()
           base_dir='.images/base'

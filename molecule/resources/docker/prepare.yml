@@ -10,6 +10,7 @@
 
     - name: Update base ISO images cache
       shell: |
+        set -Eeuo pipefail
         check_url=()
         base_url=()
         base_dir="{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images/base"
@@ -40,6 +41,6 @@
           ! -regex "^.*/\(${image_file// /\\\|}\)$" \
           -exec rm -rf '{}' \;
       register: kickstart_iso_molecule_images_cache
-      changed_when: kickstart_iso_molecule_images_cache.stdout != ''
+      changed_when: kickstart_iso_molecule_images_cache.stdout | length > 0
       failed_when: kickstart_iso_molecule_images_cache.rc != 0
       delegate_to: 127.0.0.1
