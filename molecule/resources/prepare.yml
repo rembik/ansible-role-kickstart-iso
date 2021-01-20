@@ -17,8 +17,8 @@
     copy:
       src: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images"
       dest: ".images"
+      mode: 0755
       decrypt: no
     when:
       - molecule_image_cache.stat.exists
       - molecule_image_cache.stat.isdir
-
