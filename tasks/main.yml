@@ -74,7 +74,7 @@
         path: "{{ kickstart_iso_src }}"
         state: "directory"
         mode: 0755
-      when:    
+      when:
         - not (kickstart_iso_src_check.stat.exists and
           kickstart_iso_src_check.stat.isreg|default('false'))
 

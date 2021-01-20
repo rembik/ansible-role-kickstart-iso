@@ -49,7 +49,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            .images
+            .images/base
           key: ${{ runner.os }}-images-${{ steps.env.outputs.cache-date }}-${{ hashFiles('molecule/resources/converge.yml') }}  # yamllint disable-line rule:line-length
           restore-keys: |
             ${{ runner.os }}-images-
@@ -182,7 +182,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            .images
+            .images/base
           key: ${{ runner.os }}-images-${{ steps.env.outputs.cache-date }}-${{ hashFiles('molecule/resources/converge.yml') }}  # yamllint disable-line rule:line-length
 
       - name: Install dependencies
