@@ -54,7 +54,7 @@
       args:
         warn: false
   always:
-    - name: Prepare ephemeral files and directories
+    - name: Prepare kickstart ISO images directory
       file:
         path: "{{ item.path }}"
         state: "{{ item.state }}"
@@ -68,6 +68,15 @@
       stat:
         path: "{{ kickstart_iso_src }}/{{ kickstart_iso_info.file_name }}.iso"
       register: kickstart_iso_src_check
+
+    - name: Prepare base ISO image directory
+      file:
+        path: "{{ kickstart_iso_src }}"
+        state: "directory"
+        mode: 0755
+      when:    
+        - not (kickstart_iso_src_check.stat.exists and
+          kickstart_iso_src_check.stat.isreg|default('false'))
 
     - name: Download base ISO image (support redirect)
       command: >
@@ -142,4 +151,4 @@
         state: absent
       loop:
         - "{{ kickstart_iso_dest }}/iso"
-  when: kickstart_iso_check.matched|int == 0
+  when: kickstart_iso_dest_check.matched|int == 0

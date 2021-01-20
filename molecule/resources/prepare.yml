@@ -5,5 +5,5 @@
   become: yes
 
   tasks:
-  - include_role:
-      name: rembik.bootstrap
+    - include_role:
+        name: rembik.bootstrap
