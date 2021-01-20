@@ -19,7 +19,7 @@
         base_url[1]='http://isoredirect.centos.org/centos/7/isos/x86_64/'
         image_type=('boot' 'NetInstall')
         image_name=()
-        for ((i=0; i<${#check_url[@]}; i++)); do
+        for ((i=0; i<2; i++)); do
           check="$(curl -s ${check_url[$i]} |
             grep -Eo ".*[a-z0-9]{64,}.*" |
             grep -Eo ".*${image_type[$i]}.*" )"
