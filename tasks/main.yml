@@ -60,7 +60,6 @@
         state: "{{ item.state }}"
         mode: 0755
       loop:
-        - {path: "{{ kickstart_iso_src }}", state: 'directory'}
         - {path: "{{ kickstart_iso_dest }}/iso", state: 'absent'}
         - {path: "{{ kickstart_iso_dest }}/iso", state: 'directory'}
 

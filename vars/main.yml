@@ -4,10 +4,12 @@ kickstart_iso_uefi_conf_file: 'EFI/BOOT/grub.cfg'
 
 _kickstart_iso_packages:
   Alpine: [file, gcc, g++, gzip, linux-headers, make, tar, wget, xorriso]
+  Archlinux: [gcc, gcc-c++, make, wget, libisoburn]
   Debian: [gcc, g++, make, wget, xorriso]
+  Gentoo: [gcc, gcc-c++, make, wget, xorriso]
   RedHat: [gcc, gcc-c++, make, wget, xorriso]
-  Suse: [gcc, gcc-c++, gzip, make, tar, wget ,xorriso]
-  Amazon: [gcc, gcc-c++, gzip, make, tar, wget ,xorriso]
+  Suse: [gcc, gcc-c++, gzip, make, tar, wget, xorriso]
+  Amazon: [gcc, gcc-c++, gzip, make, tar, wget, xorriso]
 
 # Map the right set of packages, based on gathered facts.
 # yamllint disable-line rule:line-length
