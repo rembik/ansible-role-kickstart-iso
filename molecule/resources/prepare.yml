@@ -10,14 +10,15 @@
 
   - name: Ensure images cache exits
     stat:
-      path: "{{ (lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images"
+      path: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images"
     register: molecule_image_cache
 
   - name: Copy images cache
     copy:
-      src: "{{ (lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images"
+      src: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images"
       dest: ".images"
       decrypt: no
     when:
       - molecule_image_cache.stat.exists
       - molecule_image_cache.stat.isdir
+
