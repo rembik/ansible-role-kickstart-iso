@@ -26,9 +26,11 @@ provisioner:
       stdout_callback: yaml
       callback_plugins: /usr/lib/python${TEST_PYTHON_VERSION:-3.9}/site-packages/ara/plugins/callbacks
   playbooks:
+    docker:
+      prepare: ${TEST_PREPARE:-../resources/docker/prepare.yml}
+    prepare: ${TEST_PREPARE:-../resources/prepare.yml}
     converge: ${TEST_CONVERGE:-../resources/converge.yml}
     verify: ${TEST_VERIFY:-../resources/verify.yml}
-    prepare: ${TEST_PREPARE:-../resources/prepare.yml}
 scenario:
   name: default
 verifier:
