@@ -41,7 +41,7 @@
           ! -regex "^.*/\(${image_file// /\\\|}\)$" \
           -exec rm -rf '{}' \;
       args:
-        executable: /bin/bash 
+        executable: /bin/bash
       register: kickstart_iso_molecule_images_cache
       changed_when: kickstart_iso_molecule_images_cache.stdout | length > 0
       failed_when: kickstart_iso_molecule_images_cache.rc != 0
