@@ -64,7 +64,7 @@ jobs:
 
       - name: Update base images
         if: steps.cache-images.outputs.cache-hit != 'true'
-        run: |  
+        run: |
           check_url=()
           base_url=()
           base_dir='.images'
