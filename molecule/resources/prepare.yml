@@ -1,0 +1,15 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - include_role:
+      name: rembik.bootstrap
+
+  - name: Copy images cache
+    copy:
+      src: ".images"
+      dest: ".images"
+      decrypt: no

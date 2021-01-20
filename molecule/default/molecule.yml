@@ -19,8 +19,8 @@ platforms:
       - ${TEST_DISTRO:-centos_latest}_docker
 provisioner:
   name: ansible
-  # ansible_args:
-  #   - -vvvv
+  ansible_args:
+    - -vvvv
   config_options:
     defaults:
       stdout_callback: yaml
@@ -28,6 +28,7 @@ provisioner:
   playbooks:
     converge: ${TEST_CONVERGE:-../resources/converge.yml}
     verify: ${TEST_VERIFY:-../resources/verify.yml}
+    prepare: ${TEST_PREPARE:-../resources/prepare.yml}
 scenario:
   name: default
 verifier:

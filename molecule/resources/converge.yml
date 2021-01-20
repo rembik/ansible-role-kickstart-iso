@@ -1,12 +1,10 @@
 ---
 - name: Converge
   hosts: all
-  gather_facts: no
+  gather_facts: yes
   become: yes
 
   tasks:
-  - include_role:
-      name: rembik.bootstrap
   - include_role:
       name: ansible-role-kickstart-iso
     vars:
@@ -15,6 +13,7 @@
       kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
       kickstart_iso_install_media: 'url --url http://mirror.centos.org/centos/8/BaseOS/x86_64/os/'
       kickstart_iso_network_bootproto: 'dhcp'
+
   - include_role:
       name: ansible-role-kickstart-iso
     vars:

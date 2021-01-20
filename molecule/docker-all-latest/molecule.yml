@@ -64,6 +64,7 @@ provisioner:
   playbooks:
     converge: ${TEST_CONVERGE:-../resources/converge.yml}
     verify: ${TEST_VERIFY:-../resources/verify.yml}
+    prepare: ${TEST_PREPARE:-../resources/prepare.yml}
 scenario:
   name: docker-all-latest
 verifier:

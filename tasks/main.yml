@@ -32,11 +32,11 @@
       retries: 3
       delay: 60
 
-    - name: Lookup xorriso CLT
+    - name: Lookup xorriso
       command: xorriso -version
       changed_when: false
   rescue:
-    - name: Build xorriso CLT
+    - name: Build xorriso
       become: true
       shell: |
         mkdir -p /tmp/xorriso
@@ -60,12 +60,19 @@
         state: "{{ item.state }}"
         mode: 0755
       loop:
-        - {path: "{{ kickstart_iso_storage }}/image.iso", state: 'absent'}
         - {path: "{{ kickstart_iso_storage }}/iso", state: 'absent'}
         - {path: "{{ kickstart_iso_storage }}/iso", state: 'directory'}
 
+    - name: Ensure base ISO image not already exist
+      find:
+        paths: "{{ kickstart_iso_storage }}"
+        patterns: "{{ kickstart_iso_info.file_name }}.iso"
+      register: kickstart_iso_base_check
+
     - name: Download base ISO image (support redirect)
-      command: "wget {{ kickstart_iso_base_url }}{{ kickstart_iso_info.file_name }}.iso -O image.iso"
+      command: >
+        wget {{ kickstart_iso_base_url }}{{ kickstart_iso_info.file_name }}.iso
+        -O {{ kickstart_iso_info.file_name }}.iso"
       args:
         chdir: "{{ kickstart_iso_storage }}"
         warn: false
@@ -73,16 +80,18 @@
       until: kickstart_iso_download is succeeded
       retries: 3
       delay: "{{ kickstart_iso_download_delay }}"
+      when: kickstart_iso_base_check.matched|int == 0
 
     - name: Verify base ISO image
-      command: "sha256sum image.iso"
+      command: "sha256sum {{ kickstart_iso_info.file_name }}.iso"
       args:
         chdir: "{{ kickstart_iso_storage }}"
       register: kickstart_iso_verify
       failed_when: (kickstart_iso_verify.stdout).split('  ')[0] != kickstart_iso_info.checksum
 
     - name: Extract base ISO image
-      command: xorriso -osirrox on -indev image.iso -extract / iso
+      command: >
+        xorriso -osirrox on -indev {{ kickstart_iso_info.file_name }}.iso -extract / iso
       args:
         chdir: "{{ kickstart_iso_storage }}"
 
@@ -131,6 +140,5 @@
         path: "{{ item }}"
         state: absent
       loop:
-        - "{{ kickstart_iso_storage }}/image.iso"
         - "{{ kickstart_iso_storage }}/iso"
   when: kickstart_iso_check.matched|int == 0

@@ -12,8 +12,102 @@ on:
 
 jobs:
 
+  cache:
+    name: Cache dependencies
+    runs-on: ubuntu-latest
+  strategy:
+    max-parallel: 1
+    matrix:
+      python-version: [3.9]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "${{ matrix.python-version }}"
+      
+      - name: Set environment variables
+        id: env
+        run: |
+          echo ::set-output name=cache-date::$(date -u "+%Y%m")
+          echo ::set-output name=cache-pip::$(pip cache dir)
+    
+      - name: Check out tox cache
+        id: cache-tox
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.env.outputs.cache-pip }}
+            .tox
+            !.tox/**/log
+            !.tox/**/tmp
+          key: ${{ runner.os }}-tox-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}-${{ matrix.python-version }}  # yamllint disable-line rule:line-length
+          restore-keys: |
+            ${{ runner.os }}-tox-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}-
+
+      - name: Install tox dependencies
+        if: steps.cache-tox.outputs.cache-hit != 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox tox-gh-actions
+          tox --notest
+
+      - name: Check out images cache
+        id: cache-images
+        uses: actions/cache@v2
+        with:
+          path: |
+            .images
+          key: ${{ runner.os }}-images-${{ steps.env.outputs.cache-date }}-${{ hashFiles('molecule/resources/converge.yml') }}  # yamllint disable-line rule:line-length
+          restore-keys: |
+            ${{ runner.os }}-images-
+
+      - name: Update images cache
+        if: steps.cache-images.outputs.cache-hit != 'true'
+        run: |  
+          check_url=()
+          base_url=()
+          base_dir='.images'
+          check_url[0]='http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
+          check_url[1]='http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
+          base_url[0]='http://isoredirect.centos.org/centos/8/isos/x86_64/'
+          base_url[1]='http://isoredirect.centos.org/centos/7/isos/x86_64/'
+          image_type=('boot' 'NetInstall')
+          image_name=()
+          for ((i=0; i<${#check_url[@]}; i++)); do
+            check="$(curl -s ${check_url[$i]} |
+              grep -Eo ".*[a-z0-9]{64,}.*" |
+              grep -Eo ".*${image_type[$i]}.*" )"
+            name="$(echo "${check}" |
+              sed -En 's/.*[^a-zA-Z0-9\._-]([a-zA-Z0-9\._-]+)\.iso.*/\1/p')"
+            check="$(echo "${check}" |
+              sed -En 's/.*([a-z0-9]{64,}).*/\1/p')"
+            url="${base_url[$i]}${name}.iso"
+            dir="${base_dir}/${name}"
+            if [ ! -d "${dir}" ]; then
+              mkdir -p "${dir}"
+              (cd "${dir}" && curl -LOsw "%{filename_effective} %{time_total}s\n" $url)
+              (cd "${dir}" && echo "${check}  ${name}.iso" | sha256sum -c --status)
+            fi
+            image_name[$i]="${name}"
+          done
+          dir="${image_name[*]}"
+          find "${base_dir}" -depth -mindepth 1 -maxdepth 1 \
+            ! -regex "^.*/\(${dir// /\\\|}\)$" \
+            -exec rm -rf '{}' \;
+          mapfile -t paths < <(find "${base_dir}" -depth -mindepth 2 -maxdepth 2)
+          for path in "${paths[@]}"; do
+            if [ "$(basename "$(dirname "${path}")")" != "$(basename -s .iso "${path}")" ]; then
+              rm -rf "${path}"
+            fi
+          done
+
   test:
     name: Test Ansible role
+    needs: cache
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.experimental }}
     outputs:
@@ -48,8 +142,13 @@ jobs:
           - {distro: ubuntu_devel, ansible: preview, python-version: 3.9, experimental: true}
 
     steps:
-      - name: Check out codebase
+      - name: Check out repository
         uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "${{ matrix.python-version }}"
 
       - name: Set environment variables
         id: env
@@ -78,16 +177,33 @@ jobs:
             RELEASE=true
           fi
           echo ::set-output name=release::${RELEASE:-false}
+          echo ::set-output name=cache-date::$(date -u "+%Y%m")
+          echo ::set-output name=cache-pip::$(pip cache dir)
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Check out tox cache
+        id: cache
+        uses: actions/cache@v2
         with:
-          python-version: "${{ matrix.python-version }}"
+          path: |
+            ${{ steps.env.outputs.cache-pip }}
+            .tox
+            !.tox/**/log
+            !.tox/**/tmp
+          key: ${{ runner.os }}-tox-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}-${{ matrix.python-version }}  # yamllint disable-line rule:line-length
 
-      - name: Install dependencies
+      - name: Install tox dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install tox tox-gh-actions
+
+      - name: Check out images cache
+        id: cache_images
+        uses: actions/cache@v2
+        with:
+          path: |
+            .images
+          key: ${{ runner.os }}-images-${{ steps.env.outputs.cache-date }}-${{ hashFiles('molecule/resources/converge.yml') }}  # yamllint disable-line rule:line-length
 
       - name: Molecule test
         timeout-minutes: 60
