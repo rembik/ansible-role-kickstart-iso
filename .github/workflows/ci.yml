@@ -15,10 +15,10 @@ jobs:
   cache:
     name: Cache dependencies
     runs-on: ubuntu-latest
-  strategy:
-    max-parallel: 1
-    matrix:
-      python-version: [3.9]
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.9]
 
     steps:
       - name: Check out repository
