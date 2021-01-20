@@ -64,9 +64,8 @@
         - {path: "{{ kickstart_iso_storage }}/iso", state: 'directory'}
 
     - name: Ensure base ISO image not already exist
-      find:
-        paths: "{{ kickstart_iso_storage }}"
-        patterns: "{{ kickstart_iso_info.file_name }}.iso"
+      stat:
+        path: "{{ kickstart_iso_storage }}/{{ kickstart_iso_info.file_name }}.iso"
       register: kickstart_iso_base_check
 
     - name: Download base ISO image (support redirect)
@@ -80,7 +79,9 @@
       until: kickstart_iso_download is succeeded
       retries: 3
       delay: "{{ kickstart_iso_download_delay }}"
-      when: kickstart_iso_base_check.matched|int == 0
+      when:
+        - kickstart_iso_base_check.stat.exists
+        - kickstart_iso_base_check.stat.isreg
 
     - name: Verify base ISO image
       command: "sha256sum {{ kickstart_iso_info.file_name }}.iso"

@@ -13,7 +13,7 @@ on:
 jobs:
 
   cache:
-    name: Cache dependencies
+    name: Cache test dependencies
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -28,32 +28,22 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "${{ matrix.python-version }}"
-      
-      - name: Set environment variables
+
+      - name: Set cache variables
         id: env
         run: |
           echo ::set-output name=cache-date::$(date -u "+%Y%m")
           echo ::set-output name=cache-pip::$(pip cache dir)
-    
+
       - name: Check out tox cache
         id: cache-tox
         uses: actions/cache@v2
         with:
           path: |
-            ${{ steps.env.outputs.cache-pip }}
             .tox
             !.tox/**/log
             !.tox/**/tmp
-          key: ${{ runner.os }}-tox-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}-${{ matrix.python-version }}  # yamllint disable-line rule:line-length
-          restore-keys: |
-            ${{ runner.os }}-tox-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}-
-
-      - name: Install tox dependencies
-        if: steps.cache-tox.outputs.cache-hit != 'true'
-        run: |
-          python -m pip install --upgrade pip
-          pip install tox tox-gh-actions
-          tox --notest
+          key: ${{ runner.os }}-tox-python${{ matrix.python-version }}-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}  # yamllint disable-line rule:line-length
 
       - name: Check out images cache
         id: cache-images
@@ -65,7 +55,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-images-
 
-      - name: Update images cache
+      - name: Install tox dependencies
+        if: steps.cache-tox.outputs.cache-hit != 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox tox-gh-actions
+          tox --notest
+
+      - name: Update base images
         if: steps.cache-images.outputs.cache-hit != 'true'
         run: |  
           check_url=()
@@ -150,7 +147,7 @@ jobs:
         with:
           python-version: "${{ matrix.python-version }}"
 
-      - name: Set environment variables
+      - name: Set test variables
         id: env
         run: |
           case "${{ matrix.distro }}" in
@@ -181,29 +178,25 @@ jobs:
           echo ::set-output name=cache-pip::$(pip cache dir)
 
       - name: Check out tox cache
-        id: cache
         uses: actions/cache@v2
         with:
           path: |
-            ${{ steps.env.outputs.cache-pip }}
             .tox
             !.tox/**/log
             !.tox/**/tmp
-          key: ${{ runner.os }}-tox-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}-${{ matrix.python-version }}  # yamllint disable-line rule:line-length
-
-      - name: Install tox dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          python -m pip install --upgrade pip
-          pip install tox tox-gh-actions
+          key: ${{ runner.os }}-tox-python${{ matrix.python-version }}-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}  # yamllint disable-line rule:line-length
 
       - name: Check out images cache
-        id: cache_images
         uses: actions/cache@v2
         with:
           path: |
             .images
           key: ${{ runner.os }}-images-${{ steps.env.outputs.cache-date }}-${{ hashFiles('molecule/resources/converge.yml') }}  # yamllint disable-line rule:line-length
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox tox-gh-actions
 
       - name: Molecule test
         timeout-minutes: 60
