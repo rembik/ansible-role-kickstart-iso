@@ -3,6 +3,9 @@
   hosts: all
   gather_facts: yes
   become: yes
+  vars:
+    kickstart_iso_src: "/tmp/images/base"
+    kickstart_iso_dest: "/tmp/images/kickstart"
 
   tasks:
     - include_role:

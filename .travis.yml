@@ -65,7 +65,6 @@ install:
   - pip install tox-travis
 
 script:
-  - export TEST_PYTHON_VERSION="${TRAVIS_PYTHON_VERSION}"
   - unbuffer tox
 
 notifications:

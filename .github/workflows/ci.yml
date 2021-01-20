@@ -186,7 +186,7 @@ jobs:
             .images/base
           key: ${{ runner.os }}-images-${{ steps.env.outputs.cache-date }}-${{ hashFiles('molecule/resources/converge.yml') }}  # yamllint disable-line rule:line-length
 
-      - name: Install dependencies
+      - name: Install tox
         run: |
           python -m pip install --upgrade pip
           pip install tox tox-gh-actions
@@ -199,7 +199,6 @@ jobs:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
           ANSIBLE: ${{ matrix.ansible }}
-          TEST_PYTHON_VERSION: ${{ matrix.python-version }}
           TEST_DISTRO: ${{ matrix.distro }}
           TEST_DOCKER_IMAGE: ${{ steps.env.outputs.docker-image }}
           TEST_DOCKER_COMMAND: ${{ steps.env.outputs.docker-command }}

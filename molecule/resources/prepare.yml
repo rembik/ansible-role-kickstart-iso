@@ -7,3 +7,42 @@
   tasks:
     - include_role:
         name: rembik.bootstrap
+
+    - name: Update base ISO images cache
+      shell: |
+        set -Eeuo pipefail
+        check_url=()
+        base_url=()
+        base_dir="{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images/base"
+        check_url[0]='http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
+        check_url[1]='http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
+        base_url[0]='http://isoredirect.centos.org/centos/8/isos/x86_64/'
+        base_url[1]='http://isoredirect.centos.org/centos/7/isos/x86_64/'
+        image_type=('boot' 'NetInstall')
+        image_name=()
+        for ((i=0; i<2; i++)); do
+          check="$(curl -s ${check_url[$i]} |
+            grep -Eo ".*[a-z0-9]{64,}.*" |
+            grep -Eo ".*${image_type[$i]}.*" )"
+          name="$(echo "${check}" |
+            sed -En 's/.*[^a-zA-Z0-9\._-]([a-zA-Z0-9\._-]+)\.iso.*/\1/p')"
+          check="$(echo "${check}" |
+            sed -En 's/.*([a-z0-9]{64,}).*/\1/p')"
+          url="${base_url[$i]}${name}.iso"
+          if [ ! -f "${base_dir}/${name}.iso" ]; then
+            mkdir -p "${base_dir}"
+            (cd "${base_dir}" && curl -LOsw "%{filename_effective} %{time_total}s\n" $url)
+            (cd "${base_dir}" && echo "${check}  ${name}.iso" | sha256sum -c --status)
+          fi
+          image_name[$i]="${name}"
+        done
+        image_file="${image_name[*]/%/.iso}"
+        find "${base_dir}" -depth -mindepth 1 -maxdepth 1 \
+          ! -regex "^.*/\(${image_file// /\\\|}\)$" \
+          -exec rm -rf '{}' \;
+      args:
+        executable: /bin/bash
+      register: kickstart_iso_molecule_images_cache
+      changed_when: kickstart_iso_molecule_images_cache.stdout | length > 0
+      ignore_errors: yes
+      delegate_to: 127.0.0.1

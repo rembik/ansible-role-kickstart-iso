@@ -2,7 +2,7 @@
 dependency:
   name: galaxy
   options:
-    role-file: requirements.yml
+    role-file: molecule/requirements.yml
 driver:
   name: docker
 lint: |
@@ -21,16 +21,14 @@ platforms:
       - ${MOLECULE_PROJECT_DIRECTORY}/.images/base:/tmp/images/base:ro
 provisioner:
   name: ansible
-  ansible_args:
-    - -vvvv
+  # ansible_args:
+  #  - -vvvv
   config_options:
     defaults:
+      interpreter_python: auto_silent
+      callback_whitelist: profile_tasks, timer, yaml
       stdout_callback: yaml
-      callback_plugins: /usr/lib/python${TEST_PYTHON_VERSION:-3.9}/site-packages/ara/plugins/callbacks
   playbooks:
-    docker:
-      prepare: ${TEST_PREPARE:-../resources/docker/prepare.yml}
-      converge: ${TEST_CONVERGE:-../resources/docker/converge.yml}
     prepare: ${TEST_PREPARE:-../resources/prepare.yml}
     converge: ${TEST_CONVERGE:-../resources/converge.yml}
     verify: ${TEST_VERIFY:-../resources/verify.yml}
