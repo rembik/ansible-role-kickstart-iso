@@ -14,7 +14,7 @@ Requirements
 - Access to repositories containing system packages and base ISO images, likely on the internet.
 - A recent Ansible version (tested last 2 stable major versions).
 
-The following roles can be installed to ensure all requirements are met, using `ansible-galaxy install -r molecule/requirements.yml` :
+The following roles can be installed to ensure all requirements are met, using `ansible-galaxy install -r molecule/resources/requirements.yml` :
 
 ```yaml
 ---

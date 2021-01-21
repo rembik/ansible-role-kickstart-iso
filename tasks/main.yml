@@ -11,7 +11,7 @@
   when:
     - item is search(kickstart_iso_type)
     - item is search('[a-z0-9]{64,}')
-  changed_when: false
+  changed_when: no
 
 - name: Ensure kickstart ISO images not already exist
   find:
@@ -29,37 +29,11 @@
       loop: "{{ kickstart_iso_packages }}"
       register: kickstart_iso_packages_install
       until: kickstart_iso_packages_install is succeeded
-      retries: 3
-      delay: 60
+      retries: 1
+      delay: 30
   rescue:
-    - name: Install system compile packages
-      become: true
-      package:
-        name: "{{ item }}"
-        state: present
-      loop: "{{ kickstart_iso_compile_packages }}"
-      register: kickstart_iso_compile_packages_install
-      until: kickstart_iso_compile_packages_install is succeeded
-      retries: 3
-      delay: 60
-
     - name: Compile xorriso
-      become: true
-      shell: |
-        mkdir -p /tmp/xorriso
-        cd /tmp/xorriso
-        wget https://ftp.gnu.org/gnu/xorriso/xorriso-1.5.2.tar.gz
-        tar xzf xorriso-1.5.2.tar.gz
-        cd xorriso-1.5.2
-        ./configure --prefix=/usr
-        make
-        ./xorriso/xorriso
-        make buildstamped
-        strip ./xorriso/xorriso
-        make install
-        rm -rf /tmp/xorriso
-      args:
-        warn: false
+      include_tasks: xorriso.yml
   always:
     - name: Prepare kickstart ISO images directory
       file:
@@ -90,7 +64,7 @@
         -O {{ kickstart_iso_info.file_name }}.iso
       args:
         chdir: "{{ kickstart_iso_src }}"
-        warn: false
+        warn: no
       register: kickstart_iso_download
       until: kickstart_iso_download is succeeded
       retries: 3
