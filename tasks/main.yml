@@ -30,7 +30,6 @@
   rescue:
     - name: Compile xorriso
       include_tasks: xorriso.yml
-      when: kickstart_iso_xorriso_check is failed
   always:
     - name: Lookup base ISO image
       stat:
