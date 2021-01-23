@@ -28,12 +28,6 @@
         state: present
       loop: "{{ kickstart_iso_packages }}"
   rescue:
-    - name: Test xorriso
-      command: xorriso -version
-      register: kickstart_iso_xorriso_check
-      changed_when: no
-      ignore_errors: yes
-
     - name: Compile xorriso
       include_tasks: xorriso.yml
       when: kickstart_iso_xorriso_check is failed
@@ -130,4 +124,4 @@
         state: absent
   when:
     - (kickstart_iso_dest_check.matched|int == 0 or
-      kickstart_iso_override|bool)       
+      kickstart_iso_override|bool)

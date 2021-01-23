@@ -31,19 +31,20 @@ jobs:
       - name: Set cache variables
         id: env
         run: |
+          PYTHON_SEM_VERSION="$(python -V | sed -En 's/.*([0-9]+\.[0-9]+\.[0-9]+).*/\1/p')"
+          echo ::set-output name=cache-python::${PYTHON_SEM_VERSION}
           echo ::set-output name=cache-date::$(date -u "+%Y%m")
-          echo ::set-output name=cache-pip::$(pip cache dir)
 
       - name: Check out tox cache
         id: cache-tox
         uses: actions/cache@v2
         with:
           path: |
-            ${{ steps.env.outputs.cache-pip }}
+            ${{ env.pythonLocation }}
             .tox
             !.tox/**/log
             !.tox/**/tmp
-          key: ${{ runner.os }}-tox-python${{ matrix.python-version }}-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}  # yamllint disable-line rule:line-length
+          key: ${{ runner.os }}-tox-${{ steps.env.outputs.cache-python }}-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}  # yamllint disable-line rule:line-length
 
       - name: Check out images cache
         id: cache-images
@@ -168,19 +169,19 @@ jobs:
             RELEASE=true
           fi
           echo ::set-output name=release::${RELEASE:-false}
+          PYTHON_SEM_VERSION="$(python -V | sed -En 's/.*([0-9]+\.[0-9]+\.[0-9]+).*/\1/p')"
+          echo ::set-output name=cache-python::${PYTHON_SEM_VERSION}
           echo ::set-output name=cache-date::$(date -u "+%Y%m")
-          echo ::set-output name=cache-pip::$(pip cache dir)
 
       - name: Check out tox cache
-        id: cache-tox
         uses: actions/cache@v2
         with:
           path: |
-            ${{ steps.env.outputs.cache-pip }}
+            ${{ env.pythonLocation }}
             .tox
             !.tox/**/log
             !.tox/**/tmp
-          key: ${{ runner.os }}-tox-python${{ matrix.python-version }}-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}  # yamllint disable-line rule:line-length
+          key: ${{ runner.os }}-tox-${{ steps.env.outputs.cache-python }}-${{ steps.env.outputs.cache-date }}-${{ hashFiles('tox.ini') }}  # yamllint disable-line rule:line-length
 
       - name: Check out images cache
         uses: actions/cache@v2
@@ -188,13 +189,6 @@ jobs:
           path: |
             .images/base
           key: ${{ runner.os }}-images-${{ steps.env.outputs.cache-date }}-${{ hashFiles('molecule/resources/converge.yml') }}  # yamllint disable-line rule:line-length
-
-      - name: Install tox
-        run: |
-          python -m pip install --upgrade pip
-          echo "$(pip cache dir)"
-          eval "ls $(pip cache dir)"
-          pip install tox tox-gh-actions
 
       - name: Molecule test
         timeout-minutes: 60
