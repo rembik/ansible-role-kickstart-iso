@@ -33,15 +33,13 @@ jobs:
         run: |
           echo ::set-output name=cache-date::$(date -u "+%Y%m")
           echo ::set-output name=cache-pip::$(pip cache dir)
-          echo "$(pip cache dir)"
-          echo "$(getent passwd "$USER" | cut -d: -f6)/.cache/pip"
 
       - name: Check out tox cache
         id: cache-tox
         uses: actions/cache@v2
         with:
           path: |
-            ~/.cache/pip
+            ${{ steps.env.outputs.cache-pip }}
             .tox
             !.tox/**/log
             !.tox/**/tmp
@@ -172,15 +170,13 @@ jobs:
           echo ::set-output name=release::${RELEASE:-false}
           echo ::set-output name=cache-date::$(date -u "+%Y%m")
           echo ::set-output name=cache-pip::$(pip cache dir)
-          echo "$(pip cache dir)"
-          echo "$(getent passwd "$USER" | cut -d: -f6)/.cache/pip"
 
       - name: Check out tox cache
         id: cache-tox
         uses: actions/cache@v2
         with:
           path: |
-            ~/.cache/pip
+            ${{ steps.env.outputs.cache-pip }}
             .tox
             !.tox/**/log
             !.tox/**/tmp
@@ -197,6 +193,8 @@ jobs:
         if: steps.cache-tox.outputs.cache-hit != 'true'
         run: |
           python -m pip install --upgrade pip
+          echo "$(pip cache dir)"
+          eval "ls $(pip cache dir)"
           pip install tox tox-gh-actions
 
       - name: Molecule test
