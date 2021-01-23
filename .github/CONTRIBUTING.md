@@ -13,22 +13,25 @@ You are very welcome to develop bug fixes or features. Please make sure to run t
 ## Test
 
 This role uses [Molecule](https://github.com/ansible-community/molecule) for testing and that, in turn, uses Ansible to deploy the needed test infrastructure:
-```
-sudo pip install ansible
-sudo pip install molecule
+
+```shell
+sudo pip install ansible yamllint ansible-lint molecule
 ```
 
 Furthermore, tests use Docker. Follow the respective requirements for that:
-- [Docker](http://github.com/rembik/ansible-role-kickstart-iso/tree/master/molecule/default/INSTALL.rst)
+
+- [Docker](http://github.com/rembik/ansible-role-kickstart-iso/tree/master/molecule/resources/docker/INSTALL.rst)
 
 Then run the test with the chosen molecule scenario:
-```
+
+```shell
 molecule test
 molecule test --scenario-name docker-all-latest
 ```
 
 In addition, if you want to run the tests on different Ansible versions locally with Docker use [tox](https://tox.readthedocs.io/en/latest/):
-```
+
+```shell
 sudo pip install tox
 
 tox

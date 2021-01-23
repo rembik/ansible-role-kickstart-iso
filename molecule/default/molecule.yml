@@ -29,6 +29,8 @@ provisioner:
       callback_whitelist: profile_tasks, timer, yaml
       stdout_callback: yaml
   playbooks:
+    docker:
+      prepare: ${TEST_PREPARE:-../resources/docker/prepare.yml}
     prepare: ${TEST_PREPARE:-../resources/prepare.yml}
     converge: ${TEST_CONVERGE:-../resources/converge.yml}
     verify: ${TEST_VERIFY:-../resources/verify.yml}

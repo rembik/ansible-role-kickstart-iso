@@ -6,8 +6,8 @@
 
 ##### ISSUE TYPE
 <!--- Pick one below and delete the rest -->
- - Bug Report
- - Feature Idea
+- Bug Report
+- Feature Idea
 
 ##### COMPONENT NAME
 <!--- Write the short name of the module, plugin, task or feature below, use your best guess if unsure -->
