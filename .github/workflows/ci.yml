@@ -190,7 +190,6 @@ jobs:
           key: ${{ runner.os }}-images-${{ steps.env.outputs.cache-date }}-${{ hashFiles('molecule/resources/converge.yml') }}  # yamllint disable-line rule:line-length
 
       - name: Install tox
-        if: steps.cache-tox.outputs.cache-hit != 'true'
         run: |
           python -m pip install --upgrade pip
           echo "$(pip cache dir)"
