@@ -5,12 +5,13 @@
 kickstart_iso_type: 'boot'
 kickstart_iso_check_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
 kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
-kickstart_iso_download_delay: 300
 
-# Directory where the base ISO images are saved, if they do not already exist
-kickstart_iso_src: ".images/base"
-# Directory where the kickstart ISO images are saved, if they do not already exist
-kickstart_iso_dest: ".images/kickstart"
+# Directory where the base ISO images are saved
+kickstart_iso_src: '.images/base'
+# Directory where the kickstart ISO images are saved
+kickstart_iso_dest: '.images/kickstart'
+# Allow override of kickstart ISO images, if some already exist (yes|no)
+kickstart_iso_override: no
 
 # Pick first disks with minimal physical size kickstart_iso_disk_drive_min_size (GiB)
 # until a overall minimal logical OS volume size kickstart_iso_disk_volume_min_size (GiB)

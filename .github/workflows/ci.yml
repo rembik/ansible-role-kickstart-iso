@@ -33,12 +33,15 @@ jobs:
         run: |
           echo ::set-output name=cache-date::$(date -u "+%Y%m")
           echo ::set-output name=cache-pip::$(pip cache dir)
+          echo "$(pip cache dir)"
+          echo "$(getent passwd "$USER" | cut -d: -f6)/.cache/pip"
 
       - name: Check out tox cache
         id: cache-tox
         uses: actions/cache@v2
         with:
           path: |
+            ~/.cache/pip
             .tox
             !.tox/**/log
             !.tox/**/tmp
@@ -169,11 +172,15 @@ jobs:
           echo ::set-output name=release::${RELEASE:-false}
           echo ::set-output name=cache-date::$(date -u "+%Y%m")
           echo ::set-output name=cache-pip::$(pip cache dir)
+          echo "$(pip cache dir)"
+          echo "$(getent passwd "$USER" | cut -d: -f6)/.cache/pip"
 
       - name: Check out tox cache
+        id: cache-tox
         uses: actions/cache@v2
         with:
           path: |
+            ~/.cache/pip
             .tox
             !.tox/**/log
             !.tox/**/tmp
@@ -187,6 +194,7 @@ jobs:
           key: ${{ runner.os }}-images-${{ steps.env.outputs.cache-date }}-${{ hashFiles('molecule/resources/converge.yml') }}  # yamllint disable-line rule:line-length
 
       - name: Install tox
+        if: steps.cache-tox.outputs.cache-hit != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install tox tox-gh-actions

@@ -13,7 +13,7 @@
     - item is search('[a-z0-9]{64,}')
   changed_when: no
 
-- name: Ensure kickstart ISO images not already exist
+- name: Lookup kickstart ISO images
   find:
     paths: "{{ kickstart_iso_dest }}"
     patterns: "{{ kickstart_iso_info.file_name }}_*.iso"
@@ -27,24 +27,18 @@
         name: "{{ item }}"
         state: present
       loop: "{{ kickstart_iso_packages }}"
-      register: kickstart_iso_packages_install
-      until: kickstart_iso_packages_install is succeeded
-      retries: 1
-      delay: 30
   rescue:
+    - name: Test xorriso
+      command: xorriso -version
+      register: kickstart_iso_xorriso_check
+      changed_when: no
+      ignore_errors: yes
+
     - name: Compile xorriso
       include_tasks: xorriso.yml
+      when: kickstart_iso_xorriso_check is failed
   always:
-    - name: Prepare kickstart ISO images directory
-      file:
-        path: "{{ item.path }}"
-        state: "{{ item.state }}"
-        mode: 0755
-      loop:
-        - {path: "{{ kickstart_iso_dest }}/iso", state: 'absent'}
-        - {path: "{{ kickstart_iso_dest }}/iso", state: 'directory'}
-
-    - name: Ensure base ISO image not already exists
+    - name: Lookup base ISO image
       stat:
         path: "{{ kickstart_iso_src }}/{{ kickstart_iso_info.file_name }}.iso"
       register: kickstart_iso_src_check
@@ -58,6 +52,15 @@
         - not (kickstart_iso_src_check.stat.exists and
           kickstart_iso_src_check.stat.isreg|default('false'))
 
+    - name: Prepare kickstart ISO images directory
+      file:
+        path: "{{ item.path }}"
+        state: "{{ item.state }}"
+        mode: 0755
+      loop:
+        - {path: "{{ kickstart_iso_dest }}/iso", state: 'absent'}
+        - {path: "{{ kickstart_iso_dest }}/iso", state: 'directory'}
+
     - name: Download base ISO image (support redirect)
       command: >
         wget {{ kickstart_iso_base_url }}{{ kickstart_iso_info.file_name }}.iso
@@ -65,10 +68,6 @@
       args:
         chdir: "{{ kickstart_iso_src }}"
         warn: no
-      register: kickstart_iso_download
-      until: kickstart_iso_download is succeeded
-      retries: 3
-      delay: "{{ kickstart_iso_download_delay }}"
       when:
         - not (kickstart_iso_src_check.stat.exists and
           kickstart_iso_src_check.stat.isreg|default('false'))
@@ -127,8 +126,8 @@
 
     - name: Clean kickstart ISO images directory
       file:
-        path: "{{ item }}"
+        path: "{{ kickstart_iso_dest }}/iso"
         state: absent
-      loop:
-        - "{{ kickstart_iso_dest }}/iso"
-  when: kickstart_iso_dest_check.matched|int == 0
+  when:
+    - (kickstart_iso_dest_check.matched|int == 0 or
+      kickstart_iso_override|bool)       

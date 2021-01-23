@@ -1,21 +1,10 @@
 ---
-- name: Test xorriso
-  command: xorriso -version
-  register: kickstart_iso_xorriso_check
-  changed_when: no
-  ignore_errors: yes
-
 - name: Install system compile packages
   become: true
   package:
     name: "{{ item }}"
     state: present
   loop: "{{ kickstart_iso_compile_packages }}"
-  register: kickstart_iso_compile_packages_install
-  until: kickstart_iso_compile_packages_install is succeeded
-  retries: 1
-  delay: 30
-  when: kickstart_iso_xorriso_check is failed
 
 - name: Compile xorriso
   become: true
@@ -34,9 +23,7 @@
     rm -rf /tmp/xorriso
   args:
     warn: no
-  when: kickstart_iso_xorriso_check is failed
 
 - name: Verify xorriso
   command: xorriso -version
   register: kickstart_iso_xorriso_check
-  when: kickstart_iso_xorriso_check is failed
