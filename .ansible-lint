@@ -1,2 +1,4 @@
 skip_list:
   - '106'
+exclude_paths:
+  - .travis.yml
