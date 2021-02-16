@@ -1,2 +1,3 @@
 ---
-- name: rembik.bootstrap
+roles:
+  - name: rembik.bootstrap
