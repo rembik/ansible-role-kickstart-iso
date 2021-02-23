@@ -1,4 +1,5 @@
 skip_list:
-  - '106'
+  - 'role-name'
 exclude_paths:
+  - molecule/resources/requirements.yml
   - .travis.yml
