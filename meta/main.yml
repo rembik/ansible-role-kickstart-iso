@@ -1,13 +1,11 @@
 ---
-dependencies: []
-
 galaxy_info:
   role_name: kickstart_iso
-  author: Brian Rimek
+  author: rembik
   description: Creates kickstart ISO images for RHEL/CentOS.
   license: "Apache 2.0"
   company: none
-  min_ansible_version: 2.9
+  min_ansible_version: 2.10
   platforms:
     - name: Alpine
       versions:
@@ -42,3 +40,5 @@ galaxy_info:
     - el
     - centos
     - rhel
+
+dependencies: []

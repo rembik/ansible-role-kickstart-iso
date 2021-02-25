@@ -1,2 +1,8 @@
 ---
-- name: rembik.bootstrap
+roles:
+  - name: rembik.bootstrap
+
+collections:
+  - name: ansible.posix
+  - name: community.general
+  - name: community.docker

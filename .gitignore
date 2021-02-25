@@ -3,3 +3,4 @@ molecule/*/.molecule
 *.swp
 .tox
 .images
+.cache
