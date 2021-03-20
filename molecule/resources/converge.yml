@@ -8,8 +8,8 @@
     kickstart_iso_dest: "/tmp/images/kickstart"
 
   tasks:
-      - name: Converge (CentOS 8)
-        include_role:
+    - name: Converge (CentOS 8)
+      include_role:
         name: ansible-role-kickstart-iso
       vars:
         kickstart_iso_type: 'boot'
