@@ -5,7 +5,8 @@
   become: yes
 
   tasks:
-    - include_role:
+    - name: Include role rembik.bootstrap
+      include_role:
         name: rembik.bootstrap
 
     - name: Update base ISO images cache

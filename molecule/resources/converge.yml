@@ -8,7 +8,8 @@
     kickstart_iso_dest: "/tmp/images/kickstart"
 
   tasks:
-    - include_role:
+      - name: Converge (CentOS 8)
+        include_role:
         name: ansible-role-kickstart-iso
       vars:
         kickstart_iso_type: 'boot'
@@ -17,7 +18,8 @@
         kickstart_iso_install_media: 'url --url http://mirror.centos.org/centos/8/BaseOS/x86_64/os/'
         kickstart_iso_network_bootproto: 'dhcp'
 
-    - include_role:
+    - name: Converge (CentOS 7)
+      include_role:
         name: ansible-role-kickstart-iso
       vars:
         kickstart_iso_type: 'NetInstall'
