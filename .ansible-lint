@@ -2,5 +2,7 @@
 skip_list:
   - 'role-name'
 exclude_paths:
-  - molecule/resources/requirements.yml
+  - .cache/
+  - .tox/
   - .travis.yml
+  - molecule/resources/requirements.yml

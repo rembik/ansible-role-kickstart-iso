@@ -14,5 +14,6 @@ rules:
   truthy: disable
 
 ignore: |
-  .travis.yml
+  .cache/
   .tox/
+  .travis.yml
