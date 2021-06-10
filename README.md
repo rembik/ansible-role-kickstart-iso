@@ -33,11 +33,11 @@ These defaults are set in `defaults/main.yml`:
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/performing_an_advanced_rhel_installation
 
 # If kickstart_iso_src_file.name or kickstart_iso_src_file.checksum is undefined,
-# kickstart_iso_src_file.checksum_url and kickstart_iso_src_file.search is used to
-# dertermine the missing base ISO image file name and checksum
+# kickstart_iso_src_file.checksum_url and kickstart_iso_src_file.search are used
+# to dertermine the missing base ISO image file name and checksum
 kickstart_iso_src_file:
-  search: 'boot'
   name: ''
+  search: 'boot'
   checksum: ''
   checksum_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM'
   base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64'
