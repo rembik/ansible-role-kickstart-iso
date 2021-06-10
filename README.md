@@ -32,9 +32,15 @@ These defaults are set in `defaults/main.yml`:
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-boot-menu-customization
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/performing_an_advanced_rhel_installation
 
-kickstart_iso_type: 'boot'
-kickstart_iso_check_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
-kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
+# If kickstart_iso_src_file.name or kickstart_iso_src_file.checksum is undefined,
+# kickstart_iso_src_file.checksum_url and kickstart_iso_src_file.search is used to
+# dertermine the missing base ISO image file name and checksum
+kickstart_iso_src_file:
+  search: 'boot'
+  name: ''
+  checksum: ''
+  checksum_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM'
+  base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64'
 
 # Directory where the base ISO images are saved
 kickstart_iso_src: '.images/base'
@@ -107,9 +113,10 @@ localhost; made for static network configuration.
     - include_role:
         name: rembik.kickstart_iso
       vars:
-        kickstart_iso_type: 'Minimal'
-        kickstart_iso_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
-        kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
+        kickstart_iso_src_file:
+          search: 'Minimal'
+          checksum_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt'
+          base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64'
         kickstart_iso_install_media: 'cdrom'
         kickstart_iso_network_bootproto: 'static'
         kickstart_iso_network_static_netmask: '255.255.252.0'

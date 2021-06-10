@@ -69,34 +69,34 @@ jobs:
         if: steps.cache-images.outputs.cache-hit != 'true'
         run: |
           set -Eeuo pipefail
-          check_url=()
-          base_url=()
-          base_dir='.images/base'
-          check_url[0]='http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
-          check_url[1]='http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
-          base_url[0]='http://isoredirect.centos.org/centos/8/isos/x86_64/'
-          base_url[1]='http://isoredirect.centos.org/centos/7/isos/x86_64/'
-          image_type=('boot' 'NetInstall')
-          image_name=()
-          for ((i=0; i<${#check_url[@]}; i++)); do
-            check="$(curl -s ${check_url[$i]} |
+          img_info_url=()
+          img_base_url=()
+          img_base_dir="{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images/base"
+          img_info_url[0]='http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM'
+          img_info_url[1]='http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt'
+          img_base_url[0]='http://isoredirect.centos.org/centos/8/isos/x86_64'
+          img_base_url[1]='http://isoredirect.centos.org/centos/7/isos/x86_64'
+          img_type=('boot' 'NetInstall' 'dvd')
+          img_file=()
+          for ((i=0; i<${#img_info_url[@]}; i++)); do
+            info="$(curl -s ${img_info_url[$i]} |
               grep -Eo ".*[a-z0-9]{64,}.*" |
-              grep -Eo ".*${image_type[$i]}.*" )"
-            name="$(echo "${check}" |
-              sed -En 's/.*[^a-zA-Z0-9\._-]([a-zA-Z0-9\._-]+)\.iso.*/\1/p')"
-            check="$(echo "${check}" |
+              grep -Eo ".*${img_type[$i]}.*" )"
+            file="$(echo "${info}" |
+              sed -En 's/.*[^a-zA-Z0-9\._-]([a-zA-Z0-9\._-]+\.iso).*/\1/p')"
+            check="$(echo "${info}" |
               sed -En 's/.*([a-z0-9]{64,}).*/\1/p')"
-            url="${base_url[$i]}${name}.iso"
-            if [ ! -f "${base_dir}/${name}.iso" ]; then
-              mkdir -p "${base_dir}"
-              (cd "${base_dir}" && curl -LOsw "%{filename_effective} %{time_total}s\n" $url)
-              (cd "${base_dir}" && echo "${check}  ${name}.iso" | sha256sum -c --status)
+            url="${img_base_url[$i]}/${file}"
+            if [ ! -f "${img_base_dir}/${file}" ]; then
+              mkdir -p "${img_base_dir}"
+              (cd "${img_base_dir}" && curl -LOsw "%{filename_effective} %{time_total}s\n" $url)
+              (cd "${img_base_dir}" && echo "${check}  ${file}" | sha256sum -c --status)
             fi
-            image_name[$i]="${name}"
+            img_file[$i]="${file}"
           done
-          image_file="${image_name[*]/%/.iso}"
-          find "${base_dir}" -depth -mindepth 1 -maxdepth 1 \
-            ! -regex "^.*/\(${image_file// /\\\|}\)$" \
+          img_files="${img_file[*]}"
+          find "${img_base_dir}" -depth -mindepth 1 -maxdepth 1 \
+            ! -regex "^.*/\(${img_files// /\\\|}\)$" \
             -exec rm -rf '{}' \;
 
   test:

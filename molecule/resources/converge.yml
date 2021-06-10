@@ -4,17 +4,18 @@
   gather_facts: yes
   become: yes
   vars:
-    kickstart_iso_src: "/tmp/images/base"
-    kickstart_iso_dest: "/tmp/images/kickstart"
+    kickstart_iso_src_dir: "/tmp/images/base"
+    kickstart_iso_dest_dir: "/tmp/images/kickstart"
 
   tasks:
     - name: Converge (CentOS 8)
       include_role:
         name: ansible-role-kickstart-iso
       vars:
-        kickstart_iso_type: 'boot'
-        kickstart_iso_check_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
-        kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
+        kickstart_iso_src_file:
+          search: 'boot'
+          checksum_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM'
+          base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64'
         kickstart_iso_install_media: 'url --url http://mirror.centos.org/centos/8/BaseOS/x86_64/os/'
         kickstart_iso_network_bootproto: 'dhcp'
 
@@ -22,9 +23,10 @@
       include_role:
         name: ansible-role-kickstart-iso
       vars:
-        kickstart_iso_type: 'NetInstall'
-        kickstart_iso_check_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt.asc'
-        kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64/'
+        kickstart_iso_src_file:
+          search: 'NetInstall'
+          checksum_url: 'http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt'
+          base_url: 'http://isoredirect.centos.org/centos/7/isos/x86_64'
         kickstart_iso_install_media: 'url --url http://mirror.centos.org/centos/7/os/x86_64/'
         kickstart_iso_network_bootproto: 'static'
         kickstart_iso_network_static_netmask: '255.255.252.0'

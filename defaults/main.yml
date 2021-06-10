@@ -2,14 +2,20 @@
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-boot-menu-customization
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/considerations_in_adopting_rhel_8/installer-and-image-creation_considerations-in-adopting-rhel-8#kickstart-changes_installation-and-booting
 
-kickstart_iso_type: 'boot'
-kickstart_iso_check_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM.asc'
-kickstart_iso_base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64/'
+# If kickstart_iso_src_file.name or kickstart_iso_src_file.checksum is undefined,
+# kickstart_iso_src_file.checksum_url and kickstart_iso_src_file.search is used to
+# dertermine the missing base ISO image file name and checksum
+kickstart_iso_src_file:
+  search: 'boot'
+  name: ''
+  checksum: ''
+  checksum_url: 'http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM'
+  base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64'
 
 # Directory where the base ISO images are saved
-kickstart_iso_src: '.images/base'
+kickstart_iso_src_dir: '.images/base'
 # Directory where the kickstart ISO images are saved
-kickstart_iso_dest: '.images/kickstart'
+kickstart_iso_dest_dir: '.images/kickstart'
 # Allow override of kickstart ISO images, if some already exist (yes|no)
 kickstart_iso_override: no
 
