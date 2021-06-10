@@ -35,7 +35,7 @@ jobs:
         run: |
           PYTHON_SEM_VERSION="$(python -V | sed -En 's/.*([0-9]+\.[0-9]+\.[0-9]+).*/\1/p')"
           echo ::set-output name=cache-python::${PYTHON_SEM_VERSION}
-          echo ::set-output name=cache-date::$(date -u "+%Y%m%d")
+          echo ::set-output name=cache-date::$(date -u "+%Y%m")
 
       - name: Check out tox cache
         id: cache-tox

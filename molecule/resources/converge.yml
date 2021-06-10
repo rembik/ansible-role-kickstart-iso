@@ -4,8 +4,8 @@
   gather_facts: yes
   become: yes
   vars:
-    kickstart_iso_src_dir: "/tmp/images/base"
-    kickstart_iso_dest_dir: "/tmp/images/kickstart"
+    kickstart_iso_src_dir: '/tmp/images/base'
+    kickstart_iso_dest_dir: '/tmp/images/kickstart'
 
   tasks:
     - name: Converge (CentOS 8)
