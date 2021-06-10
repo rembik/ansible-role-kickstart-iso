@@ -71,7 +71,7 @@ jobs:
           set -Eeuo pipefail
           img_info_url=()
           img_base_url=()
-          img_base_dir="{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/.images/base"
+          img_base_dir='.images/base'
           img_info_url[0]='http://mirror.centos.org/centos/8/isos/x86_64/CHECKSUM'
           img_info_url[1]='http://mirror.centos.org/centos/7/isos/x86_64/sha256sum.txt'
           img_base_url[0]='http://isoredirect.centos.org/centos/8/isos/x86_64'
