@@ -43,9 +43,9 @@ kickstart_iso_src_file:
   base_url: 'http://isoredirect.centos.org/centos/8/isos/x86_64'
 
 # Directory where the base ISO images are saved
-kickstart_iso_src: '.images/base'
+kickstart_iso_src_dir: '.images/base'
 # Directory where the kickstart ISO images are saved
-kickstart_iso_dest: '.images/kickstart'
+kickstart_iso_dest_dir: '.images/kickstart'
 # Allow override of kickstart ISO images, if some already exist (yes|no)
 kickstart_iso_override: no
 
