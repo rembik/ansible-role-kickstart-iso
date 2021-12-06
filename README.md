@@ -12,7 +12,7 @@ Requirements
 ------------
 
 - Access to repositories containing system packages and base ISO images, likely on the internet.
-- A recent Ansible version (tested last 2 stable major versions).
+- A recent Ansible version (tested [last 2 stable major versions][ansible_releases]).
 
 The following roles can be installed to ensure all requirements are met, using `ansible-galaxy role install -r molecule/resources/requirements.yml` :
 
@@ -173,14 +173,15 @@ Author Information
 [license]: http://github.com/rembik/ansible-role-kickstart-iso/tree/master/LICENSE
 
 [python]: https://www.python.org/
-[ansible_previous]: https://docs.ansible.com/ansible/2.10/
-[ansible_latest]: https://docs.ansible.com/ansible/3/
+[ansible_previous]: https://docs.ansible.com/ansible/4/
+[ansible_latest]: https://docs.ansible.com/ansible/5/
 [ansible_devel]: https://docs.ansible.com/ansible/devel/
+[ansible_releases]: https://docs.ansible.com/ansible/devel/reference_appendices/release_and_maintenance.html#ansible-community-changelogs
 
 [python_badge]: https://img.shields.io/badge/python-3.9-1488C6
 [ansible_badge]: https://img.shields.io/badge/Ansible--56b4b6
-[ansible_previous_badge]: https://img.shields.io/badge/2.10-56b4b6
-[ansible_latest_badge]: https://img.shields.io/badge/3.0-56b4b6
+[ansible_previous_badge]: https://img.shields.io/badge/4.x-56b4b6
+[ansible_latest_badge]: https://img.shields.io/badge/5.x-56b4b6
 [ansible_devel_badge]: https://img.shields.io/badge/devel-56b4b6
 
 [alpine]: https://hub.docker.com/_/alpine
