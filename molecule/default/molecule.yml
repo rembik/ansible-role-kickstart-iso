@@ -26,8 +26,8 @@ provisioner:
   config_options:
     defaults:
       interpreter_python: auto_silent
-      callback_whitelist: profile_tasks, timer, yaml
-      stdout_callback: yaml
+      callbacks_enabled: ansible.posix.profile_tasks, ansible.posix.timer, community.general.yaml
+      stdout_callback: community.general.yaml
   playbooks:
     docker:
       prepare: ${TEST_PREPARE:-../resources/docker/prepare.yml}
